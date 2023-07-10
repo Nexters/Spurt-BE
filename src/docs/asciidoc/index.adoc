@@ -1,0 +1,23 @@
+ifndef::snippets[]
+//:snippets:build/generated-snippets
+:snippets:/build/generated-snippets
+endif::[]
+
+= Spurt REST Docs
+
+SPURT api 명세서
+
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Spurt-API]]
+== Spurt API
+
+[[테스트]]
+=== 테스트 api
+==== get 기본 테스트
+include::{snippets}/sample-controller-test/기본테스트/auto-section.adoc[]
