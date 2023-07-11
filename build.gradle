@@ -104,3 +104,10 @@ task copyDocument(type: Copy) {
 assemble {
     dependsOn copyDocument
 }
+
+bootJar{
+    archiveFileName = 'spurt.jar'
+}
+jar{
+    enabled = false
+}
