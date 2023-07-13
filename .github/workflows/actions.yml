@@ -64,6 +64,6 @@ jobs:
           script: |
             docker login ${{ secrets.NCP_CONTAINER_REGISTRY }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
             docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-            docker stop spurt-backend
-            docker rm spurt-backend
-            docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
+            docker stop $(docker ps -a -q)
+            docker rm $(docker ps -a -q)
+            docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
