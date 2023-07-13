@@ -54,14 +54,6 @@ jobs:
     needs: push_to_registry
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to NCP Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.NCP_CONTAINER_REGISTRY }}
-          username: ${{ secrets.NCP_ACCESS_KEY }}
-          password: ${{ secrets.NCP_SECRET_KEY }}
       - name: connect ssh
         uses: appleboy/ssh-action@master
         with:
@@ -70,6 +62,7 @@ jobs:
           password: ${{ secrets.DEV_PASSWORD }}
           port: ${{ secrets.DEV_PORT }}
           script: |
+            docker login ${{ secrets.NCP_CONTAINER_REGISTRY }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
             docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend
             docker stop $(docker ps -a -q)
             docker rm $(docker ps -a -q)
