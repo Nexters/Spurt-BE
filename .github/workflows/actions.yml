@@ -63,8 +63,7 @@ jobs:
           port: ${{ secrets.DEV_PORT }}
           script: |
             docker login ${{ secrets.NCP_CONTAINER_REGISTRY }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
-            docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
-            docker run -d -p 8080:8080 --env-file ${{ secrets.ENV_FILENAME_FRONTEND }} ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
-            docker image prune -f
+            docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
+            docker stop spurt-backend
+            docker rm spurt-backend
+            docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
