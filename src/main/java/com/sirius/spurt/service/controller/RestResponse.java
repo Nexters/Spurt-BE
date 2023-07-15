@@ -1,4 +1,4 @@
-package com.sirius.spurt.common.template;
+package com.sirius.spurt.service.controller;
 
 import com.sirius.spurt.common.meta.ResultCode;
 import java.io.Serializable;

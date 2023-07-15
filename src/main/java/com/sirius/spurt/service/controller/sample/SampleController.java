@@ -1,8 +1,8 @@
-package com.sirius.spurt.service.controller;
+package com.sirius.spurt.service.controller.sample;
 
-import com.sirius.spurt.common.template.RestResponse;
-import com.sirius.spurt.service.flow.SampleFlow;
-import com.sirius.spurt.service.flow.SampleFlow.Dto;
+import com.sirius.spurt.service.business.sample.TestGetBusiness;
+import com.sirius.spurt.service.business.sample.TestGetBusiness.Dto;
+import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SampleController {
 
-    private final SampleFlow sampleFlow;
+    private final TestGetBusiness sampleFlow;
     /**
      * @param sample
      * @param path
@@ -25,9 +25,9 @@ public class SampleController {
      * @title samele get 호출 예제
      */
     @GetMapping("/sample/{path}")
-    public RestResponse<SampleFlow.Result> testGet(
+    public RestResponse<TestGetBusiness.Result> testGet(
             @RequestParam(name = "sample") String sample, @PathVariable("path") String path) {
-        SampleFlow.Dto dto = Dto.builder().testDto(sample).testPath(path).build();
+        TestGetBusiness.Dto dto = Dto.builder().testDto(sample).testPath(path).build();
         log.info("sample parm : {} path parm : {}", sample, path);
         return RestResponse.success(sampleFlow.execute(dto));
     }
