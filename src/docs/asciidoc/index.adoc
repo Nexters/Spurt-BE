@@ -3,9 +3,6 @@ ifndef::snippets[]
 endif::[]
 
 = Spurt REST Docs
-
-SPURT api 명세서
-
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -13,10 +10,48 @@ SPURT api 명세서
 :toclevels: 2
 :sectlinks:
 
+넥스터즈 시리우스 팀 api 명세서
+
 [[Spurt-API]]
-== Spurt API
+
+== Host 정보
+[cols=2*,options=header]
+|===
+|ENV
+|URL
+
+|DEV
+|http://sirius-spurt.duckdns.org
+|===
+
+== Header 정보
+
+[cols=3*,options=header]
+|===
+|Header
+|정보
+|Optional
+
+|TOKEN
+|구글 토큰 정보
+|false
+
+|USER-ID
+|유저 ID 정보
+|true
+|===
+
+= Spurt API
+
+[[질문]]
+== 질문 API
+
+[[카테고리]]
+== 카테고리 API
+
+[[직군]]
+== 직군 API
 
 [[테스트]]
-=== 테스트 api
-==== get 기본 테스트
+== 테스트 API
 include::{snippets}/sample-controller-test/기본테스트/auto-section.adoc[]

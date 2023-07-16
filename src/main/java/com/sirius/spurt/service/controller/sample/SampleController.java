@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SampleController {
 
-    private final TestGetBusiness sampleFlow;
+    private final TestGetBusiness testGetBusiness;
     /**
      * @param sample
      * @param path
@@ -29,6 +29,6 @@ public class SampleController {
             @RequestParam(name = "sample") String sample, @PathVariable("path") String path) {
         TestGetBusiness.Dto dto = Dto.builder().testDto(sample).testPath(path).build();
         log.info("sample parm : {} path parm : {}", sample, path);
-        return RestResponse.success(sampleFlow.execute(dto));
+        return RestResponse.success(testGetBusiness.execute(dto));
     }
 }
