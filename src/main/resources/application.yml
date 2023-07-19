@@ -26,7 +26,8 @@ spring:
         mode: always
         encoding: UTF-8
 
-
 logging:
   level:
     org.hibernate.SQL: debug
+
+token-info-endpoint: https://www.googleapis.com/oauth2/v1/tokeninfo
