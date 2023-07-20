@@ -714,7 +714,7 @@ Content-Length: 381
       "mainText" : "본문",
       "category" : "category",
       "jobGroup" : "jobgroup",
-      "createTimestamp" : "2023-07-18T14:49:03.139+00:00"
+      "createTimestamp" : "2023-07-20T15:22:13.609+00:00"
     } ],
     "meta" : {
       "totalCount" : 2,
@@ -778,22 +778,24 @@ Content-Length: 381
 <td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">keyWord</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">keyWordList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">키워드 (최대 20개).</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">category</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">categoryList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
+<p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [FRONTEND, DESIGNER, BACKEND, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
@@ -816,7 +818,7 @@ Content-Length: 381
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question' -i -X POST \
     -H 'Content-Type: application/json' \
-    -d '{"subject":"test 질문","mainText":"test 내용","keyWord":[],"category":"category","jobGroup":"jobgroup","userId":null}'</code></pre>
+    -d '{"subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["MOTVE"],"jobGroup":"BACKEND","userId":null}'</code></pre>
 </div>
 </div>
 </div>
@@ -959,7 +961,7 @@ Content-Length: 248
     "mainText" : "본문",
     "category" : "category",
     "jobGroup" : "jobgroup",
-    "createTimestamp" : "2023-07-18T14:49:03.312+00:00"
+    "createTimestamp" : "2023-07-20T15:22:13.792+00:00"
   }
 }</code></pre>
 </div>

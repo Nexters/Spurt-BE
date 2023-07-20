@@ -1,7 +1,10 @@
 package com.sirius.spurt.store.repository.database.entity;
 
+import com.sirius.spurt.common.meta.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,11 +19,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "SAMPLE")
-public class SampleEntity {
+@Table(name = "CATEGORY")
+public class CategoryEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sampleId;
+    private Long categoryId;
 
-    @Column private String sampleKey;
+    @Column private Long questionId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;
 }

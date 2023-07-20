@@ -16,11 +16,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "SAMPLE")
-public class SampleEntity {
+@Table(name = "KEYWORD")
+public class KeyWordEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sampleId;
+    private Long keyWordId;
 
-    @Column private String sampleKey;
+    @Column private Long questionId;
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) CHARACTER SET UTF8")
+    private String keyWord;
 }

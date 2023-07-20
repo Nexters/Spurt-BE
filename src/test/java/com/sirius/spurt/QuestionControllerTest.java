@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.sirius.spurt.common.meta.Category;
+import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
@@ -46,9 +48,9 @@ public class QuestionControllerTest extends BaceMvcTest {
                 SaveQuestionBusiness.Dto.builder()
                         .subject("test 질문")
                         .mainText("test 내용")
-                        .jobGroup("jobgroup")
-                        .category("category")
-                        .keyWord(List.of())
+                        .jobGroup(JobGroup.BACKEND)
+                        .categoryList(List.of(Category.MOTVE))
+                        .keyWordList(List.of("testKeyword"))
                         .build();
         when(saveQuestionBusiness.execute(any())).thenReturn(new SaveQuestionBusiness.Result());
         this.mockMvc

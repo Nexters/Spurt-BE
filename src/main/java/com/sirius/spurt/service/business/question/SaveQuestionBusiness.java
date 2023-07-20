@@ -1,9 +1,12 @@
 package com.sirius.spurt.service.business.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sirius.spurt.common.meta.Category;
+import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Result;
+import com.sirius.spurt.store.provider.question.QuestionProvider;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
@@ -22,9 +25,20 @@ import org.springframework.validation.annotation.Validated;
 @Component
 @RequiredArgsConstructor
 public class SaveQuestionBusiness implements Business<Dto, Result> {
+
+    private final QuestionProvider questionProvider;
+
     @Override
     public Result execute(Dto input) {
         log.info("Start SaveQuestionBusiness");
+        questionProvider.saveQuestion(
+                input.getSubject(),
+                input.getMainText(),
+                input.getKeyWordList(),
+                input.getCategoryList(),
+                input.getJobGroup(),
+                input.getUserId());
+
         return new Result();
     }
 
@@ -44,11 +58,11 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
         private String mainText;
         /** 키워드 (최대 20개) */
         @Size(max = 20)
-        private List<String> keyWord;
+        private List<String> keyWordList;
         /** 카테고리 */
-        private String category;
+        private List<Category> categoryList;
         /** 직군 */
-        private String jobGroup;
+        private JobGroup jobGroup;
         /** 사용자 ID */
         private String userId;
     }
