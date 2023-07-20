@@ -18,7 +18,7 @@ endif::[]
 [cols=2*,options=header]
 |===
 |ENV
-|URL
+|BASE URL
 
 |DEV
 |http://sirius-spurt.duckdns.org
@@ -43,15 +43,14 @@ endif::[]
 
 = Spurt API
 
-[[질문]]
 == 질문 API
+include::{snippets}/question-controller-test/질문_검색/auto-section.adoc[]
+include::{snippets}/question-controller-test/질문_저장/auto-section.adoc[]
+include::{snippets}/question-controller-test/질문_단건_조회/auto-section.adoc[]
 
-[[카테고리]]
 == 카테고리 API
 
-[[직군]]
 == 직군 API
 
-[[테스트]]
 == 테스트 API
 include::{snippets}/sample-controller-test/기본테스트/auto-section.adoc[]

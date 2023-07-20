@@ -23,7 +23,7 @@ public class TestGetBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        log.info("Strart sample flow");
+        log.info("Start sample flow");
         SampleVo sample = sampleProvider.getSamepleData(Long.valueOf(1));
         return Result.builder().sampleKey(sample.getSampleKey()).build();
     }
