@@ -36,7 +36,7 @@ public class CustomFilter extends OncePerRequestFilter {
         String accessHeader = request.getHeader("Authorization");
 
         if (accessHeader == null || !accessHeader.startsWith(TOKEN_TYPE)) {
-            chain.doFilter(request, response);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return;
         }
 
