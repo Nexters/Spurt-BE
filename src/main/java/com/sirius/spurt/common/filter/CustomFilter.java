@@ -47,6 +47,7 @@ public class CustomFilter extends OncePerRequestFilter {
             return;
         }
 
+        request.setAttribute("email", tokenInfoResponse.getEmail());
         chain.doFilter(request, response);
     }
 
