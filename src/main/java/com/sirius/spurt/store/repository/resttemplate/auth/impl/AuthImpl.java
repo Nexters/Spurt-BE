@@ -1,7 +1,10 @@
 package com.sirius.spurt.store.repository.resttemplate.auth.impl;
 
+import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.common.meta.ResultCode;
 import com.sirius.spurt.store.repository.resttemplate.auth.AuthRepository;
 import com.sirius.spurt.store.repository.resttemplate.auth.playload.UserInfoPayload;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -12,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class AuthImpl implements AuthRepository {
     @Value("${user-info-endpoint}")
     private String userInfoEndpoint;
@@ -25,19 +29,20 @@ public class AuthImpl implements AuthRepository {
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<UserInfoPayload> res =
-                restTemplate.exchange(
-                    userInfoEndpoint + "?access_token=" + accessToken,
-                    HttpMethod.GET,
-                    req,
-                    UserInfoPayload.class);
+                    restTemplate.exchange(
+                            userInfoEndpoint + "?access_token=" + accessToken,
+                            HttpMethod.GET,
+                            req,
+                            UserInfoPayload.class);
 
             if (res.getStatusCode().is2xxSuccessful()) {
                 return res.getBody();
             } else {
-                return null;
+                throw new GlobalException(ResultCode.AUTHENTICATION_FAILED);
             }
         } catch (Exception e) {
-            return null;
+            log.error(e.getMessage());
+            throw new GlobalException(ResultCode.AUTHENTICATION_FAILED);
         }
     }
 }

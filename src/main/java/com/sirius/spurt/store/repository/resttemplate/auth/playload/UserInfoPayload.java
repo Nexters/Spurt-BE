@@ -15,17 +15,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInfoPayload {
-    @JsonProperty("issued_to")
-    private String issuedTo;
-    private String audience;
-    @JsonProperty("user_id")
+    @JsonProperty("id")
     private String userId;
-    private String scope;
-    @JsonProperty("expires_in")
-    private Long expiresIn;
+
     private String email;
+
     @JsonProperty("verified_email")
-    private boolean verifiedEmail;
-    @JsonProperty("access_type")
-    private String accessType;
+    private Boolean verifiedEmail;
+
+    private String name;
+
+    @JsonProperty("given_name")
+    private String givenName;
+
+    private String picture;
+    private String locale;
+    private String hd;
 }

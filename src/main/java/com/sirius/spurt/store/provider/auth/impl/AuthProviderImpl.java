@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class AuthProviderImpl implements AuthProvider {
     private final AuthRepository authRepository;
 
-   @Override
-   public String getUserId(String accessToken){
-       return authRepository.getUserInfo(accessToken).getUserId();
-   }
+    @Override
+    public String getUserId(String accessToken) {
+        return authRepository.getUserInfo(accessToken).getUserId();
+    }
 }
