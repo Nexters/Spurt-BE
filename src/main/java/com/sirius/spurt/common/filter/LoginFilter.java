@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Configuration
 @RequiredArgsConstructor
-public class CustomFilter extends OncePerRequestFilter {
+public class LoginFilter extends OncePerRequestFilter {
     private final AuthProvider authProvider;
     private final String TOKEN_TYPE = "Bearer ";
 
