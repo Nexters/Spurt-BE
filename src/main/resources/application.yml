@@ -30,4 +30,4 @@ logging:
   level:
     org.hibernate.SQL: debug
 
-token-info-endpoint: https://www.googleapis.com/oauth2/v1/tokeninfo
+user-info-endpoint: https://www.googleapis.com/oauth2/v1/userinfo
