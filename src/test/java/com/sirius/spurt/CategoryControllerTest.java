@@ -24,9 +24,7 @@ public class CategoryControllerTest extends BaseMvcTest {
         categoryList.add(Category.MAJOR);
 
         GetAllCategoryBusiness.Result result =
-                GetAllCategoryBusiness.Result.builder()
-                        .categoryList(categoryList)
-                        .build();
+                GetAllCategoryBusiness.Result.builder().categoryList(categoryList).build();
         when(getAllCategoryBusiness.execute(null)).thenReturn(result);
         this.mockMvc.perform(get("/v1/category")).andExpect(status().isOk()).andDo(print());
     }

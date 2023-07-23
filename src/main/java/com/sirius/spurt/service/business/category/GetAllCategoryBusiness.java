@@ -26,7 +26,9 @@ public class GetAllCategoryBusiness implements Business<Dto, Result> {
     @Override
     public Result execute(Dto input) {
         return Result.builder()
-                .categoryList(GetAllCategoryBusinessMapper.INSTANCE.toCategoryList(categoryProvider.getCategoryList()))
+                .categoryList(
+                        GetAllCategoryBusinessMapper.INSTANCE.toCategoryList(
+                                categoryProvider.getCategoryList()))
                 .build();
     }
 
@@ -46,6 +48,7 @@ public class GetAllCategoryBusiness implements Business<Dto, Result> {
         default Category map(CategoryVo categoryVo) {
             return categoryVo.getCategory();
         }
+
         List<Category> toCategoryList(List<CategoryVo> categoryVoList);
     }
 }
