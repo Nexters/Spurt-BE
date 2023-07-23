@@ -29,11 +29,6 @@ public class LoginFilter extends OncePerRequestFilter {
         String accessHeader = request.getHeader("Authorization");
 
         String userId = "admin";
-        //        if (!StringUtils.hasLength(accessHeader) || !accessHeader.startsWith(TOKEN_TYPE)) {
-        //            setErrorResponse(response, ResultCode.AUTHENTICATION_FAILED);
-        //            return;
-        //        }
-
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             try {
