@@ -17,15 +17,13 @@ public class CategoryProviderImpl implements CategoryProvider {
 
     @Override
     public List<CategoryVo> getCategoryList() {
-        return categoryRepository.findAll().stream()
-                .map(CategoryProviderImplMapper.INSTANCE::toCategoryVo)
-                .toList();
+        return CategoryProviderImplMapper.INSTANCE.toCategoryVoList(categoryRepository.findAll());
     }
 
     @Mapper
     public interface CategoryProviderImplMapper {
         CategoryProviderImplMapper INSTANCE = Mappers.getMapper(CategoryProviderImplMapper.class);
 
-        CategoryVo toCategoryVo(CategoryEntity entity);
+        List<CategoryVo> toCategoryVoList(List<CategoryEntity> categoryEntityList);
     }
 }

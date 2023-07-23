@@ -13,6 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -23,9 +25,8 @@ public class GetAllCategoryBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        List<CategoryVo> categoryVoList = categoryProvider.getCategoryList();
         return Result.builder()
-                .categoryList(categoryVoList.stream().map(CategoryVo::getCategory).toList())
+                .categoryList(GetAllCategoryBusinessMapper.INSTANCE.toCategoryList(categoryProvider.getCategoryList()))
                 .build();
     }
 
@@ -36,5 +37,15 @@ public class GetAllCategoryBusiness implements Business<Dto, Result> {
     @Builder
     public static class Result implements Business.Result, Serializable {
         List<Category> categoryList;
+    }
+
+    @Mapper
+    public interface GetAllCategoryBusinessMapper {
+        GetAllCategoryBusinessMapper INSTANCE = Mappers.getMapper(GetAllCategoryBusinessMapper.class);
+
+        default Category map(CategoryVo categoryVo) {
+            return categoryVo.getCategory();
+        }
+        List<Category> toCategoryList(List<CategoryVo> categoryVoList);
     }
 }
