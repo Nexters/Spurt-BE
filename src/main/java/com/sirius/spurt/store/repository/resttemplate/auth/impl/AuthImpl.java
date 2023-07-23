@@ -35,11 +35,7 @@ public class AuthImpl implements AuthRepository {
                             req,
                             UserInfoPayload.class);
 
-            if (res.getStatusCode().is2xxSuccessful()) {
-                return res.getBody();
-            } else {
-                throw new GlobalException(ResultCode.AUTHENTICATION_FAILED);
-            }
+            return res.getBody();
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new GlobalException(ResultCode.AUTHENTICATION_FAILED);
