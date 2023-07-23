@@ -19,4 +19,11 @@ public class RestResponse<T> implements Serializable {
                 .data(data)
                 .build();
     }
+
+    public static <T> RestResponse<T> error(ResultCode resultCode) {
+        return RestResponse.<T>builder()
+                .code(resultCode.getCode())
+                .message(resultCode.getMessage())
+                .build();
+    }
 }
