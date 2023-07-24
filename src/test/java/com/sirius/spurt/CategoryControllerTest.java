@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.service.business.category.GetAllCategoryBusiness;
+import com.sirius.spurt.service.business.category.GetAllCategoryBusiness.GetAllCategoryBusinessMapper;
 import com.sirius.spurt.service.controller.category.CategoryController;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,12 @@ public class CategoryControllerTest extends BaseMvcTest {
 
     @Test
     void 카테고리_전체_조회_테스트() throws Exception {
-        List<Category> categoryList = List.of(Category.values());
         GetAllCategoryBusiness.Result result =
-                GetAllCategoryBusiness.Result.builder().categoryList(categoryList).build();
+                GetAllCategoryBusiness.Result.builder()
+                        .categoryList(
+                                GetAllCategoryBusinessMapper.INSTANCE.toResultCategoryList(
+                                        List.of(Category.values())))
+                        .build();
         when(getAllCategoryBusiness.execute(null)).thenReturn(result);
         this.mockMvc.perform(get("/v1/category")).andExpect(status().isOk()).andDo(print());
     }
