@@ -22,7 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(controllers = {QuestionController.class})
-public class QuestionControllerTest extends BaceMvcTest {
+public class QuestionControllerTest extends BaseMvcTest {
     @MockBean private RetrieveQuestionBusiness retrieveQuestionBusiness;
     @MockBean private SaveQuestionBusiness saveQuestionBusiness;
     @MockBean private GetQuestionBusiness getQuestionBusiness;

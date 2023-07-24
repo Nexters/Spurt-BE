@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @WebMvcTest(controllers = {SampleController.class})
-public class SampleControllerTest extends BaceMvcTest {
+public class SampleControllerTest extends BaseMvcTest {
     @MockBean private SampleController smapleController;
 
     @Test

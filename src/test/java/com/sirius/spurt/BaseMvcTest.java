@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith({RestDocumentationExtension.class, MockitoExtension.class, SpringExtension.class})
-public class BaceMvcTest {
+public class BaseMvcTest {
     @Autowired private WebApplicationContext context;
 
     @Autowired protected ObjectMapper objectMapper;

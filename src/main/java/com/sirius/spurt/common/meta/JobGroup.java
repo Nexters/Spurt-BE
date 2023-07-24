@@ -14,7 +14,7 @@ public enum JobGroup implements CommonEnum {
     @Getter private final String description;
 
     @Override
-    public String getCode() {
+    public String getValue() {
         return name();
     }
 }
