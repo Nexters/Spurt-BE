@@ -7,14 +7,14 @@ import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Dto;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Result;
 import com.sirius.spurt.store.provider.jobgroup.JobGroupProvider;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SaveJobGroupBusiness implements Business<Dto, Result> {
@@ -22,7 +22,6 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        log.info("Start SaveJobGroupBusiness");
         jobGroupProvider.saveJobGroup(input.getUserId(), input.getJobGroup());
 
         return null;
@@ -32,6 +31,8 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
     @Data
     @Validated
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Dto implements Business.Dto, Serializable {
         private String userId;
         private JobGroup jobGroup;

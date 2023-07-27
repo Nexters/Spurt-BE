@@ -11,6 +11,7 @@ import com.sirius.spurt.service.controller.jobgroup.JobGroupController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 
 @WebMvcTest(controllers = {JobGroupController.class})
 public class JobGroupControllerTest extends BaseMvcTest {
@@ -25,7 +26,8 @@ public class JobGroupControllerTest extends BaseMvcTest {
                 .perform(
                         post("/v1/jobgroup")
                                 .requestAttr("userId", "admin")
-                                .param("jobGroup", String.valueOf(JobGroup.DEVELOPER)))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
