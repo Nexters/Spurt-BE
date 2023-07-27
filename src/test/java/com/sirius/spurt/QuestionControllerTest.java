@@ -48,7 +48,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                 SaveQuestionBusiness.Dto.builder()
                         .subject("test 질문")
                         .mainText("test 내용")
-                        .jobGroup(JobGroup.BACKEND)
+                        .jobGroup(JobGroup.DEVELOPER)
                         .categoryList(List.of(Category.MOTVE))
                         .keyWordList(List.of("testKeyword"))
                         .build();
