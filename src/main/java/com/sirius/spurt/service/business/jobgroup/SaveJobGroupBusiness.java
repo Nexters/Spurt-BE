@@ -24,7 +24,7 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
     public Result execute(Dto input) {
         jobGroupProvider.saveJobGroup(input.getUserId(), input.getJobGroup());
 
-        return null;
+        return new SaveJobGroupBusiness.Result();
     }
 
     @JsonIgnoreProperties
@@ -38,5 +38,6 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
         private JobGroup jobGroup;
     }
 
+    @JsonIgnoreProperties
     public static class Result implements Business.Result, Serializable {}
 }
