@@ -6,6 +6,7 @@ import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,8 @@ public class QuestionController {
      */
     @PostMapping("/question")
     public RestResponse<SaveQuestionBusiness.Result> questionSave(
-            @RequestBody SaveQuestionBusiness.Dto dto) {
+            HttpServletRequest request, @RequestBody SaveQuestionBusiness.Dto dto) {
+        dto.setUserId(request.getAttribute("userId").toString());
         return RestResponse.success(saveQuestionBusiness.execute(dto));
     }
 
@@ -62,6 +64,7 @@ public class QuestionController {
      */
     @GetMapping("/question")
     public RestResponse<RetrieveQuestionBusiness.Result> questionRetrieve(
+            HttpServletRequest request,
             @RequestParam(name = "subject", required = false) String subject,
             @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
             @RequestParam(name = "category", required = false) Category category,
@@ -69,10 +72,10 @@ public class QuestionController {
             @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndecator,
             @RequestParam(name = "offest", defaultValue = "0") String offest,
             @RequestParam(name = "size", defaultValue = "10") String size) {
-
+        String userId = request.getAttribute("userId").toString();
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
-                        .userId("testUser")
+                        .userId(userId)
                         .subject(subject)
                         .jobGroup(jobGroup)
                         .category(category)
