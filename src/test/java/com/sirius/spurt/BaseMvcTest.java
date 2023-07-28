@@ -4,6 +4,7 @@ import capital.scalable.restdocs.AutoDocumentation;
 import capital.scalable.restdocs.jackson.JacksonResultHandlers;
 import capital.scalable.restdocs.response.ResponseModifyingPreprocessors;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sirius.spurt.common.filter.LoginFilter;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class BaseMvcTest {
     @Autowired private WebApplicationContext context;
     @Autowired protected ObjectMapper objectMapper;
+    @Autowired protected LoginFilter loginFilter;
 
     @MockBean private AuthProvider authProvider;
     protected MockMvc mockMvc;
@@ -34,6 +36,7 @@ public class BaseMvcTest {
 
         this.mockMvc =
                 MockMvcBuilders.webAppContextSetup(context)
+                        .addFilter(loginFilter)
                         .alwaysDo(JacksonResultHandlers.prepareJackson(objectMapper))
                         .alwaysDo(
                                 MockMvcRestDocumentation.document(
