@@ -18,4 +18,10 @@ public class JobGroupProviderImpl implements JobGroupProvider {
     public void saveJobGroup(final String userId, final JobGroup jobGroup) {
         userRepository.save(UserEntity.builder().userId(userId).jobGroup(jobGroup).build());
     }
+
+    @Override
+    @Transactional
+    public void updateJobGroup(final String userId, final JobGroup jobGroup) {
+        userRepository.save(UserEntity.builder().userId(userId).jobGroup(jobGroup).build());
+    }
 }

@@ -3,8 +3,8 @@ package com.sirius.spurt.service.business.jobgroup;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
-import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Dto;
-import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Result;
+import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness.Dto;
+import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness.Result;
 import com.sirius.spurt.store.provider.jobgroup.JobGroupProvider;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
@@ -17,14 +17,14 @@ import org.springframework.validation.annotation.Validated;
 
 @Component
 @RequiredArgsConstructor
-public class SaveJobGroupBusiness implements Business<Dto, Result> {
+public class UpdateJobGroupBusiness implements Business<Dto, Result> {
     private final JobGroupProvider jobGroupProvider;
 
     @Override
     public Result execute(Dto input) {
-        jobGroupProvider.saveJobGroup(input.getUserId(), input.getJobGroup());
+        jobGroupProvider.updateJobGroup(input.getUserId(), input.getJobGroup());
 
-        return new SaveJobGroupBusiness.Result();
+        return new UpdateJobGroupBusiness.Result();
     }
 
     @JsonIgnoreProperties
