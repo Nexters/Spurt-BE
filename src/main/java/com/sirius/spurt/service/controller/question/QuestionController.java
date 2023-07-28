@@ -1,5 +1,7 @@
 package com.sirius.spurt.service.controller.question;
 
+import com.sirius.spurt.common.meta.Category;
+import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
@@ -32,7 +34,8 @@ public class QuestionController {
     @GetMapping("/question/{questionId}")
     public RestResponse<GetQuestionBusiness.Result> questionGet(
             @PathVariable("questionId") String questionId) {
-        GetQuestionBusiness.Dto dto = GetQuestionBusiness.Dto.builder().questionId(questionId).build();
+        GetQuestionBusiness.Dto dto =
+                GetQuestionBusiness.Dto.builder().questionId(Long.parseLong(questionId)).build();
         return RestResponse.success(getQuestionBusiness.execute(dto));
     }
     /**
@@ -52,17 +55,20 @@ public class QuestionController {
      * @param category 카테고리
      * @param pinIndecator 10분노트 여부 true/fasle
      * @param myQuestionIndecator 내 질문만 조회 true/fasle
+     * @param offest 페이지 (시작 0)
+     * @param size size
      * @return
      * @title 질문 검색 api
      */
     @GetMapping("/question")
     public RestResponse<RetrieveQuestionBusiness.Result> questionRetrieve(
-            @RequestParam(name = "subject") String subject,
-            @RequestParam(name = "jobGroup") String jobGroup,
-            @RequestParam(name = "category") String category,
-            @RequestParam(name = "pinIndecator", defaultValue = "false") String pinIndecator,
-            @RequestParam(name = "myQuestionIndecator", defaultValue = "true")
-                    String myQuestionIndecator) {
+            @RequestParam(name = "subject", required = false) String subject,
+            @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
+            @RequestParam(name = "category", required = false) Category category,
+            @RequestParam(name = "pinIndicator", defaultValue = "false") String pinIndecator,
+            @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndecator,
+            @RequestParam(name = "offest", defaultValue = "0") String offest,
+            @RequestParam(name = "size", defaultValue = "10") String size) {
 
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
@@ -70,8 +76,10 @@ public class QuestionController {
                         .subject(subject)
                         .jobGroup(jobGroup)
                         .category(category)
-                        .pinIndecator(pinIndecator)
-                        .myQuestionIndecator(myQuestionIndecator)
+                        .pinIndicator(Boolean.valueOf(pinIndecator))
+                        .myQuestionIndicator(Boolean.valueOf(myQuestionIndecator))
+                        .size(size)
+                        .offset(offest)
                         .build();
         return RestResponse.success(retrieveQuestionBusiness.execute(dto));
     }

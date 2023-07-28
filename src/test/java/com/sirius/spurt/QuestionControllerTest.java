@@ -29,14 +29,16 @@ public class QuestionControllerTest extends BaseMvcTest {
 
     @Test
     void 질문_단건_조회() throws Exception {
-        GetQuestionBusiness.Dto dto = GetQuestionBusiness.Dto.builder().questionId("1").build();
+        GetQuestionBusiness.Dto dto =
+                GetQuestionBusiness.Dto.builder().questionId(Long.parseLong("1")).build();
         GetQuestionBusiness.Result result =
                 GetQuestionBusiness.Result.builder()
                         .subject("제목")
-                        .category("category")
-                        .jobGroup("jobgroup")
+                        .jobGroup(JobGroup.DEVELOPER)
                         .mainText("본문")
                         .createTimestamp(Timestamp.from(Instant.now()))
+                        .categoryList(List.of(Category.MOTVE))
+                        .keyWordList(List.of("키워드"))
                         .build();
         when(getQuestionBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/question/1")).andExpect(status().isOk()).andDo(print());
@@ -67,20 +69,19 @@ public class QuestionControllerTest extends BaseMvcTest {
 
         RetrieveQuestionBusiness.Result result =
                 RetrieveQuestionBusiness.Result.builder()
-                        .question(
+                        .questions(
                                 List.of(
                                         RetrieveQuestionBusiness.Result.Question.builder()
                                                 .subject("제목")
-                                                .category("category")
-                                                .jobGroup("jobgroup")
+                                                .categoryList(List.of(Category.MOTVE))
+                                                .jobGroup(JobGroup.DEVELOPER)
                                                 .mainText("본문")
                                                 .createTimestamp(Timestamp.from(Instant.now()))
                                                 .build()))
                         .meta(
                                 RetrieveQuestionBusiness.Result.MetaData.builder()
-                                        .totalCount(2)
-                                        .pageableCount(1)
-                                        .isEnd(true)
+                                        .totalCount(Long.parseLong("1"))
+                                        .totalPage(1)
                                         .build())
                         .build();
 
@@ -89,8 +90,8 @@ public class QuestionControllerTest extends BaseMvcTest {
                 .perform(
                         get("/v1/question")
                                 .param("subject", "제목")
-                                .param("jobGroup", "1")
-                                .param("category", "1"))
+                                .param("jobGroup", JobGroup.DEVELOPER.name())
+                                .param("category", Category.MOTVE.name()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

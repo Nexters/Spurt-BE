@@ -1,9 +1,14 @@
 package com.sirius.spurt.service.business.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sirius.spurt.common.meta.Category;
+import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness.Result;
+import com.sirius.spurt.store.provider.question.QuestionProvider;
+import com.sirius.spurt.store.provider.question.vo.CategoryVo;
+import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,6 +20,10 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -22,10 +31,22 @@ import org.springframework.validation.annotation.Validated;
 @Component
 @RequiredArgsConstructor
 public class RetrieveQuestionBusiness implements Business<Dto, Result> {
+
+    private final QuestionProvider questionProvider;
+
     @Override
     public Result execute(Dto input) {
-        log.info("Start RetrieveQuestionBusiness");
-        return new Result();
+        QuestionVoList questionVoList =
+                questionProvider.searchQuestion(
+                        input.getSubject(),
+                        input.getJobGroup(),
+                        input.getCategory(),
+                        input.getPinIndicator(),
+                        input.getMyQuestionIndicator(),
+                        input.getUserId(),
+                        PageRequest.of(Integer.parseInt(input.getOffset()), Integer.parseInt(input.getSize())));
+
+        return RetrieveQuestionBusinessMapper.INSTANCE.toResult(questionVoList);
     }
 
     @JsonIgnoreProperties
@@ -36,14 +57,13 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
 
         @Serial private static final long serialVersionUID = -4507368296777999659L;
         private String userId;
-        private String jobGroup;
+        private JobGroup jobGroup;
         private String subject;
-        private String category;
-        private String pinIndecator;
-        private String myQuestionIndecator;
+        private Category category;
+        private Boolean pinIndicator;
+        private Boolean myQuestionIndicator;
         private String size;
-        private String sort;
-        private String page;
+        private String offset;
     }
 
     @Setter
@@ -56,7 +76,7 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
 
         @Serial private static final long serialVersionUID = -6167887863876370836L;
         /** 질문 정보 */
-        private List<Question> question;
+        private List<Question> questions;
         /** 메타 정보 */
         private MetaData meta;
 
@@ -65,15 +85,14 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
         @Builder
         @AllArgsConstructor
         public static class Question {
-
             /** 제목 */
             private String subject;
             /** 본문 */
             private String mainText;
             /** 카테고리 */
-            private String category;
+            private List<Category> categoryList;
             /** 직군 */
-            private String jobGroup;
+            private JobGroup jobGroup;
             /** 생성시간 */
             private Timestamp createTimestamp;
         }
@@ -83,13 +102,24 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class MetaData implements Serializable {
-
-            /** 전체 질문 개수 */
-            private Integer totalCount;
-            /** 현재 page */
-            private Integer pageableCount;
-            /** 마지막 페이지 여부 */
-            private Boolean isEnd;
+            /** 전체 개수 */
+            private Long totalCount;
+            /** 전체 페이지 수 */
+            private Integer totalPage;
         }
+    }
+
+    @Mapper
+    public interface RetrieveQuestionBusinessMapper {
+        RetrieveQuestionBusiness.RetrieveQuestionBusinessMapper INSTANCE =
+                Mappers.getMapper(RetrieveQuestionBusiness.RetrieveQuestionBusinessMapper.class);
+
+        default List<Category> toCategory(List<CategoryVo> categoryListe) {
+            return categoryListe.stream().map(categoryVo -> categoryVo.getCategory()).toList();
+        }
+
+        @Mapping(source = "totalCount", target = "meta.totalCount")
+        @Mapping(source = "totalPage", target = "meta.totalPage")
+        RetrieveQuestionBusiness.Result toResult(QuestionVoList questions);
     }
 }

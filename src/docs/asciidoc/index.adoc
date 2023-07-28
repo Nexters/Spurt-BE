@@ -35,11 +35,13 @@ endif::[]
 |TOKEN
 |구글 토큰 정보
 |false
-
-|USER-ID
-|유저 ID 정보
-|true
 |===
+
+== 현재 오류 사항
+- 명세서 body의 userId 는 전달 필요 x
+
+
+
 
 = Spurt API
 
@@ -49,8 +51,11 @@ include::{snippets}/question-controller-test/질문_저장/auto-section.adoc[]
 include::{snippets}/question-controller-test/질문_단건_조회/auto-section.adoc[]
 
 == 카테고리 API
+include::{snippets}/category-controller-test/카테고리_전체_조회_테스트/auto-section.adoc[]
 
 == 직군 API
+include::{snippets}/job-group-controller-test/유저_직군_저장/auto-section.adoc[]
 
-== 테스트 API
-include::{snippets}/sample-controller-test/기본테스트/auto-section.adoc[]
+== 유저 API
+include::{snippets}/user-controller-test/유저_존재_확인/auto-section.adoc[]
+

@@ -30,7 +30,6 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        log.info("Start SaveQuestionBusiness");
         questionProvider.saveQuestion(
                 input.getSubject(),
                 input.getMainText(),
@@ -38,7 +37,6 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
                 input.getCategoryList(),
                 input.getJobGroup(),
                 input.getUserId());
-
         return new Result();
     }
 
