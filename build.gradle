@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.0'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'com.diffplug.spotless' version '6.11.0'
+//    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.sirius'
@@ -27,33 +28,73 @@ repositories {
 ext {
     snippetsDir = file('build/generated-snippets') // snippet 이 생성될 디렉토리 지정
     javadocJsonDir = file("$buildDir/generated-javadoc-json") // javadoc-json 이 생성될 디렉토리 지정
+//    querydslDir = file("$buildDir/generated/querydsl) // javadoc-json 이 생성될 디렉토리 지정
+//    def querydslDir = "$buildDir/generated/querydsl"
 }
 
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
+    runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'capital.scalable:spring-auto-restdocs-core:2.0.11'
-//    jsondoclet 'capital.scalable:spring-auto-restdocs-json-doclet:2.0.11'
     jsondoclet 'capital.scalable:spring-auto-restdocs-json-doclet-jdk9:2.0.11'
-
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'io.projectreactor:reactor-test'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    // == 스프링 부트 3.0 이상 ==
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
 }
 
+// === Querydsl 빌드 옵션 ===
+def querydslDir = "$buildDir/generated/querydsl"
+//sourceSets {
+//    main.java.srcDir querydslDir
+//}
+//clean.doLast {
+//    file(querydslDir).deleteDir()
+//}
+//task querydsl(type: JavaCompile,dependsOn: compileJava) {
+//    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+//}
+
 task jsonDoclet(type: Javadoc, dependsOn: compileJava) {
-    source = sourceSets.main.allJava
-    classpath = sourceSets.main.compileClasspath
-    destinationDir = javadocJsonDir
-    options.docletpath = configurations.jsondoclet.files.asType(List)
-    options.doclet = 'capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet'
-    options.memberLevel = JavadocMemberLevel.PACKAGE
+//    doFirst{
+//        querydsl
+//    }
+    doLast{
+        source = sourceSets.main.allJava
+        classpath = sourceSets.main.compileClasspath
+        destinationDir = javadocJsonDir
+        options.docletpath = configurations.jsondoclet.files.asType(List)
+        options.doclet = 'capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet'
+        options.memberLevel = JavadocMemberLevel.PACKAGE
+    }
+
 }
+
+//tasks.named("Javadoc").configure { dependsOn("querydsl") }
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+//jsonDoclet 보다 먼저 실행이 되어야함. 의존성을 가팅 주려고 별도의 task 로 생성
+
+//tasks.named("jsonDoclet").configure { dependsOn("querydsl") }
+
+
 
 spotless {
     java {
@@ -70,6 +111,8 @@ spotless {
     }
 }
 
+// 의존성을 설정해줌 test 끝나고 spotlessjava 수행되도록
+tasks.named("spotlessJava").configure { dependsOn("compileTestJava") }
 
 // 테스트 실행 후, snipperDir에 snippet(.adoc 파일들) 생성
 test {

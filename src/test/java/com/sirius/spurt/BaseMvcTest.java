@@ -4,10 +4,12 @@ import capital.scalable.restdocs.AutoDocumentation;
 import capital.scalable.restdocs.jackson.JacksonResultHandlers;
 import capital.scalable.restdocs.response.ResponseModifyingPreprocessors;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sirius.spurt.store.provider.auth.AuthProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.cli.CliDocumentation;
@@ -20,15 +22,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith({RestDocumentationExtension.class, MockitoExtension.class, SpringExtension.class})
-public class BaceMvcTest {
+public class BaseMvcTest {
     @Autowired private WebApplicationContext context;
-
     @Autowired protected ObjectMapper objectMapper;
 
+    @MockBean private AuthProvider authProvider;
     protected MockMvc mockMvc;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) throws Exception {
+
         this.mockMvc =
                 MockMvcBuilders.webAppContextSetup(context)
                         .alwaysDo(JacksonResultHandlers.prepareJackson(objectMapper))

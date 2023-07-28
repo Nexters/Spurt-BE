@@ -12,7 +12,7 @@ public class CustomResponseFieldSnippet extends JacksonResponseFieldSnippet {
     protected Type[] getType(final HandlerMethod method) {
         var originalResponse = super.getType(method);
         Class<?> methodReturnType = method.getReturnType().getParameterType();
-        if ("com.sirius.spurt.common.template.RestResponse"
+        if ("com.sirius.spurt.service.controller.RestResponse"
                 .equals(methodReturnType.getCanonicalName())) {
             Type type = firstGenericType(method.getReturnType());
             Type returnType;

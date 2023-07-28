@@ -3,9 +3,6 @@ ifndef::snippets[]
 endif::[]
 
 = Spurt REST Docs
-
-SPURT api 명세서
-
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -13,10 +10,52 @@ SPURT api 명세서
 :toclevels: 2
 :sectlinks:
 
-[[Spurt-API]]
-== Spurt API
+넥스터즈 시리우스 팀 api 명세서
 
-[[테스트]]
-=== 테스트 api
-==== get 기본 테스트
-include::{snippets}/sample-controller-test/기본테스트/auto-section.adoc[]
+[[Spurt-API]]
+
+== Host 정보
+[cols=2*,options=header]
+|===
+|ENV
+|BASE URL
+
+|DEV
+|http://sirius-spurt.duckdns.org
+|===
+
+== Header 정보
+
+[cols=3*,options=header]
+|===
+|Header
+|정보
+|Optional
+
+|TOKEN
+|구글 토큰 정보
+|false
+|===
+
+== 현재 오류 사항
+- 명세서 body의 userId 는 전달 필요 x
+
+
+
+
+= Spurt API
+
+== 질문 API
+include::{snippets}/question-controller-test/질문_검색/auto-section.adoc[]
+include::{snippets}/question-controller-test/질문_저장/auto-section.adoc[]
+include::{snippets}/question-controller-test/질문_단건_조회/auto-section.adoc[]
+
+== 카테고리 API
+include::{snippets}/category-controller-test/카테고리_전체_조회_테스트/auto-section.adoc[]
+
+== 직군 API
+include::{snippets}/job-group-controller-test/유저_직군_저장/auto-section.adoc[]
+
+== 유저 API
+include::{snippets}/user-controller-test/유저_존재_확인/auto-section.adoc[]
+
