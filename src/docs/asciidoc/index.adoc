@@ -48,6 +48,7 @@ endif::[]
 == 질문 API
 include::{snippets}/question-controller-test/질문_검색/auto-section.adoc[]
 include::{snippets}/question-controller-test/질문_저장/auto-section.adoc[]
+include::{snippets}/question-controller-test/질문_수정/auto-section.adoc[]
 include::{snippets}/question-controller-test/질문_단건_조회/auto-section.adoc[]
 
 == 카테고리 API

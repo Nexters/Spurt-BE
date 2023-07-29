@@ -16,6 +16,15 @@ public interface QuestionProvider {
             final JobGroup jobGroup,
             final String userId);
 
+    void putQuestion(
+            final String questionId,
+            final String subject,
+            final String mainText,
+            final List<String> keyWordList,
+            final List<Category> categoryList,
+            final JobGroup jobGroup,
+            final String userId);
+
     QuestionVo getQuestion(final Long questionId);
 
     QuestionVoList searchQuestion(

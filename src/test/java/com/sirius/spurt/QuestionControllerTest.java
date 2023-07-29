@@ -4,12 +4,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
+import com.sirius.spurt.service.business.question.PutQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.question.QuestionController;
@@ -25,6 +27,7 @@ import org.springframework.http.MediaType;
 public class QuestionControllerTest extends BaseMvcTest {
     @MockBean private RetrieveQuestionBusiness retrieveQuestionBusiness;
     @MockBean private SaveQuestionBusiness saveQuestionBusiness;
+    @MockBean private PutQuestionBusiness putQuestionBusiness;
     @MockBean private GetQuestionBusiness getQuestionBusiness;
 
     @Test
@@ -42,6 +45,27 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .build();
         when(getQuestionBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/question/1")).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 질문_수정() throws Exception {
+        PutQuestionBusiness.Dto dto =
+                PutQuestionBusiness.Dto.builder()
+                        .questionId("2")
+                        .subject("test 질문")
+                        .mainText("test 내용")
+                        .jobGroup(JobGroup.DEVELOPER)
+                        .categoryList(List.of(Category.MOTVE))
+                        .keyWordList(List.of("testKeyword"))
+                        .build();
+        when(putQuestionBusiness.execute(any())).thenReturn(new PutQuestionBusiness.Result());
+        this.mockMvc
+                .perform(
+                        put("/v1/question")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test

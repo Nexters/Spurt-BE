@@ -1,13 +1,12 @@
 package com.sirius.spurt.store.repository.database.custom.impl;
 
-import static com.sirius.spurt.store.repository.database.entity.QCategoryEntity.categoryEntity;
-import static com.sirius.spurt.store.repository.database.entity.QQuestionEntity.questionEntity;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.store.repository.database.custom.QuestionRepositoryCustom;
+import com.sirius.spurt.store.repository.database.entity.QCategoryEntity;
+import com.sirius.spurt.store.repository.database.entity.QQuestionEntity;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 
         List<QuestionEntity> questionEntityList =
                 jpaQueryFactory
-                        .selectFrom(questionEntity)
-                        .leftJoin(questionEntity.categoryEntityList, categoryEntity)
+                        .selectFrom(QQuestionEntity.questionEntity)
+                        .leftJoin(
+                                QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
                         .where(
                                 containSubject(subject),
                                 eqJobGroup(jobGroup),
@@ -44,13 +44,14 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                                 eqCategory(category))
                         .offset(pageRequest.getOffset())
                         .limit(pageRequest.getPageSize())
-                        .orderBy(questionEntity.createTimestamp.desc())
+                        .orderBy(QQuestionEntity.questionEntity.createTimestamp.desc())
                         .fetch();
 
         int count =
                 jpaQueryFactory
-                        .selectFrom(questionEntity)
-                        .leftJoin(questionEntity.categoryEntityList, categoryEntity)
+                        .selectFrom(QQuestionEntity.questionEntity)
+                        .leftJoin(
+                                QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
                         .where(
                                 containSubject(subject),
                                 eqJobGroup(jobGroup),
@@ -76,26 +77,26 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 
     private BooleanExpression containSubject(String subject) {
         if (!StringUtils.hasText(subject)) return null;
-        return questionEntity.subject.contains(subject);
+        return QQuestionEntity.questionEntity.subject.contains(subject);
     }
 
     private BooleanExpression eqJobGroup(JobGroup jobGroup) {
         if (jobGroup == null) return null;
-        return questionEntity.jobGroup.eq(jobGroup);
+        return QQuestionEntity.questionEntity.jobGroup.eq(jobGroup);
     }
 
     private BooleanExpression eqPinIndicator(Boolean pinIndicator) {
         if (pinIndicator == null) return null;
-        return questionEntity.pinIndicator.eq(pinIndicator);
+        return QQuestionEntity.questionEntity.pinIndicator.eq(pinIndicator);
     }
 
     private BooleanExpression eqUserId(Boolean myQuestionIndicator, String userId) {
         if (myQuestionIndicator == false) return null;
-        return questionEntity.userId.eq(userId);
+        return QQuestionEntity.questionEntity.userId.eq(userId);
     }
     //
     private BooleanExpression eqCategory(Category category) {
         if (category == null) return null;
-        return categoryEntity.category.eq(category);
+        return QCategoryEntity.categoryEntity.category.eq(category);
     }
 }
