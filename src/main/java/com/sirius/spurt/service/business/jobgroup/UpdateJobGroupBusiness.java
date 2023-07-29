@@ -34,7 +34,9 @@ public class UpdateJobGroupBusiness implements Business<Dto, Result> {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Dto implements Business.Dto, Serializable {
+        /** Userid 프론트 전달 x */
         private String userId;
+        /** 직군 */
         private JobGroup jobGroup;
     }
 

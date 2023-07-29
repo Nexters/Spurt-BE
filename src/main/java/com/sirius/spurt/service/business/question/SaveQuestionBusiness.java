@@ -61,7 +61,7 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
         private List<Category> categoryList;
         /** 직군 */
         private JobGroup jobGroup;
-        /** 사용자 ID */
+        /** 사용자 ID (프론트 전달 x) */
         private String userId;
     }
 

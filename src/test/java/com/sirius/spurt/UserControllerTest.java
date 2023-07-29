@@ -22,9 +22,6 @@ public class UserControllerTest extends BaseMvcTest {
         CheckUserExistsBusiness.Result result =
                 CheckUserExistsBusiness.Result.builder().isUserExists(false).build();
         when(checkUserExistsBusiness.execute(dto)).thenReturn(result);
-        this.mockMvc
-                .perform(get("/v1/user/exist").requestAttr("userId", "test-admin"))
-                .andExpect(status().isOk())
-                .andDo(print());
+        this.mockMvc.perform(get("/v1/user/exist")).andExpect(status().isOk()).andDo(print());
     }
 }
