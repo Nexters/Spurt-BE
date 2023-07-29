@@ -13,7 +13,6 @@ version = '0.0.1-SNAPSHOT'
 java {
     sourceCompatibility = '17'
 }
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -59,40 +58,43 @@ dependencies {
 
 // === Querydsl 빌드 옵션 ===
 def querydslDir = "$buildDir/generated/querydsl"
-//sourceSets {
-//    main.java.srcDir querydslDir
-//}
-//clean.doLast {
-//    file(querydslDir).deleteDir()
-//}
-//task querydsl(type: JavaCompile,dependsOn: compileJava) {
-//    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+sourceSets {
+    main.java.srcDirs += querydslDir
+}
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+//task querydsl(type: JavaCompile, dependsOn: compileJava) {
+//    doFirst{
+//        options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+//    }
 //}
 
 task jsonDoclet(type: Javadoc, dependsOn: compileJava) {
 //    doFirst{
 //        querydsl
 //    }
-    doLast{
-        source = sourceSets.main.allJava
-        classpath = sourceSets.main.compileClasspath
-        destinationDir = javadocJsonDir
-        options.docletpath = configurations.jsondoclet.files.asType(List)
-        options.doclet = 'capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet'
-        options.memberLevel = JavadocMemberLevel.PACKAGE
-    }
+//    source = sourceSets.main.allJava
+//    classpath = sourceSets.main.compileClasspath
+//    destinationDir = javadocJsonDir
+//    options.docletpath = configurations.jsondoclet.files.asType(List)
+//    options.doclet = 'capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet'
+//    options.memberLevel = JavadocMemberLevel.PACKAGE
+//    doLast{
+//        source = sourceSets.main.allJava
+//        classpath = sourceSets.main.compileClasspath
+//        destinationDir = javadocJsonDir
+//        options.docletpath = configurations.jsondoclet.files.asType(List)
+//        options.doclet = 'capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet'
+//        options.memberLevel = JavadocMemberLevel.PACKAGE
+//    }
 
 }
 
-//tasks.named("Javadoc").configure { dependsOn("querydsl") }
 
-tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-}
-
-//jsonDoclet 보다 먼저 실행이 되어야함. 의존성을 가팅 주려고 별도의 task 로 생성
-
-//tasks.named("jsonDoclet").configure { dependsOn("querydsl") }
 
 
 

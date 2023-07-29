@@ -52,6 +52,44 @@ public class QuestionProviderImpl implements QuestionProvider {
 
     @Override
     @Transactional
+    public void putQuestion(
+            final String questionId,
+            final String subject,
+            final String mainText,
+            final List<String> keyWordList,
+            final List<Category> categoryList,
+            final JobGroup jobGroup,
+            final String userId) {
+
+        QuestionEntity previous = questionRepository.findByQuestionId(Long.valueOf(questionId));
+
+        List<CategoryEntity> categoryEntityList =
+                categoryList.stream()
+                        .map(category -> CategoryEntity.builder().category(category).build())
+                        .toList();
+
+        List<KeyWordEntity> keyWordEntityList =
+                keyWordList.stream()
+                        .map(keyWord -> KeyWordEntity.builder().keyWord(keyWord).build())
+                        .toList();
+
+        QuestionEntity questionEntity =
+                QuestionEntity.builder()
+                        .questionId(Long.valueOf(questionId))
+                        .categoryEntityList(categoryEntityList)
+                        .KeyWordEntityList(keyWordEntityList)
+                        .subject(subject)
+                        .mainText(mainText)
+                        .jobGroup(jobGroup)
+                        .userId(userId)
+                        .pinIndicator(previous.getPinIndicator())
+                        .build();
+
+        questionRepository.save(questionEntity);
+    }
+
+    @Override
+    @Transactional
     public void saveQuestion(
             final String subject,
             final String mainText,

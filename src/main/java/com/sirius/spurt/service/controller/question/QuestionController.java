@@ -3,6 +3,7 @@ package com.sirius.spurt.service.controller.question;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
+import com.sirius.spurt.service.business.question.PutQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,8 +26,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuestionController {
 
     private final SaveQuestionBusiness saveQuestionBusiness;
+    private final PutQuestionBusiness putQuestionBusiness;
     private final GetQuestionBusiness getQuestionBusiness;
     private final RetrieveQuestionBusiness retrieveQuestionBusiness;
+
+    /**
+     * @param dto
+     * @return
+     * @title 질문 수정 api
+     */
+    @PutMapping("/question")
+    public RestResponse<PutQuestionBusiness.Result> questionSave(
+            HttpServletRequest request, @RequestBody PutQuestionBusiness.Dto dto) {
+        dto.setUserId(request.getAttribute("userId").toString());
+        return RestResponse.success(putQuestionBusiness.execute(dto));
+    }
 
     /**
      * @param questionId 질문 ID
