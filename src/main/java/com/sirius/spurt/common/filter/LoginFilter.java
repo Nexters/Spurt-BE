@@ -28,6 +28,11 @@ public class LoginFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
         String accessHeader = request.getHeader("Authorization");
 
+        if (!StringUtils.hasLength(accessHeader) || !accessHeader.startsWith(TOKEN_TYPE)) {
+            setErrorResponse(response, ResultCode.AUTHENTICATION_FAILED);
+            return;
+        }
+
         String userId = "admin";
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
