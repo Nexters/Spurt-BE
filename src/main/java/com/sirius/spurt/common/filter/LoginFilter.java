@@ -26,6 +26,11 @@ public class LoginFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        if (isNoAuthUriPattern(request.getServletPath())) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String accessHeader = request.getHeader("Authorization");
 
         if (!StringUtils.hasLength(accessHeader) || !accessHeader.startsWith(TOKEN_TYPE)) {
@@ -56,5 +61,10 @@ public class LoginFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("UTF-8");
 
         response.getWriter().write(objectMapper.writeValueAsString(RestResponse.error(resultCode)));
+    }
+
+    private boolean isNoAuthUriPattern(String uriPattern) {
+        // TODO ADD get random question api
+        return uriPattern.startsWith("/v1/category");
     }
 }
