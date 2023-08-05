@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface QuestionRepository
         extends JpaRepository<QuestionEntity, String>, QuestionRepositoryCustom {
     QuestionEntity findByQuestionId(final Long id);
+
+    void deleteByQuestionIdAndUserId(final Long questionId, final String userId);
 }

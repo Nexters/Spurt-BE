@@ -453,25 +453,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_질문_api">질문 API</a>
 <ul class="sectlevel2">
-<li><a href="#resources-question-controller-test-질문_검색">Question Retrieve</a></li>
-<li><a href="#resources-question-controller-test-질문_저장">Question Save</a></li>
-<li><a href="#resources-question-controller-test-질문_수정">Question Save</a></li>
-<li><a href="#resources-question-controller-test-질문_단건_조회">Question Get</a></li>
+<li><a href="#resources-question-controller-test-질문_검색">질문 검색 api</a></li>
+<li><a href="#resources-question-controller-test-질문_저장">질문 저장 api</a></li>
+<li><a href="#resources-question-controller-test-질문_수정">질문 저장 api</a></li>
+<li><a href="#resources-question-controller-test-질문_단건_조회">질문 단건 조회 api</a></li>
 </ul>
 </li>
 <li><a href="#_카테고리_api">카테고리 API</a>
 <ul class="sectlevel2">
-<li><a href="#resources-category-controller-test-카테고리_전체_조회_테스트">Get All Category</a></li>
+<li><a href="#resources-category-controller-test-카테고리_전체_조회_테스트">카테고리 전체 조회</a></li>
 </ul>
 </li>
 <li><a href="#_직군_api">직군 API</a>
 <ul class="sectlevel2">
-<li><a href="#resources-job-group-controller-test-유저_직군_저장">Save Job Group</a></li>
+<li><a href="#resources-job-group-controller-test-유저_직군_저장">유저 아이디, 직군 저장 api</a></li>
 </ul>
 </li>
 <li><a href="#_유저_api">유저 API</a>
 <ul class="sectlevel2">
-<li><a href="#resources-user-controller-test-유저_존재_확인">Check User Exists</a></li>
+<li><a href="#resources-user-controller-test-유저_존재_확인">유저 존재 여부 확인 api</a></li>
 </ul>
 </li>
 </ul>
@@ -553,9 +553,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_질문_api"><a class="link" href="#_질문_api">질문 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-question-controller-test-질문_검색"><a class="link" href="#resources-question-controller-test-질문_검색">Question Retrieve</a></h3>
+<h3 id="resources-question-controller-test-질문_검색"><a class="link" href="#resources-question-controller-test-질문_검색">질문 검색 api</a></h3>
 <div class="paragraph">
 <p><code>GET /v1/question</code></p>
+</div>
+<div class="paragraph">
+<p>@param subject.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters"><a class="link" href="#_path_parameters">Path parameters</a></h4>
@@ -591,37 +594,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">category</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
+<p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Default value: 'false'.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10분노트 여부 true/fasle.</p>
+<p class="tableblock">Default value: 'false'.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">myQuestionIndicator</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Default value: 'true'.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">내 질문만 조회 true/fasle.</p>
+<p class="tableblock">Default value: 'true'.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">offest</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Default value: '0'.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 (시작 0).</p>
+<p class="tableblock">Default value: '0'.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">size</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Default value: '10'.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size.</p>
+<p class="tableblock">Default value: '10'.</p></td>
 </tr>
 </tbody>
 </table>
@@ -654,55 +663,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[Object]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 정보.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].subject</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].mainText</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].categoryList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
+<p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].createTimestamp</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성시간.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">meta</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Object</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메타 정보.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">meta.totalCount</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전체 개수.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">meta.totalPage</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전체 페이지 수.</p></td>
 </tr>
 </tbody>
 </table>
@@ -732,7 +743,7 @@ Content-Length: 362
       "mainText" : "본문",
       "categoryList" : [ "MOTVE" ],
       "jobGroup" : "DEVELOPER",
-      "createTimestamp" : "2023-07-29T03:13:04.248+00:00"
+      "createTimestamp" : "2023-08-05T08:40:58.732+00:00"
     } ],
     "meta" : {
       "totalCount" : 1,
@@ -745,9 +756,12 @@ Content-Length: 362
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources-question-controller-test-질문_저장"><a class="link" href="#resources-question-controller-test-질문_저장">Question Save</a></h3>
+<h3 id="resources-question-controller-test-질문_저장"><a class="link" href="#resources-question-controller-test-질문_저장">질문 저장 api</a></h3>
 <div class="paragraph">
 <p><code>POST /v1/question</code></p>
+</div>
+<div class="paragraph">
+<p>@param dto.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_2"><a class="link" href="#_path_parameters_2">Path parameters</a></h4>
@@ -783,37 +797,39 @@ Content-Length: 362
 <td class="tableblock halign-left valign-top"><p class="tableblock">subject</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목 (최대 30자).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">mainText</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">keyWordList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 (최대 20개).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">categoryList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
+<p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 ID (프론트 전달 x).</p></td>
 </tr>
 </tbody>
 </table>
@@ -852,9 +868,12 @@ Content-Length: 79
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources-question-controller-test-질문_수정"><a class="link" href="#resources-question-controller-test-질문_수정">Question Save</a></h3>
+<h3 id="resources-question-controller-test-질문_수정"><a class="link" href="#resources-question-controller-test-질문_수정">질문 저장 api</a></h3>
 <div class="paragraph">
 <p><code>PUT /v1/question</code></p>
+</div>
+<div class="paragraph">
+<p>@param dto.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_3"><a class="link" href="#_path_parameters_3">Path parameters</a></h4>
@@ -890,49 +909,51 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QuestionID.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">subject</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목 (최대 30자).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">mainText</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pin 여부 확인.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">keyWordList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 (최대 20개).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">categoryList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
+<p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 ID (프론트 전달 x).</p></td>
 </tr>
 </tbody>
 </table>
@@ -971,9 +992,12 @@ Content-Length: 79
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources-question-controller-test-질문_단건_조회"><a class="link" href="#resources-question-controller-test-질문_단건_조회">Question Get</a></h3>
+<h3 id="resources-question-controller-test-질문_단건_조회"><a class="link" href="#resources-question-controller-test-질문_단건_조회">질문 단건 조회 api</a></h3>
 <div class="paragraph">
 <p><code>GET /v1/question/{questionId}</code></p>
+</div>
+<div class="paragraph">
+<p>@param questionId 질문 ID.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_4"><a class="link" href="#_path_parameters_4">Path parameters</a></h4>
@@ -997,7 +1021,7 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 ID.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1036,55 +1060,57 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 ID.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">subject</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">mainText</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">createTimestamp</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성시간.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 Key.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pin 여부 확인.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">keyWordList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 리스트.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">categoryList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트.</p>
+<p class="tableblock">Must be one of [COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIANCE, MAJOR, MOTVE].</p></td>
 </tr>
 </tbody>
 </table>
@@ -1113,7 +1139,7 @@ Content-Length: 364
     "subject" : "제목",
     "mainText" : "본문",
     "jobGroup" : "DEVELOPER",
-    "createTimestamp" : "2023-07-29T03:13:04.325+00:00",
+    "createTimestamp" : "2023-08-05T08:40:58.824+00:00",
     "userId" : null,
     "pinIndicator" : null,
     "keyWordList" : [ "키워드" ],
@@ -1130,9 +1156,12 @@ Content-Length: 364
 <h2 id="_카테고리_api"><a class="link" href="#_카테고리_api">카테고리 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-category-controller-test-카테고리_전체_조회_테스트"><a class="link" href="#resources-category-controller-test-카테고리_전체_조회_테스트">Get All Category</a></h3>
+<h3 id="resources-category-controller-test-카테고리_전체_조회_테스트"><a class="link" href="#resources-category-controller-test-카테고리_전체_조회_테스트">카테고리 전체 조회</a></h3>
 <div class="paragraph">
 <p><code>GET /v1/category</code></p>
+</div>
+<div class="paragraph">
+<p>@return categoryList.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_5"><a class="link" href="#_path_parameters_5">Path parameters</a></h4>
@@ -1233,9 +1262,12 @@ Content-Length: 335
 <h2 id="_직군_api"><a class="link" href="#_직군_api">직군 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-job-group-controller-test-유저_직군_저장"><a class="link" href="#resources-job-group-controller-test-유저_직군_저장">Save Job Group</a></h3>
+<h3 id="resources-job-group-controller-test-유저_직군_저장"><a class="link" href="#resources-job-group-controller-test-유저_직군_저장">유저 아이디, 직군 저장 api</a></h3>
 <div class="paragraph">
 <p><code>POST /v1/jobgroup</code></p>
+</div>
+<div class="paragraph">
+<p>@param dto.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_6"><a class="link" href="#_path_parameters_6">Path parameters</a></h4>
@@ -1271,13 +1303,14 @@ Content-Length: 335
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Userid 프론트 전달 x.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 </tbody>
 </table>
@@ -1321,9 +1354,12 @@ Content-Length: 79
 <h2 id="_유저_api"><a class="link" href="#_유저_api">유저 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-user-controller-test-유저_존재_확인"><a class="link" href="#resources-user-controller-test-유저_존재_확인">Check User Exists</a></h3>
+<h3 id="resources-user-controller-test-유저_존재_확인"><a class="link" href="#resources-user-controller-test-유저_존재_확인">유저 존재 여부 확인 api</a></h3>
 <div class="paragraph">
 <p><code>GET /v1/user/exist</code></p>
+</div>
+<div class="paragraph">
+<p>@return.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_7"><a class="link" href="#_path_parameters_7">Path parameters</a></h4>

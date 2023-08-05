@@ -25,6 +25,21 @@ public class QuestionProviderImpl implements QuestionProvider {
     private final QuestionRepository questionRepository;
 
     @Override
+    public QuestionVoList randomQuestion(
+            final JobGroup jobGroup, final String userId, final Integer count) {
+        return QuestionVoList.builder()
+                .questions(
+                        QuestionProviderImplMapper.INSTANCE.toQuestionVos(
+                                questionRepository.RandomQuestion(jobGroup, userId, count)))
+                .build();
+    }
+
+    @Override
+    public void deleteQuestion(final String userId, final Long questionId) {
+        questionRepository.deleteByQuestionIdAndUserId(questionId, userId);
+    }
+
+    @Override
     public QuestionVoList searchQuestion(
             final String subject,
             final JobGroup jobGroup,
