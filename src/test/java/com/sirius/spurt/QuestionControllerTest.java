@@ -36,6 +36,24 @@ public class QuestionControllerTest extends BaseMvcTest {
     @MockBean private RandomQuestionBusiness randomQuestionBusiness;
 
     @Test
+    void 질문_랜덤_조회() throws Exception {
+        RandomQuestionBusiness.Result result =
+                RandomQuestionBusiness.Result.builder()
+                        .questions(
+                                List.of(
+                                        RandomQuestionBusiness.Result.Question.builder()
+                                                .jobGroup(JobGroup.DESIGNER)
+                                                .subject("subject")
+                                                .build()))
+                        .build();
+        when(randomQuestionBusiness.execute(any())).thenReturn(result);
+        this.mockMvc
+                .perform(get("/v1/question/random").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
     void 질문_삭제() throws Exception {
         DeleteQuestionBusiness.Dto dto = DeleteQuestionBusiness.Dto.builder().questionId("1").build();
         when(deleteQuestionBusiness.execute(any())).thenReturn(new DeleteQuestionBusiness.Result());
