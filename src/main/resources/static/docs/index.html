@@ -457,6 +457,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-question-controller-test-질문_저장">질문 저장 api</a></li>
 <li><a href="#resources-question-controller-test-질문_수정">질문 저장 api</a></li>
 <li><a href="#resources-question-controller-test-질문_단건_조회">질문 단건 조회 api</a></li>
+<li><a href="#resources-question-controller-test-질문_삭제">질문 삭제</a></li>
+<li><a href="#resources-question-controller-test-질문_랜덤_조회">같은 직군 질문 랜덤 조회</a></li>
 </ul>
 </li>
 <li><a href="#_카테고리_api">카테고리 API</a>
@@ -743,7 +745,7 @@ Content-Length: 362
       "mainText" : "본문",
       "categoryList" : [ "MOTVE" ],
       "jobGroup" : "DEVELOPER",
-      "createTimestamp" : "2023-08-05T08:40:58.732+00:00"
+      "createTimestamp" : "2023-08-05T16:40:23.409+00:00"
     } ],
     "meta" : {
       "totalCount" : 1,
@@ -1139,11 +1141,216 @@ Content-Length: 364
     "subject" : "제목",
     "mainText" : "본문",
     "jobGroup" : "DEVELOPER",
-    "createTimestamp" : "2023-08-05T08:40:58.824+00:00",
+    "createTimestamp" : "2023-08-05T16:40:23.491+00:00",
     "userId" : null,
     "pinIndicator" : null,
     "keyWordList" : [ "키워드" ],
     "categoryList" : [ "MOTVE" ]
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="resources-question-controller-test-질문_삭제"><a class="link" href="#resources-question-controller-test-질문_삭제">질문 삭제</a></h3>
+<div class="paragraph">
+<p><code>DELETE /v1/question</code></p>
+</div>
+<div class="paragraph">
+<p>@param dto.</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_5"><a class="link" href="#_path_parameters_5">Path parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_5"><a class="link" href="#_query_parameters_5">Query parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_fields_5"><a class="link" href="#_request_fields_5">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_5"><a class="link" href="#_response_fields_5">Response fields</a></h4>
+<div class="paragraph">
+<p>No response body.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_request_5"><a class="link" href="#_example_request_5">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question' -i -X DELETE \
+    -H 'Content-Type: application/json' \
+    -d '{"questionId":"1","userId":null}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_5"><a class="link" href="#_example_response_5">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 79
+
+{
+  "code" : 0,
+  "message" : "정상 처리 되었습니다",
+  "data" : { }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="resources-question-controller-test-질문_랜덤_조회"><a class="link" href="#resources-question-controller-test-질문_랜덤_조회">같은 직군 질문 랜덤 조회</a></h3>
+<div class="paragraph">
+<p><code>GET /v1/question/random</code></p>
+</div>
+<div class="paragraph">
+<p>@param request.</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_6"><a class="link" href="#_path_parameters_6">Path parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_6"><a class="link" href="#_query_parameters_6">Query parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">offest</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">랜덤 질문 갯수.</p>
+<p class="tableblock">Default value: '4'.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_fields_6"><a class="link" href="#_request_fields_6">Request fields</a></h4>
+<div class="paragraph">
+<p>No request body.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_6"><a class="link" href="#_response_fields_6">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[Object]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 정보.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questions[].subject</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questions[].jobGroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
+<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question/random' -i -X GET \
+    -H 'Content-Type: application/json'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_6"><a class="link" href="#_example_response_6">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 170
+
+{
+  "code" : 0,
+  "message" : "정상 처리 되었습니다",
+  "data" : {
+    "questions" : [ {
+      "subject" : "subject",
+      "jobGroup" : "DESIGNER"
+    } ]
   }
 }</code></pre>
 </div>
@@ -1164,25 +1371,25 @@ Content-Length: 364
 <p>@return categoryList.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_5"><a class="link" href="#_path_parameters_5">Path parameters</a></h4>
+<h4 id="_path_parameters_7"><a class="link" href="#_path_parameters_7">Path parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_5"><a class="link" href="#_query_parameters_5">Query parameters</a></h4>
+<h4 id="_query_parameters_7"><a class="link" href="#_query_parameters_7">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_5"><a class="link" href="#_request_fields_5">Request fields</a></h4>
+<h4 id="_request_fields_7"><a class="link" href="#_request_fields_7">Request fields</a></h4>
 <div class="paragraph">
 <p>No request body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_5"><a class="link" href="#_response_fields_5">Response fields</a></h4>
+<h4 id="_response_fields_7"><a class="link" href="#_response_fields_7">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1221,7 +1428,7 @@ Content-Length: 364
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_5"><a class="link" href="#_example_request_5">Example request</a></h4>
+<h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/category' -i -X GET</code></pre>
@@ -1229,7 +1436,7 @@ Content-Length: 364
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_5"><a class="link" href="#_example_response_5">Example response</a></h4>
+<h4 id="_example_response_7"><a class="link" href="#_example_response_7">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1270,19 +1477,19 @@ Content-Length: 335
 <p>@param dto.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_6"><a class="link" href="#_path_parameters_6">Path parameters</a></h4>
+<h4 id="_path_parameters_8"><a class="link" href="#_path_parameters_8">Path parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_6"><a class="link" href="#_query_parameters_6">Query parameters</a></h4>
+<h4 id="_query_parameters_8"><a class="link" href="#_query_parameters_8">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_6"><a class="link" href="#_request_fields_6">Request fields</a></h4>
+<h4 id="_request_fields_8"><a class="link" href="#_request_fields_8">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1316,13 +1523,13 @@ Content-Length: 335
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_6"><a class="link" href="#_response_fields_6">Response fields</a></h4>
+<h4 id="_response_fields_8"><a class="link" href="#_response_fields_8">Response fields</a></h4>
 <div class="paragraph">
 <p>No response body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example request</a></h4>
+<h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/jobgroup' -i -X POST \
@@ -1332,7 +1539,7 @@ Content-Length: 335
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_6"><a class="link" href="#_example_response_6">Example response</a></h4>
+<h4 id="_example_response_8"><a class="link" href="#_example_response_8">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1362,25 +1569,25 @@ Content-Length: 79
 <p>@return.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_7"><a class="link" href="#_path_parameters_7">Path parameters</a></h4>
+<h4 id="_path_parameters_9"><a class="link" href="#_path_parameters_9">Path parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_7"><a class="link" href="#_query_parameters_7">Query parameters</a></h4>
+<h4 id="_query_parameters_9"><a class="link" href="#_query_parameters_9">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_7"><a class="link" href="#_request_fields_7">Request fields</a></h4>
+<h4 id="_request_fields_9"><a class="link" href="#_request_fields_9">Request fields</a></h4>
 <div class="paragraph">
 <p>No request body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_7"><a class="link" href="#_response_fields_7">Response fields</a></h4>
+<h4 id="_response_fields_9"><a class="link" href="#_response_fields_9">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1407,7 +1614,7 @@ Content-Length: 79
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example request</a></h4>
+<h4 id="_example_request_9"><a class="link" href="#_example_request_9">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/user/exist' -i -X GET</code></pre>
@@ -1415,7 +1622,7 @@ Content-Length: 79
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_7"><a class="link" href="#_example_response_7">Example response</a></h4>
+<h4 id="_example_response_9"><a class="link" href="#_example_response_9">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1437,7 +1644,7 @@ Content-Length: 80
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-29 01:57:35 +0900
+Last updated 2023-08-06 00:49:49 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
