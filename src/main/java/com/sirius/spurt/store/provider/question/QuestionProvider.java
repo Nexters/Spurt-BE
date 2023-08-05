@@ -8,6 +8,11 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
 public interface QuestionProvider {
+
+    QuestionVoList randomQuestion(final JobGroup jobGroup, final String userId, final Integer count);
+
+    void deleteQuestion(final String userId, final Long questionId);
+
     void saveQuestion(
             final String subject,
             final String mainText,

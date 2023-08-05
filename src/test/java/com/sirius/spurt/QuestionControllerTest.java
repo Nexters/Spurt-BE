@@ -2,6 +2,7 @@ package com.sirius.spurt;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -10,8 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;
+import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.question.QuestionController;
@@ -29,6 +32,21 @@ public class QuestionControllerTest extends BaseMvcTest {
     @MockBean private SaveQuestionBusiness saveQuestionBusiness;
     @MockBean private PutQuestionBusiness putQuestionBusiness;
     @MockBean private GetQuestionBusiness getQuestionBusiness;
+    @MockBean private DeleteQuestionBusiness deleteQuestionBusiness;
+    @MockBean private RandomQuestionBusiness randomQuestionBusiness;
+
+    @Test
+    void 질문_삭제() throws Exception {
+        DeleteQuestionBusiness.Dto dto = DeleteQuestionBusiness.Dto.builder().questionId("1").build();
+        when(deleteQuestionBusiness.execute(any())).thenReturn(new DeleteQuestionBusiness.Result());
+        this.mockMvc
+                .perform(
+                        delete("/v1/question")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 
     @Test
     void 질문_단건_조회() throws Exception {

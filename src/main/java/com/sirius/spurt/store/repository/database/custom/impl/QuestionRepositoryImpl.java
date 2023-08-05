@@ -1,6 +1,7 @@
 package com.sirius.spurt.store.repository.database.custom.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
@@ -20,6 +21,18 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public List<QuestionEntity> RandomQuestion(
+            final JobGroup jobGroup, final String userId, final Integer count) {
+        return jpaQueryFactory
+                .selectFrom(QQuestionEntity.questionEntity)
+                .leftJoin(QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
+                .where(eqJobGroup(jobGroup), neUserId(userId))
+                .limit(count)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                .fetch();
+    }
 
     @Override
     public Page<QuestionEntity> searchQuestion(
@@ -62,17 +75,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         .size();
 
         return new PageImpl<>(questionEntityList, pageRequest, count);
-        //        return jpaQueryFactory
-        //                .selectFrom(questionEntity)
-        //                .leftJoin(questionEntity.categoryEntityList, categoryEntity)
-        //                .where(
-        //                        containSubject(subject),
-        //                        eqJobGroup(jobGroup),
-        //                        eqPinIndicator(pinIndicator),
-        //                        eqUserId(myQuestionIndicator, userId),
-        //                        eqCategory(category))
-        //                .orderBy(questionEntity.createTimestamp.desc())
-        //                .fetch();
     }
 
     private BooleanExpression containSubject(String subject) {
@@ -94,7 +96,12 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         if (myQuestionIndicator == false) return null;
         return QQuestionEntity.questionEntity.userId.eq(userId);
     }
-    //
+
+    private BooleanExpression neUserId(String userId) {
+        if (!StringUtils.hasText(userId)) return null;
+        return QQuestionEntity.questionEntity.userId.ne(userId);
+    }
+
     private BooleanExpression eqCategory(Category category) {
         if (category == null) return null;
         return QCategoryEntity.categoryEntity.category.eq(category);

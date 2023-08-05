@@ -2,14 +2,17 @@ package com.sirius.spurt.service.controller.question;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;
+import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +29,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuestionController {
 
     private final SaveQuestionBusiness saveQuestionBusiness;
+    private final DeleteQuestionBusiness deleteQuestionBusiness;
     private final PutQuestionBusiness putQuestionBusiness;
     private final GetQuestionBusiness getQuestionBusiness;
+    private final RandomQuestionBusiness randomQuestionBusiness;
     private final RetrieveQuestionBusiness retrieveQuestionBusiness;
+
+    /**
+     * @param request
+     * @param count 랜덤 질문 갯수
+     * @return
+     * @title 같은 직군 질문 랜덤 조회
+     */
+    @GetMapping("/question/random")
+    public RestResponse<RandomQuestionBusiness.Result> questionRandom(
+            HttpServletRequest request, @RequestParam(name = "offest", defaultValue = "4") String count) {
+        RandomQuestionBusiness.Dto dto =
+                RandomQuestionBusiness.Dto.builder()
+                        .userId(request.getAttribute("userId").toString())
+                        .count(Integer.valueOf(count))
+                        .build();
+        return RestResponse.success(randomQuestionBusiness.execute(dto));
+    }
+
+    /**
+     * @param dto
+     * @return
+     * @title 질문 삭제
+     */
+    @DeleteMapping("/question")
+    public RestResponse<DeleteQuestionBusiness.Result> questionDelete(
+            HttpServletRequest request, @RequestBody DeleteQuestionBusiness.Dto dto) {
+        dto.setUserId(request.getAttribute("userId").toString());
+        return RestResponse.success(deleteQuestionBusiness.execute(dto));
+    }
 
     /**
      * @param dto
