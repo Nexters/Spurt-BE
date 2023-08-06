@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sirius.spurt.common.meta.ResultCode;
 import com.sirius.spurt.service.controller.RestResponse;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
+import com.sirius.spurt.store.provider.auth.vo.AuthVo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class LoginFilter extends OncePerRequestFilter {
             return;
         }
 
-        String[] userInfo = new String[] {"admin", "email"};
+        AuthVo userInfo = new AuthVo("admin", "email");
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             try {
@@ -56,8 +57,8 @@ public class LoginFilter extends OncePerRequestFilter {
             }
         }
 
-        request.setAttribute("userId", userInfo[0]);
-        request.setAttribute("email", userInfo[1]);
+        request.setAttribute("userId", userInfo.getUserId());
+        request.setAttribute("email", userInfo.getEmail());
         chain.doFilter(request, response);
     }
 

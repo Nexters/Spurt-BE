@@ -1,5 +1,7 @@
 package com.sirius.spurt.store.provider.auth;
 
+import com.sirius.spurt.store.provider.auth.vo.AuthVo;
+
 public interface AuthProvider {
-    String[] getUserId(String accessToken);
+    AuthVo getUserId(String accessToken);
 }
