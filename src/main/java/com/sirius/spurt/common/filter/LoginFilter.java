@@ -32,8 +32,9 @@ public class LoginFilter extends OncePerRequestFilter {
             return;
         }
         String testHeader = request.getHeader("test");
-        if (StringUtils.hasLength(testHeader) && testHeader.equals("test")) {
+        if (StringUtils.hasLength(testHeader)) {
             request.setAttribute("userId", "admin");
+            request.setAttribute("email", "email");
             chain.doFilter(request, response);
             return;
         }
@@ -44,18 +45,19 @@ public class LoginFilter extends OncePerRequestFilter {
             return;
         }
 
-        String userId = "admin";
+        String[] userInfo = new String[] {"admin", "email"};
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             try {
-                userId = authProvider.getUserId(accessToken);
+                userInfo = authProvider.getUserId(accessToken);
             } catch (Exception e) {
                 setErrorResponse(response, ResultCode.AUTHENTICATION_FAILED);
                 return;
             }
         }
 
-        request.setAttribute("userId", userId);
+        request.setAttribute("userId", userInfo[0]);
+        request.setAttribute("email", userInfo[1]);
         chain.doFilter(request, response);
     }
 

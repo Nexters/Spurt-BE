@@ -1,5 +1,5 @@
 package com.sirius.spurt.store.provider.auth;
 
 public interface AuthProvider {
-    String getUserId(String accessToken);
+    String[] getUserId(String accessToken);
 }
