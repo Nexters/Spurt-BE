@@ -33,7 +33,10 @@ public class DeleteQuestionBusiness implements Business<Dto, Result> {
     @Validated
     @Builder
     public static class Dto implements Business.Dto, Serializable {
+
+        /** 질문 ID */
         private String questionId;
+        /** user ID (전달 필요 x) */
         private String userId;
     }
 

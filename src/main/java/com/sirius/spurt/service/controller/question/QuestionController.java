@@ -67,10 +67,10 @@ public class QuestionController {
     /**
      * @param dto
      * @return
-     * @title 질문 수정 api
+     * @title 질문 수정
      */
     @PutMapping("/question")
-    public RestResponse<PutQuestionBusiness.Result> questionSave(
+    public RestResponse<PutQuestionBusiness.Result> questionPut(
             HttpServletRequest request, @RequestBody PutQuestionBusiness.Dto dto) {
         dto.setUserId(request.getAttribute("userId").toString());
         return RestResponse.success(putQuestionBusiness.execute(dto));
@@ -79,7 +79,7 @@ public class QuestionController {
     /**
      * @param questionId 질문 ID
      * @return
-     * @title 질문 단건 조회 api
+     * @title 질문 단건 조회
      */
     @GetMapping("/question/{questionId}")
     public RestResponse<GetQuestionBusiness.Result> questionGet(
@@ -91,7 +91,7 @@ public class QuestionController {
     /**
      * @param dto
      * @return
-     * @title 질문 저장 api
+     * @title 질문 저장
      */
     @PostMapping("/question")
     public RestResponse<SaveQuestionBusiness.Result> questionSave(
@@ -109,7 +109,7 @@ public class QuestionController {
      * @param offest 페이지 (시작 0)
      * @param size size
      * @return
-     * @title 질문 검색 api
+     * @title 질문 조회
      */
     @GetMapping("/question")
     public RestResponse<RetrieveQuestionBusiness.Result> questionRetrieve(

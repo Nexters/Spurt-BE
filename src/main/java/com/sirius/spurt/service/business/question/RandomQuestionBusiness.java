@@ -44,7 +44,10 @@ public class RandomQuestionBusiness implements Business<Dto, Result> {
     @Validated
     @Builder
     public static class Dto implements Business.Dto, Serializable {
+
+        /** userId (전달 필요 x) */
         private String userId;
+        /** 전달 질문 개수 (기본값 4) */
         private Integer count;
     }
 
