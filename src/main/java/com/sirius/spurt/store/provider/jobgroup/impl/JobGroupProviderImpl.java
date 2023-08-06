@@ -15,13 +15,15 @@ public class JobGroupProviderImpl implements JobGroupProvider {
 
     @Override
     @Transactional
-    public void saveJobGroup(final String userId, final JobGroup jobGroup) {
-        userRepository.save(UserEntity.builder().userId(userId).jobGroup(jobGroup).build());
+    public void saveJobGroup(final String userId, final String email, final JobGroup jobGroup) {
+        userRepository.save(
+                UserEntity.builder().userId(userId).email(email).jobGroup(jobGroup).build());
     }
 
     @Override
     @Transactional
-    public void updateJobGroup(final String userId, final JobGroup jobGroup) {
-        userRepository.save(UserEntity.builder().userId(userId).jobGroup(jobGroup).build());
+    public void updateJobGroup(final String userId, final String email, final JobGroup jobGroup) {
+        userRepository.save(
+                UserEntity.builder().userId(userId).email(email).jobGroup(jobGroup).build());
     }
 }

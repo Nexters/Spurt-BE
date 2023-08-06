@@ -24,4 +24,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private JobGroup jobGroup;
+
+    @Column(nullable = false)
+    private String email;
 }

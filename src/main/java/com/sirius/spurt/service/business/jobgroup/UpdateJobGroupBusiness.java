@@ -22,7 +22,7 @@ public class UpdateJobGroupBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        jobGroupProvider.updateJobGroup(input.getUserId(), input.getJobGroup());
+        jobGroupProvider.updateJobGroup(input.getUserId(), input.getEmail(), input.getJobGroup());
 
         return new UpdateJobGroupBusiness.Result();
     }
@@ -36,6 +36,8 @@ public class UpdateJobGroupBusiness implements Business<Dto, Result> {
     public static class Dto implements Business.Dto, Serializable {
         /** Userid 프론트 전달 x */
         private String userId;
+
+        private String email;
         /** 직군 */
         private JobGroup jobGroup;
     }
