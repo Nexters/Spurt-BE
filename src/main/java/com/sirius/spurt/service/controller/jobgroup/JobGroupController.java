@@ -29,6 +29,7 @@ public class JobGroupController {
     public RestResponse<SaveJobGroupBusiness.Result> saveJobGroup(
             HttpServletRequest request, @RequestBody SaveJobGroupBusiness.Dto dto) {
         dto.setUserId(request.getAttribute("userId").toString());
+        dto.setEmail(request.getAttribute("email").toString());
         return RestResponse.success(saveJobGroupBusiness.execute(dto));
     }
 
@@ -41,6 +42,7 @@ public class JobGroupController {
     public RestResponse<UpdateJobGroupBusiness.Result> updateJobGroup(
             HttpServletRequest request, @RequestBody UpdateJobGroupBusiness.Dto dto) {
         dto.setUserId(request.getAttribute("userId").toString());
+        dto.setEmail(request.getAttribute("email").toString());
         return RestResponse.success(updateJobGroupBusiness.execute(dto));
     }
 }

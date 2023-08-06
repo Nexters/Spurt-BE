@@ -22,7 +22,7 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        jobGroupProvider.saveJobGroup(input.getUserId(), input.getJobGroup());
+        jobGroupProvider.saveJobGroup(input.getUserId(), input.getEmail(), input.getJobGroup());
 
         return new SaveJobGroupBusiness.Result();
     }
@@ -37,6 +37,8 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
 
         /** Userid 프론트 전달 x */
         private String userId;
+
+        private String email;
         /** 직군 */
         private JobGroup jobGroup;
     }

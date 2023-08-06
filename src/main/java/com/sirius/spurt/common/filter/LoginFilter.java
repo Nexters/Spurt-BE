@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sirius.spurt.common.meta.ResultCode;
 import com.sirius.spurt.service.controller.RestResponse;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
+import com.sirius.spurt.store.provider.auth.vo.AuthVo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,8 +33,9 @@ public class LoginFilter extends OncePerRequestFilter {
             return;
         }
         String testHeader = request.getHeader("test");
-        if (StringUtils.hasLength(testHeader) && testHeader.equals("test")) {
+        if (StringUtils.hasLength(testHeader)) {
             request.setAttribute("userId", "admin");
+            request.setAttribute("email", "email");
             chain.doFilter(request, response);
             return;
         }
@@ -44,18 +46,19 @@ public class LoginFilter extends OncePerRequestFilter {
             return;
         }
 
-        String userId = "admin";
+        AuthVo userInfo = new AuthVo("admin", "email");
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             try {
-                userId = authProvider.getUserId(accessToken);
+                userInfo = authProvider.getUserId(accessToken);
             } catch (Exception e) {
                 setErrorResponse(response, ResultCode.AUTHENTICATION_FAILED);
                 return;
             }
         }
 
-        request.setAttribute("userId", userId);
+        request.setAttribute("userId", userInfo.getUserId());
+        request.setAttribute("email", userInfo.getEmail());
         chain.doFilter(request, response);
     }
 
