@@ -10,5 +10,5 @@ public interface QuestionRepository
         extends JpaRepository<QuestionEntity, String>, QuestionRepositoryCustom {
     QuestionEntity findByQuestionId(final Long id);
 
-    void deleteByQuestionIdAndUserId(final Long questionId, final String userId);
+    QuestionEntity findByQuestionIdAndUserId(final Long id, final String userId);
 }

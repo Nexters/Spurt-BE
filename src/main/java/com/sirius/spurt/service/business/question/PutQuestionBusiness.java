@@ -51,8 +51,8 @@ public class PutQuestionBusiness implements Business<Dto, Result> {
         @Serial private static final long serialVersionUID = 4083263567083683976L;
         /** questionID */
         @NotBlank private String questionId;
-        /** 제목 (최대 30자) */
-        @Size(max = 30)
+        /** 제목 (최대 35자) */
+        @Size(max = 35)
         @NotBlank
         private String subject;
         /** 본문 (최대 1000자) */

@@ -46,8 +46,8 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
     @Builder
     public static class Dto implements Business.Dto, Serializable {
         @Serial private static final long serialVersionUID = 3250576285065388951L;
-        /** 제목 (최대 30자) */
-        @Size(max = 30)
+        /** 제목 (최대 35자) */
+        @Size(max = 35)
         @NotBlank
         private String subject;
         /** 본문 (최대 1000자) */

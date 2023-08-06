@@ -1,5 +1,8 @@
 package com.sirius.spurt.store.provider.question.impl;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
+
+import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
@@ -36,7 +39,11 @@ public class QuestionProviderImpl implements QuestionProvider {
 
     @Override
     public void deleteQuestion(final String userId, final Long questionId) {
-        questionRepository.deleteByQuestionIdAndUserId(questionId, userId);
+        QuestionEntity entity = questionRepository.findByQuestionIdAndUserId(questionId, userId);
+        if (entity == null) {
+            throw new GlobalException(NOT_QUESTION_OWNER);
+        }
+        questionRepository.delete(entity);
     }
 
     @Override
@@ -76,7 +83,12 @@ public class QuestionProviderImpl implements QuestionProvider {
             final JobGroup jobGroup,
             final String userId) {
 
-        QuestionEntity previous = questionRepository.findByQuestionId(Long.valueOf(questionId));
+        QuestionEntity previous =
+                questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
+
+        if (previous == null) {
+            throw new GlobalException(NOT_QUESTION_OWNER);
+        }
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
