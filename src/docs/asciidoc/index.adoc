@@ -21,7 +21,7 @@ endif::[]
 |BASE URL
 
 |DEV
-|http://sirius-spurt.duckdns.org
+|https://sirius-spurt.duckdns.org
 |===
 
 == Header 정보
@@ -37,16 +37,32 @@ endif::[]
 |false
 |===
 
+== ErrorCode
+[cols=2*,options=header]
+|===
+|Code
+|Description
+
+|0
+|정상 처리 되었습니다
+
+|1000
+|알 수 없는 애러가 발생했습니다.
+
+|2000
+|인증에 실패했습니다.
+
+|3000
+|질문이 존재하지 않거나 작성자가 아닙니다.
+|===
+
 == 현재 오류 사항
 - 명세서 body의 userId 는 전달 필요 x
-
-
-
 
 = Spurt API
 
 == 질문 API
-include::{snippets}/question-controller-test/질문_검색/auto-section.adoc[]
+include::{snippets}/question-controller-test/질문_조회/auto-section.adoc[]
 include::{snippets}/question-controller-test/질문_저장/auto-section.adoc[]
 include::{snippets}/question-controller-test/질문_수정/auto-section.adoc[]
 include::{snippets}/question-controller-test/질문_단건_조회/auto-section.adoc[]

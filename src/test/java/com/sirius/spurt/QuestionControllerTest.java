@@ -125,7 +125,7 @@ public class QuestionControllerTest extends BaseMvcTest {
     }
 
     @Test
-    void 질문_검색() throws Exception {
+    void 질문_조회() throws Exception {
 
         RetrieveQuestionBusiness.Result result =
                 RetrieveQuestionBusiness.Result.builder()
