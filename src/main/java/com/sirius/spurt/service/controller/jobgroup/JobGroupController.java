@@ -28,8 +28,7 @@ public class JobGroupController {
     @PostMapping
     public RestResponse<SaveJobGroupBusiness.Result> saveJobGroup(
             LoginUser loginUser, @RequestBody SaveJobGroupBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
-        dto.setEmail(loginUser.getEmail());
+        dto.setLoginUser(loginUser);
         return RestResponse.success(saveJobGroupBusiness.execute(dto));
     }
 
@@ -41,8 +40,7 @@ public class JobGroupController {
     @PutMapping
     public RestResponse<UpdateJobGroupBusiness.Result> updateJobGroup(
             LoginUser loginUser, @RequestBody UpdateJobGroupBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
-        dto.setEmail(loginUser.getEmail());
+        dto.setLoginUser(loginUser);
         return RestResponse.success(updateJobGroupBusiness.execute(dto));
     }
 }
