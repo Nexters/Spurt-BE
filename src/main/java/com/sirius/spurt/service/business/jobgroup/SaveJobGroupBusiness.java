@@ -2,6 +2,7 @@ package com.sirius.spurt.service.business.jobgroup;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.meta.LoginUser;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Dto;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Result;
@@ -22,7 +23,8 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        jobGroupProvider.saveJobGroup(input.getUserId(), input.getEmail(), input.getJobGroup());
+        jobGroupProvider.saveJobGroup(
+                input.loginUser.getUserId(), input.loginUser.getEmail(), input.getJobGroup());
 
         return new SaveJobGroupBusiness.Result();
     }
@@ -34,11 +36,8 @@ public class SaveJobGroupBusiness implements Business<Dto, Result> {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Dto implements Business.Dto, Serializable {
-
-        /** Userid 프론트 전달 x */
-        private String userId;
-
-        private String email;
+        /** loginUser 프론트 전달 x */
+        private LoginUser loginUser;
         /** 직군 */
         private JobGroup jobGroup;
     }
