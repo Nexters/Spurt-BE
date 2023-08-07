@@ -46,11 +46,7 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
         AuthVo userInfo = AuthVo.builder().userId("admin").email("email").build();
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
-            try {
-                userInfo = authProvider.getUserId(accessToken);
-            } catch (Exception e) {
-                throw new GlobalException(ResultCode.AUTHENTICATION_FAILED);
-            }
+            userInfo = authProvider.getUserId(accessToken);
         }
 
         return new LoginUser(userInfo.getUserId(), userInfo.getEmail());
