@@ -2,7 +2,7 @@ package com.sirius.spurt.service.business.jobgroup;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sirius.spurt.common.meta.JobGroup;
-import com.sirius.spurt.common.meta.LoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Dto;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Result;

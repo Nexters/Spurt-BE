@@ -2,7 +2,7 @@ package com.sirius.spurt.service.controller.question;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
-import com.sirius.spurt.common.meta.LoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;

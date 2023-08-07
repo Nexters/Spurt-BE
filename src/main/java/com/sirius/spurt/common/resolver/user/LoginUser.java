@@ -1,4 +1,4 @@
-package com.sirius.spurt.common.meta;
+package com.sirius.spurt.common.resolver.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

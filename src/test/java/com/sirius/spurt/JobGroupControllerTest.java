@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sirius.spurt.common.meta.JobGroup;
-import com.sirius.spurt.common.meta.LoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness;
 import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness;
 import com.sirius.spurt.service.controller.jobgroup.JobGroupController;

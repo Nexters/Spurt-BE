@@ -1,6 +1,6 @@
 package com.sirius.spurt.service.controller.user;
 
-import com.sirius.spurt.common.meta.LoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.user.CheckUserExistsBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.sirius.spurt.common.resolver;
 
 import com.sirius.spurt.common.exception.GlobalException;
-import com.sirius.spurt.common.meta.LoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.common.meta.ResultCode;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
 import com.sirius.spurt.store.provider.auth.vo.AuthVo;
