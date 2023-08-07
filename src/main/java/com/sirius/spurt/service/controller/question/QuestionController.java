@@ -82,7 +82,7 @@ public class QuestionController {
      */
     @GetMapping("/question/{questionId}")
     public RestResponse<GetQuestionBusiness.Result> questionGet(
-            @PathVariable("questionId") String questionId) {
+            LoginUser loginUser, @PathVariable("questionId") String questionId) {
         GetQuestionBusiness.Dto dto =
                 GetQuestionBusiness.Dto.builder().questionId(Long.parseLong(questionId)).build();
         return RestResponse.success(getQuestionBusiness.execute(dto));
