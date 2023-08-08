@@ -2,6 +2,7 @@ package com.sirius.spurt.service.controller.question;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;
@@ -9,7 +10,6 @@ import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,17 +36,16 @@ public class QuestionController {
     private final RetrieveQuestionBusiness retrieveQuestionBusiness;
 
     /**
-     * @param request
      * @param count 랜덤 질문 갯수
      * @return
      * @title 같은 직군 질문 랜덤 조회
      */
     @GetMapping("/question/random")
     public RestResponse<RandomQuestionBusiness.Result> questionRandom(
-            HttpServletRequest request, @RequestParam(name = "offest", defaultValue = "4") String count) {
+            LoginUser loginUser, @RequestParam(name = "offest", defaultValue = "4") String count) {
         RandomQuestionBusiness.Dto dto =
                 RandomQuestionBusiness.Dto.builder()
-                        .userId(request.getAttribute("userId").toString())
+                        .userId(loginUser.getUserId())
                         .count(Integer.valueOf(count))
                         .build();
         return RestResponse.success(randomQuestionBusiness.execute(dto));
@@ -59,8 +58,8 @@ public class QuestionController {
      */
     @DeleteMapping("/question")
     public RestResponse<DeleteQuestionBusiness.Result> questionDelete(
-            HttpServletRequest request, @RequestBody DeleteQuestionBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
+            LoginUser loginUser, @RequestBody DeleteQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
         return RestResponse.success(deleteQuestionBusiness.execute(dto));
     }
 
@@ -71,8 +70,8 @@ public class QuestionController {
      */
     @PutMapping("/question")
     public RestResponse<PutQuestionBusiness.Result> questionPut(
-            HttpServletRequest request, @RequestBody PutQuestionBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
+            LoginUser loginUser, @RequestBody PutQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
         return RestResponse.success(putQuestionBusiness.execute(dto));
     }
 
@@ -83,7 +82,7 @@ public class QuestionController {
      */
     @GetMapping("/question/{questionId}")
     public RestResponse<GetQuestionBusiness.Result> questionGet(
-            @PathVariable("questionId") String questionId) {
+            LoginUser loginUser, @PathVariable("questionId") String questionId) {
         GetQuestionBusiness.Dto dto =
                 GetQuestionBusiness.Dto.builder().questionId(Long.parseLong(questionId)).build();
         return RestResponse.success(getQuestionBusiness.execute(dto));
@@ -95,8 +94,8 @@ public class QuestionController {
      */
     @PostMapping("/question")
     public RestResponse<SaveQuestionBusiness.Result> questionSave(
-            HttpServletRequest request, @RequestBody SaveQuestionBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
+            LoginUser loginUser, @RequestBody SaveQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
         return RestResponse.success(saveQuestionBusiness.execute(dto));
     }
 
@@ -113,7 +112,7 @@ public class QuestionController {
      */
     @GetMapping("/question")
     public RestResponse<RetrieveQuestionBusiness.Result> questionRetrieve(
-            HttpServletRequest request,
+            LoginUser loginUser,
             @RequestParam(name = "subject", required = false) String subject,
             @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
             @RequestParam(name = "category", required = false) Category category,
@@ -121,7 +120,7 @@ public class QuestionController {
             @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndecator,
             @RequestParam(name = "offest", defaultValue = "0") String offest,
             @RequestParam(name = "size", defaultValue = "10") String size) {
-        String userId = request.getAttribute("userId").toString();
+        String userId = loginUser.getUserId();
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
                         .userId(userId)

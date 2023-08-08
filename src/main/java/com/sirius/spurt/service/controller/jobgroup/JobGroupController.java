@@ -1,9 +1,9 @@
 package com.sirius.spurt.service.controller.jobgroup;
 
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness;
 import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,9 +27,8 @@ public class JobGroupController {
      */
     @PostMapping
     public RestResponse<SaveJobGroupBusiness.Result> saveJobGroup(
-            HttpServletRequest request, @RequestBody SaveJobGroupBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
-        dto.setEmail(request.getAttribute("email").toString());
+            LoginUser loginUser, @RequestBody SaveJobGroupBusiness.Dto dto) {
+        dto.setLoginUser(loginUser);
         return RestResponse.success(saveJobGroupBusiness.execute(dto));
     }
 
@@ -40,9 +39,8 @@ public class JobGroupController {
      */
     @PutMapping
     public RestResponse<UpdateJobGroupBusiness.Result> updateJobGroup(
-            HttpServletRequest request, @RequestBody UpdateJobGroupBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
-        dto.setEmail(request.getAttribute("email").toString());
+            LoginUser loginUser, @RequestBody UpdateJobGroupBusiness.Dto dto) {
+        dto.setLoginUser(loginUser);
         return RestResponse.success(updateJobGroupBusiness.execute(dto));
     }
 }
