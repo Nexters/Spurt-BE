@@ -43,7 +43,7 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
             throw new GlobalException(ResultCode.AUTHENTICATION_FAILED);
         }
 
-        AuthVo userInfo = AuthVo.builder().userId("admin").email("email").build();
+        AuthVo userInfo = new AuthVo();
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             userInfo = authProvider.getUserId(accessToken);
