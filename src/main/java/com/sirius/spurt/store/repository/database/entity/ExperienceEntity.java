@@ -27,10 +27,10 @@ public class ExperienceEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long experienceId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(30) CHARACTER SET UTF8")
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(1000) CHARACTER SET UTF8")
     private String content;
 
     @Column private String startDate;
