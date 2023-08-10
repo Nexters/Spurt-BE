@@ -73,6 +73,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
                         .endDate(endDate)
                         .link(link)
                         .userEntity(previous.getUserEntity())
+                        .questionEntityList(previous.getQuestionEntityList())
                         .build();
 
         experienceRepository.save(experienceEntity);
