@@ -52,7 +52,7 @@ public class UpdateExperienceBusiness implements Business<Dto, Result> {
         @NotBlank
         private String content;
         /** 시작 날짜 */
-        private String startDate;
+        @NotBlank private String startDate;
         /** 종료 날짜 */
         private String endDate;
         /** 관련 링크 */

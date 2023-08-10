@@ -82,7 +82,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     @Transactional
     public void deleteExperience(final Long experienceId, String userId) {
         ExperienceEntity previous =
-            experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
+                experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
 
         if (previous == null) {
             throw new GlobalException(NOT_EXPERIENCE_OWNER);
