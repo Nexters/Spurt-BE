@@ -17,4 +17,6 @@ public interface ExperienceProvider {
             final String endDate,
             final String link,
             final String userId);
+
+    void deleteExperience(final Long experienceId, String userId);
 }

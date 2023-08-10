@@ -77,4 +77,17 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
         experienceRepository.save(experienceEntity);
     }
+
+    @Override
+    @Transactional
+    public void deleteExperience(final Long experienceId, String userId) {
+        ExperienceEntity previous =
+            experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
+
+        if (previous == null) {
+            throw new GlobalException(NOT_EXPERIENCE_OWNER);
+        }
+
+        experienceRepository.deleteById(experienceId);
+    }
 }
