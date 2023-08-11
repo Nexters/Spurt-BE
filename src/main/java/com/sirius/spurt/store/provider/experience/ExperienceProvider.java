@@ -18,5 +18,5 @@ public interface ExperienceProvider {
             final String link,
             final String userId);
 
-    void deleteExperience(final Long experienceId, String userId);
+    void deleteExperience(final Long experienceId, final String userId);
 }

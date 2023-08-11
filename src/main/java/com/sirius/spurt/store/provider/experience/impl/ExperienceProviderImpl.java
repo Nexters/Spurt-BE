@@ -87,7 +87,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
     @Override
     @Transactional
-    public void deleteExperience(final Long experienceId, String userId) {
+    public void deleteExperience(final Long experienceId, final String userId) {
         ExperienceEntity previous =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
 
