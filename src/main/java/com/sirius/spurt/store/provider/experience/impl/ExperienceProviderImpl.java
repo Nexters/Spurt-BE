@@ -2,6 +2,7 @@ package com.sirius.spurt.store.provider.experience.impl;
 
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
+import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
 
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.store.provider.experience.ExperienceProvider;
@@ -9,12 +10,17 @@ import com.sirius.spurt.store.repository.database.entity.ExperienceEntity;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
 import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ExperienceProviderImpl implements ExperienceProvider {
     private final ExperienceRepository experienceRepository;
     private final UserRepository userRepository;
@@ -38,8 +44,8 @@ public class ExperienceProviderImpl implements ExperienceProvider {
                 ExperienceEntity.builder()
                         .title(title)
                         .content(content)
-                        .startDate(startDate)
-                        .endDate(endDate)
+                        .startDate(stringToTimestamp(startDate))
+                        .endDate(stringToTimestamp(endDate))
                         .link(link)
                         .userEntity(userEntity)
                         .build();
@@ -69,8 +75,8 @@ public class ExperienceProviderImpl implements ExperienceProvider {
                         .experienceId(experienceId)
                         .title(title)
                         .content(content)
-                        .startDate(startDate)
-                        .endDate(endDate)
+                        .startDate(stringToTimestamp(startDate))
+                        .endDate(stringToTimestamp(endDate))
                         .link(link)
                         .userEntity(previous.getUserEntity())
                         .questionEntityList(previous.getQuestionEntityList())
@@ -90,5 +96,20 @@ public class ExperienceProviderImpl implements ExperienceProvider {
         }
 
         experienceRepository.deleteById(experienceId);
+    }
+
+    private Timestamp stringToTimestamp(String time) {
+        if (time == null) {
+            return null;
+        }
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+            Date date = simpleDateFormat.parse(time);
+            return new Timestamp(date.getTime());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new GlobalException(TIME_FORMAT_ERROR);
+        }
     }
 }

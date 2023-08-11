@@ -6,7 +6,8 @@ public enum ResultCode {
     AUTHENTICATION_FAILED(2000, "인증에 실패했습니다."),
     NOT_QUESTION_OWNER(3000, "질문이 존재하지 않거나 작성자가 아닙니다."),
     NOT_EXIST_USER(3001, "존재하지 않는 유저입니다."),
-    NOT_EXPERIENCE_OWNER(3002, "경험이 존재하지 않거나 작성자가 아닙니다.");
+    NOT_EXPERIENCE_OWNER(3002, "경험이 존재하지 않거나 작성자가 아닙니다."),
+    TIME_FORMAT_ERROR(4000, "시간 형식이 맞지 않습니다.");
 
     private Integer code;
     private String message;

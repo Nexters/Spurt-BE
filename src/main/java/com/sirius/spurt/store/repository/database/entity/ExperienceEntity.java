@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.sql.Timestamp;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,9 +34,9 @@ public class ExperienceEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(1000) CHARACTER SET UTF8")
     private String content;
 
-    @Column private String startDate;
+    @Column private Timestamp startDate;
 
-    @Column private String endDate;
+    @Column private Timestamp endDate;
 
     @Column private String link;
 
