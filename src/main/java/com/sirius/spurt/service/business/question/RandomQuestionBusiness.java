@@ -1,6 +1,7 @@
 package com.sirius.spurt.service.business.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.question.RandomQuestionBusiness.Dto;
@@ -33,17 +34,21 @@ public class RandomQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
+        if (Category.ALL == input.getCategory()) {
+            input.setCategory(null);
+        }
 
         // 비로그인 유저
         if (input.getUserId() == null) {
             return RandomQuestionBusinessMapper.INSTANCE.toResult(
-                    questionProvider.randomQuestion(null, null, input.getCount()));
+                    questionProvider.randomQuestion(null, null, input.getCount(), input.getCategory()));
         }
 
         final UserVo userVo = userProvider.getUserInfo(input.getUserId());
         JobGroup jobGroup = userVo.getJobGroup();
         return RandomQuestionBusinessMapper.INSTANCE.toResult(
-                questionProvider.randomQuestion(jobGroup, input.getUserId(), input.getCount()));
+                questionProvider.randomQuestion(
+                        jobGroup, input.getUserId(), input.getCount(), input.getCategory()));
     }
 
     @JsonIgnoreProperties
@@ -56,6 +61,8 @@ public class RandomQuestionBusiness implements Business<Dto, Result> {
         private String userId;
         /** 전달 질문 개수 (기본값 4) */
         private Integer count;
+        /** 카테고리 */
+        private Category category;
     }
 
     @Setter

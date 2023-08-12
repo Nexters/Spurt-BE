@@ -1,5 +1,6 @@
 package com.sirius.spurt.store.provider.question.impl;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
 
 import com.sirius.spurt.common.exception.GlobalException;
@@ -11,7 +12,10 @@ import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import com.sirius.spurt.store.repository.database.entity.CategoryEntity;
 import com.sirius.spurt.store.repository.database.entity.KeyWordEntity;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
+import com.sirius.spurt.store.repository.database.entity.UserEntity;
+import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
+import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +30,48 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionProviderImpl implements QuestionProvider {
     private final QuestionRepository questionRepository;
+    private final ExperienceRepository experienceRepository;
+    private final UserRepository userRepository;
+
+    @Override
+    public void putPinQuestion(
+            final String questionId, final String userId, final Boolean pinIndicator) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
+
+        QuestionEntity previous =
+                questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
+
+        if (previous == null) {
+            throw new GlobalException(NOT_QUESTION_OWNER);
+        }
+
+        QuestionEntity questionEntity =
+                QuestionEntity.builder()
+                        .questionId(Long.valueOf(questionId))
+                        .categoryEntityList(previous.getCategoryEntityList())
+                        .KeyWordEntityList(previous.getKeyWordEntityList())
+                        .subject(previous.getSubject())
+                        .mainText(previous.getMainText())
+                        .jobGroup(userEntity.getJobGroup())
+                        .experienceId(previous.getExperienceId())
+                        .userId(userId)
+                        .pinIndicator(pinIndicator)
+                        .build();
+
+        questionRepository.save(questionEntity);
+    }
 
     @Override
     public QuestionVoList randomQuestion(
-            final JobGroup jobGroup, final String userId, final Integer count) {
+            final JobGroup jobGroup, final String userId, final Integer count, final Category category) {
         return QuestionVoList.builder()
                 .questions(
                         QuestionProviderImplMapper.INSTANCE.toQuestionVos(
-                                questionRepository.RandomQuestion(jobGroup, userId, count)))
+                                questionRepository.RandomQuestion(jobGroup, userId, count, category)))
                 .build();
     }
 
@@ -80,8 +118,12 @@ public class QuestionProviderImpl implements QuestionProvider {
             final String mainText,
             final List<String> keyWordList,
             final List<Category> categoryList,
-            final JobGroup jobGroup,
             final String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
@@ -107,7 +149,8 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .KeyWordEntityList(keyWordEntityList)
                         .subject(subject)
                         .mainText(mainText)
-                        .jobGroup(jobGroup)
+                        .jobGroup(userEntity.getJobGroup())
+                        .experienceId(previous.getExperienceId())
                         .userId(userId)
                         .pinIndicator(previous.getPinIndicator())
                         .build();
@@ -122,8 +165,13 @@ public class QuestionProviderImpl implements QuestionProvider {
             final String mainText,
             final List<String> keyWordList,
             final List<Category> categoryList,
-            final JobGroup jobGroup,
+            final Long experienceId,
             final String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
@@ -141,7 +189,8 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .KeyWordEntityList(keyWordEntityList)
                         .subject(subject)
                         .mainText(mainText)
-                        .jobGroup(jobGroup)
+                        .jobGroup(userEntity.getJobGroup())
+                        .experienceId(experienceId)
                         .userId(userId)
                         .pinIndicator(false)
                         .build();

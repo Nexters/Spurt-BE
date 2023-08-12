@@ -6,6 +6,7 @@ import com.sirius.spurt.common.resolver.NonLoginUser;
 import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
+import com.sirius.spurt.service.business.question.PutPinQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;
 import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
@@ -35,6 +36,20 @@ public class QuestionController {
     private final GetQuestionBusiness getQuestionBusiness;
     private final RandomQuestionBusiness randomQuestionBusiness;
     private final RetrieveQuestionBusiness retrieveQuestionBusiness;
+    private final PutPinQuestionBusiness putPinQuestionBusiness;
+
+    /**
+     * @param loginUser
+     * @param dto
+     * @return
+     * @title pin 고정/비고정
+     */
+    @PutMapping("/question/pin")
+    public RestResponse<PutPinQuestionBusiness.Result> questionPin(
+            LoginUser loginUser, @RequestBody PutPinQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
+        return RestResponse.success(putPinQuestionBusiness.execute(dto));
+    }
 
     /**
      * 로그인 하면 같은직군으로 조회 <br>
@@ -46,11 +61,15 @@ public class QuestionController {
      */
     @GetMapping("/question/random")
     public RestResponse<RandomQuestionBusiness.Result> questionRandom(
-            NonLoginUser loginUser, @RequestParam(name = "offest", defaultValue = "4") String count) {
+            NonLoginUser loginUser,
+            @RequestParam(name = "category") Category category,
+            @RequestParam(name = "offset", defaultValue = "4") String count) {
+
         RandomQuestionBusiness.Dto dto =
                 RandomQuestionBusiness.Dto.builder()
                         .userId(loginUser.getUserId())
                         .count(Integer.valueOf(count))
+                        .category(category)
                         .build();
         return RestResponse.success(randomQuestionBusiness.execute(dto));
     }
