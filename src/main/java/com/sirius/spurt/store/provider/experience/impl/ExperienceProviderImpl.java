@@ -2,21 +2,36 @@ package com.sirius.spurt.store.provider.experience.impl;
 
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
+import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
 
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.store.provider.experience.ExperienceProvider;
+import com.sirius.spurt.store.provider.experience.vo.CategoryVo;
+import com.sirius.spurt.store.provider.experience.vo.ExperienceVo;
+import com.sirius.spurt.store.provider.experience.vo.ExperienceVoList;
+import com.sirius.spurt.store.provider.experience.vo.KeyWordVo;
+import com.sirius.spurt.store.provider.experience.vo.QuestionVo;
+import com.sirius.spurt.store.provider.experience.vo.QuestionVoList;
+import com.sirius.spurt.store.repository.database.entity.CategoryEntity;
 import com.sirius.spurt.store.repository.database.entity.ExperienceEntity;
+import com.sirius.spurt.store.repository.database.entity.KeyWordEntity;
+import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
 import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -98,6 +113,68 @@ public class ExperienceProviderImpl implements ExperienceProvider {
         experienceRepository.deleteById(experienceId);
     }
 
+    @Override
+    public ExperienceVoList getAllExperience(final String userId) {
+        List<ExperienceEntity> experienceEntityList =
+                experienceRepository.findByUserEntityUserId(userId);
+
+        if (CollectionUtils.isEmpty(experienceEntityList)) {
+            throw new GlobalException(NO_CONTENT);
+        }
+
+        List<ExperienceVo> experienceVoList =
+                ExperienceProviderImplMapper.INSTANCE.toExperienceVoList(experienceEntityList);
+
+        return ExperienceVoList.builder()
+                .experienceVoList(experienceVoList)
+                .totalCount(experienceVoList.size())
+                .build();
+    }
+
+    @Override
+    public ExperienceVo getExperience(final Long experienceId, final String userId) {
+        ExperienceEntity experienceEntity =
+                experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
+
+        if (experienceEntity == null) {
+            throw new GlobalException(NO_CONTENT);
+        }
+
+        return ExperienceProviderImplMapper.INSTANCE.toExperienceVo(experienceEntity);
+    }
+
+    @Mapper
+    public interface ExperienceProviderImplMapper {
+        ExperienceProviderImplMapper INSTANCE = Mappers.getMapper(ExperienceProviderImplMapper.class);
+
+        @Mapping(source = "startDate", target = "startDate")
+        @Mapping(source = "endDate", target = "endDate")
+        default String toStringTime(Timestamp timestamp) {
+            return timestampToString(timestamp);
+        }
+
+        List<KeyWordVo> toKeyWordVoList(List<KeyWordEntity> keyWordEntityList);
+
+        List<CategoryVo> toCategoryVoList(List<CategoryEntity> categoryEntityList);
+
+        @Mapping(source = "keyWordEntityList", target = "keyWordVoList")
+        @Mapping(source = "categoryEntityList", target = "categoryVoList")
+        QuestionVo toQuestionVo(QuestionEntity questionEntity);
+
+        default QuestionVoList toQuestionVoList(List<QuestionEntity> questionEntityList) {
+            return QuestionVoList.builder()
+                    .questionVoList(questionEntityList.stream().map(this::toQuestionVo).toList())
+                    .totalCount(questionEntityList.size())
+                    .build();
+        }
+
+        @Mapping(source = "questionEntityList", target = "questionVoList")
+        ExperienceVo toExperienceVo(ExperienceEntity experienceEntity);
+
+        @Mapping(source = "questionEntityList", target = "questionVoList")
+        List<ExperienceVo> toExperienceVoList(List<ExperienceEntity> experienceEntityList);
+    }
+
     private Timestamp stringToTimestamp(String time) {
         if (time == null) {
             return null;
@@ -111,5 +188,13 @@ public class ExperienceProviderImpl implements ExperienceProvider {
             log.error(e.getMessage());
             throw new GlobalException(TIME_FORMAT_ERROR);
         }
+    }
+
+    private static String timestampToString(Timestamp timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+
+        return new SimpleDateFormat("yyyy-MM").format(timestamp);
     }
 }
