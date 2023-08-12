@@ -742,6 +742,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">본문.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questions[].pinIndicator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pin 여부.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].keyWordList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -762,7 +768,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">questions[].createTimestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questions[].createTime</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성시간.</p></td>
@@ -803,7 +809,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 417
+Content-Length: 431
 
 {
   "code" : 0,
@@ -813,10 +819,11 @@ Content-Length: 417
       "questionId" : null,
       "subject" : "제목",
       "mainText" : "본문",
+      "pinIndicator" : null,
       "keyWordList" : null,
       "categoryList" : [ "MOTVE" ],
       "jobGroup" : "DEVELOPER",
-      "createTimestamp" : "2023-08-12T17:16:22.647+00:00"
+      "createTime" : "2023-08-13 01:39:21"
     } ],
     "meta" : {
       "totalCount" : 1,
@@ -1157,7 +1164,7 @@ Content-Length: 79
 <p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">createTimestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">createTime</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성시간.</p></td>
@@ -1205,7 +1212,7 @@ Content-Length: 79
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 364
+Content-Length: 349
 
 {
   "code" : 0,
@@ -1215,7 +1222,7 @@ Content-Length: 364
     "subject" : "제목",
     "mainText" : "본문",
     "jobGroup" : "DEVELOPER",
-    "createTimestamp" : "2023-08-12T17:16:22.669+00:00",
+    "createTime" : "2023-08-13 01:39:21",
     "userId" : null,
     "pinIndicator" : null,
     "keyWordList" : [ "키워드" ],
@@ -1789,13 +1796,13 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">link</p></td>
@@ -1906,13 +1913,13 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">link</p></td>
@@ -2137,13 +2144,13 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">link</p></td>
@@ -2307,13 +2314,13 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].startDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].endDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜 (yyyy-MM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].link</p></td>

@@ -12,7 +12,6 @@ import com.sirius.spurt.store.provider.question.vo.KeyWordVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -106,7 +105,7 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
             /** 직군 */
             private JobGroup jobGroup;
             /** 생성시간 */
-            private Timestamp createTimestamp;
+            private String createTime;
         }
 
         @Data
