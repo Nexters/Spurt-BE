@@ -24,6 +24,6 @@ public class KeyWordEntity extends BaseEntity {
 
     @Column private Long questionId;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(20) CHARACTER SET UTF8")
+    @Column(nullable = false, columnDefinition = "VARCHAR(30) CHARACTER SET UTF8")
     private String keyWord;
 }

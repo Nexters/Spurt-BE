@@ -51,9 +51,9 @@ public class UpdateExperienceBusiness implements Business<Dto, Result> {
         @Size(max = 1000)
         @NotBlank
         private String content;
-        /** 시작 날짜 */
+        /** 시작 날짜 (yyyy-MM) */
         @NotBlank private String startDate;
-        /** 종료 날짜 */
+        /** 종료 날짜 (yyyy-MM) */
         private String endDate;
         /** 관련 링크 */
         private String link;
