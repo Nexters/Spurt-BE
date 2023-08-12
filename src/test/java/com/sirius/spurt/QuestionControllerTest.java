@@ -64,7 +64,7 @@ public class QuestionControllerTest extends BaseMvcTest {
         this.mockMvc
                 .perform(
                         get("/v1/question/random")
-                                .param("category", "MOTVE")
+                                .param("category", "CONFLICT")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -93,7 +93,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .jobGroup(JobGroup.DEVELOPER)
                         .mainText("본문")
                         .createTime("2023-08-13 01:39:21")
-                        .categoryList(List.of(Category.MOTVE))
+                        .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("키워드"))
                         .build();
         when(getQuestionBusiness.execute(any())).thenReturn(result);
@@ -107,7 +107,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .questionId("2")
                         .subject("test 질문")
                         .mainText("test 내용")
-                        .categoryList(List.of(Category.MOTVE))
+                        .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("testKeyword"))
                         .build();
         when(putQuestionBusiness.execute(any())).thenReturn(new PutQuestionBusiness.Result());
@@ -126,7 +126,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                 SaveQuestionBusiness.Dto.builder()
                         .subject("test 질문")
                         .mainText("test 내용")
-                        .categoryList(List.of(Category.MOTVE))
+                        .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("testKeyword"))
                         .build();
         when(saveQuestionBusiness.execute(any())).thenReturn(new SaveQuestionBusiness.Result());
@@ -148,7 +148,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                                 List.of(
                                         RetrieveQuestionBusiness.Result.Question.builder()
                                                 .subject("제목")
-                                                .categoryList(List.of(Category.MOTVE))
+                                                .categoryList(List.of(Category.CONFLICT))
                                                 .jobGroup(JobGroup.DEVELOPER)
                                                 .mainText("본문")
                                                 .createTime("2023-08-13 01:39:21")
@@ -167,7 +167,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                                 .param("subject", "제목")
                                 .param("pinIndicator", "false")
                                 .param("jobGroup", JobGroup.DEVELOPER.name())
-                                .param("category", Category.MOTVE.name()))
+                                .param("category", Category.CONFLICT.name()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
