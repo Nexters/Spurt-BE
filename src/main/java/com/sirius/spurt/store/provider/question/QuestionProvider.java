@@ -27,7 +27,6 @@ public interface QuestionProvider {
             final String mainText,
             final List<String> keyWordList,
             final List<Category> categoryList,
-            final Long experienceId,
             final String userId);
 
     QuestionVo getQuestion(final Long questionId);

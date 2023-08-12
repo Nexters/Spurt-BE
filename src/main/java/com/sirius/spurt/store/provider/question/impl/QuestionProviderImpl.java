@@ -1,9 +1,7 @@
 package com.sirius.spurt.store.provider.question.impl;
 
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
-import static com.sirius.spurt.common.meta.ResultCode.NO_MATCH_EXPERIENCE;
 
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
@@ -12,7 +10,6 @@ import com.sirius.spurt.store.provider.question.QuestionProvider;
 import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import com.sirius.spurt.store.repository.database.entity.CategoryEntity;
-import com.sirius.spurt.store.repository.database.entity.ExperienceEntity;
 import com.sirius.spurt.store.repository.database.entity.KeyWordEntity;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
@@ -89,7 +86,6 @@ public class QuestionProviderImpl implements QuestionProvider {
             final String mainText,
             final List<String> keyWordList,
             final List<Category> categoryList,
-            final Long experienceId,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
@@ -102,26 +98,6 @@ public class QuestionProviderImpl implements QuestionProvider {
 
         if (previous == null) {
             throw new GlobalException(NOT_QUESTION_OWNER);
-        }
-
-        ExperienceEntity experienceEntity = null;
-
-        if (experienceId != null) {
-            experienceEntity =
-                    experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-            if (experienceEntity == null) {
-                throw new GlobalException(NOT_EXPERIENCE_OWNER);
-            }
-
-            if (previous.getExperienceEntity() == null
-                    || !experienceId.equals(previous.getExperienceEntity().getExperienceId())) {
-                throw new GlobalException(NO_MATCH_EXPERIENCE);
-            }
-        }
-
-        if (experienceId == null && previous.getExperienceEntity() != null) {
-            throw new GlobalException(NO_MATCH_EXPERIENCE);
         }
 
         List<CategoryEntity> categoryEntityList =
@@ -142,7 +118,7 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .subject(subject)
                         .mainText(mainText)
                         .jobGroup(userEntity.getJobGroup())
-                        .experienceEntity(experienceEntity)
+                        .experienceId(previous.getExperienceId())
                         .userId(userId)
                         .pinIndicator(previous.getPinIndicator())
                         .build();
@@ -165,17 +141,6 @@ public class QuestionProviderImpl implements QuestionProvider {
             throw new GlobalException(NOT_EXIST_USER);
         }
 
-        ExperienceEntity experienceEntity = null;
-
-        if (experienceId != null) {
-            experienceEntity =
-                    experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-            if (experienceEntity == null) {
-                throw new GlobalException(NOT_EXPERIENCE_OWNER);
-            }
-        }
-
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
                         .map(category -> CategoryEntity.builder().category(category).build())
@@ -193,7 +158,7 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .subject(subject)
                         .mainText(mainText)
                         .jobGroup(userEntity.getJobGroup())
-                        .experienceEntity(experienceEntity)
+                        .experienceId(experienceId)
                         .userId(userId)
                         .pinIndicator(false)
                         .build();

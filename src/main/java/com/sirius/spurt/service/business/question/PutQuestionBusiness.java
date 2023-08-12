@@ -10,7 +10,6 @@ import com.sirius.spurt.service.business.question.PutQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness.Result;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
@@ -44,7 +43,6 @@ public class PutQuestionBusiness implements Business<Dto, Result> {
                 input.getMainText(),
                 input.getKeyWordList(),
                 input.getCategoryList(),
-                input.getExperienceId(),
                 input.getUserId());
         return new Result();
     }
@@ -68,15 +66,11 @@ public class PutQuestionBusiness implements Business<Dto, Result> {
         @Size(max = 1000)
         @NotBlank
         private String mainText;
-        /** pin 여부 확인 */
-        @NotNull private Boolean pinIndicator;
         /** 키워드 (최대 20개) */
         @Size(max = 20)
         private List<String> keyWordList;
         /** 카테고리 */
         private List<Category> categoryList;
-        /** experienceId */
-        private Long experienceId;
         /** 사용자 ID (프론트 전달 x) */
         private String userId;
     }

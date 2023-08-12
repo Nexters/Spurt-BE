@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
@@ -45,9 +44,8 @@ public class QuestionEntity extends BaseEntity {
 
     @Column private Boolean pinIndicator;
 
-    @ManyToOne
-    @JoinColumn(name = "experienceId")
-    private ExperienceEntity experienceEntity;
+    @Column(nullable = false)
+    private Long experienceId;
 
     // 키워드 테이블 조인
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
