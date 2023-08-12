@@ -37,6 +37,11 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
+
+        if (Category.ALL == input.getCategory()) {
+            input.setCategory(null);
+        }
+
         QuestionVoList questionVoList =
                 questionProvider.searchQuestion(
                         input.getSubject(),

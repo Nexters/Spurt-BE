@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Category implements CommonEnum {
+    ALL("전체"),
     COLLABORATION("협업경험"),
     PROSANDCONS("장점단점"),
     CONFLICT("갈등경험"),
