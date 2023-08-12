@@ -2,6 +2,7 @@ package com.sirius.spurt.service.controller.question;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.resolver.NonLoginUser;
 import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
@@ -36,13 +37,16 @@ public class QuestionController {
     private final RetrieveQuestionBusiness retrieveQuestionBusiness;
 
     /**
+     * 로그인 하면 같은직군으로 조회 <br>
+     * 비로그인시 랜덤 조회
+     *
      * @param count 랜덤 질문 갯수
      * @return
      * @title 같은 직군 질문 랜덤 조회
      */
     @GetMapping("/question/random")
     public RestResponse<RandomQuestionBusiness.Result> questionRandom(
-            LoginUser loginUser, @RequestParam(name = "offest", defaultValue = "4") String count) {
+            NonLoginUser loginUser, @RequestParam(name = "offest", defaultValue = "4") String count) {
         RandomQuestionBusiness.Dto dto =
                 RandomQuestionBusiness.Dto.builder()
                         .userId(loginUser.getUserId())
@@ -103,9 +107,9 @@ public class QuestionController {
      * @param subject
      * @param jobGroup 직군
      * @param category 카테고리
-     * @param pinIndecator 10분노트 여부 true/fasle
-     * @param myQuestionIndecator 내 질문만 조회 true/fasle
-     * @param offest 페이지 (시작 0)
+     * @param pinIndicator 10분노트 여부 true/fasle
+     * @param myQuestionIndicator 내 질문만 조회 true/fasle
+     * @param offset 페이지 (시작 0)
      * @param size size
      * @return
      * @title 질문 조회
@@ -116,9 +120,9 @@ public class QuestionController {
             @RequestParam(name = "subject", required = false) String subject,
             @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
             @RequestParam(name = "category", required = false) Category category,
-            @RequestParam(name = "pinIndicator", defaultValue = "false") String pinIndecator,
-            @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndecator,
-            @RequestParam(name = "offest", defaultValue = "0") String offest,
+            @RequestParam(name = "pinIndicator", defaultValue = "false") String pinIndicator,
+            @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndicator,
+            @RequestParam(name = "offset", defaultValue = "0") String offset,
             @RequestParam(name = "size", defaultValue = "10") String size) {
         String userId = loginUser.getUserId();
         RetrieveQuestionBusiness.Dto dto =
@@ -127,10 +131,10 @@ public class QuestionController {
                         .subject(subject)
                         .jobGroup(jobGroup)
                         .category(category)
-                        .pinIndicator(Boolean.valueOf(pinIndecator))
-                        .myQuestionIndicator(Boolean.valueOf(myQuestionIndecator))
+                        .pinIndicator(Boolean.valueOf(pinIndicator))
+                        .myQuestionIndicator(Boolean.valueOf(myQuestionIndicator))
                         .size(size)
-                        .offset(offest)
+                        .offset(offset)
                         .build();
         return RestResponse.success(retrieveQuestionBusiness.execute(dto));
     }

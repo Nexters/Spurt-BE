@@ -54,6 +54,15 @@ endif::[]
 
 |3000
 |질문이 존재하지 않거나 작성자가 아닙니다.
+
+|3001
+|존재하지 않는 유저입니다.
+
+|3002
+|경험이 존재하지 않거나 작성자가 아닙니다.
+
+|4000
+|시간 형식이 맞지 않습니다.
 |===
 
 == 현재 오류 사항
@@ -78,3 +87,8 @@ include::{snippets}/job-group-controller-test/유저_직군_저장/auto-section.
 == 유저 API
 include::{snippets}/user-controller-test/유저_존재_확인/auto-section.adoc[]
 
+== 프로젝트 API
+
+include::{snippets}/experience-controller-test/본인_경험_저장/auto-section.adoc[]
+include::{snippets}/experience-controller-test/본인_경험_수정/auto-section.adoc[]
+include::{snippets}/experience-controller-test/본인_경험_삭제/auto-section.adoc[]
