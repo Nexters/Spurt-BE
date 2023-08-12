@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: api-docs
-          path: ./src/main/resource/static/docs
+          path: build/docs/asciidoc
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
