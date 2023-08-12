@@ -1,6 +1,9 @@
 package com.sirius.spurt.service.business.question;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_ALL_CATEGORY;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
@@ -30,6 +33,10 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
+
+        if (input.getCategoryList().contains(Category.ALL)) {
+            throw new GlobalException(NOT_ALL_CATEGORY);
+        }
         questionProvider.saveQuestion(
                 input.getSubject(),
                 input.getMainText(),
