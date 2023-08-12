@@ -91,7 +91,7 @@ spotless {
 }
 
 // 의존성을 설정해줌 test 끝나고 spotlessjava 수행되도록
-tasks.named("spotlessJava").configure { dependsOn("jsonDoclet") }
+tasks.named("spotlessJava").configure { dependsOn("compileTestJava") }
 
 // 테스트 실행 후, snipperDir에 snippet(.adoc 파일들) 생성
 test {
