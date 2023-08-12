@@ -8,6 +8,7 @@ import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness.Result;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
 import com.sirius.spurt.store.provider.question.vo.CategoryVo;
+import com.sirius.spurt.store.provider.question.vo.KeyWordVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import java.io.Serial;
 import java.io.Serializable;
@@ -85,10 +86,15 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
         @Builder
         @AllArgsConstructor
         public static class Question {
+            /** 질문 ID */
+            private Long questionId;
             /** 제목 */
             private String subject;
             /** 본문 */
             private String mainText;
+
+            /** 키워드 리스트 */
+            private List<String> keyWordList;
             /** 카테고리 */
             private List<Category> categoryList;
             /** 직군 */
@@ -116,6 +122,10 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
 
         default List<Category> toCategory(List<CategoryVo> categoryListe) {
             return categoryListe.stream().map(categoryVo -> categoryVo.getCategory()).toList();
+        }
+
+        default List<String> toKeyword(List<KeyWordVo> keyWordList) {
+            return keyWordList.stream().map(KeyWordVo -> KeyWordVo.getKeyWord()).toList();
         }
 
         @Mapping(source = "totalCount", target = "meta.totalCount")

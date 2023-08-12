@@ -2,6 +2,8 @@ package com.sirius.spurt.service.controller.question;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.resolver.NonLoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;
@@ -9,7 +11,6 @@ import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,17 +37,19 @@ public class QuestionController {
     private final RetrieveQuestionBusiness retrieveQuestionBusiness;
 
     /**
-     * @param request
+     * 로그인 하면 같은직군으로 조회 <br>
+     * 비로그인시 랜덤 조회
+     *
      * @param count 랜덤 질문 갯수
      * @return
      * @title 같은 직군 질문 랜덤 조회
      */
     @GetMapping("/question/random")
     public RestResponse<RandomQuestionBusiness.Result> questionRandom(
-            HttpServletRequest request, @RequestParam(name = "offest", defaultValue = "4") String count) {
+            NonLoginUser loginUser, @RequestParam(name = "offest", defaultValue = "4") String count) {
         RandomQuestionBusiness.Dto dto =
                 RandomQuestionBusiness.Dto.builder()
-                        .userId(request.getAttribute("userId").toString())
+                        .userId(loginUser.getUserId())
                         .count(Integer.valueOf(count))
                         .build();
         return RestResponse.success(randomQuestionBusiness.execute(dto));
@@ -59,8 +62,8 @@ public class QuestionController {
      */
     @DeleteMapping("/question")
     public RestResponse<DeleteQuestionBusiness.Result> questionDelete(
-            HttpServletRequest request, @RequestBody DeleteQuestionBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
+            LoginUser loginUser, @RequestBody DeleteQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
         return RestResponse.success(deleteQuestionBusiness.execute(dto));
     }
 
@@ -71,8 +74,8 @@ public class QuestionController {
      */
     @PutMapping("/question")
     public RestResponse<PutQuestionBusiness.Result> questionPut(
-            HttpServletRequest request, @RequestBody PutQuestionBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
+            LoginUser loginUser, @RequestBody PutQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
         return RestResponse.success(putQuestionBusiness.execute(dto));
     }
 
@@ -83,7 +86,7 @@ public class QuestionController {
      */
     @GetMapping("/question/{questionId}")
     public RestResponse<GetQuestionBusiness.Result> questionGet(
-            @PathVariable("questionId") String questionId) {
+            LoginUser loginUser, @PathVariable("questionId") String questionId) {
         GetQuestionBusiness.Dto dto =
                 GetQuestionBusiness.Dto.builder().questionId(Long.parseLong(questionId)).build();
         return RestResponse.success(getQuestionBusiness.execute(dto));
@@ -95,8 +98,8 @@ public class QuestionController {
      */
     @PostMapping("/question")
     public RestResponse<SaveQuestionBusiness.Result> questionSave(
-            HttpServletRequest request, @RequestBody SaveQuestionBusiness.Dto dto) {
-        dto.setUserId(request.getAttribute("userId").toString());
+            LoginUser loginUser, @RequestBody SaveQuestionBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
         return RestResponse.success(saveQuestionBusiness.execute(dto));
     }
 
@@ -104,34 +107,34 @@ public class QuestionController {
      * @param subject
      * @param jobGroup 직군
      * @param category 카테고리
-     * @param pinIndecator 10분노트 여부 true/fasle
-     * @param myQuestionIndecator 내 질문만 조회 true/fasle
-     * @param offest 페이지 (시작 0)
+     * @param pinIndicator 10분노트 여부 true/fasle
+     * @param myQuestionIndicator 내 질문만 조회 true/fasle
+     * @param offset 페이지 (시작 0)
      * @param size size
      * @return
      * @title 질문 조회
      */
     @GetMapping("/question")
     public RestResponse<RetrieveQuestionBusiness.Result> questionRetrieve(
-            HttpServletRequest request,
+            LoginUser loginUser,
             @RequestParam(name = "subject", required = false) String subject,
             @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
             @RequestParam(name = "category", required = false) Category category,
-            @RequestParam(name = "pinIndicator", defaultValue = "false") String pinIndecator,
-            @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndecator,
-            @RequestParam(name = "offest", defaultValue = "0") String offest,
+            @RequestParam(name = "pinIndicator", defaultValue = "false") String pinIndicator,
+            @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndicator,
+            @RequestParam(name = "offset", defaultValue = "0") String offset,
             @RequestParam(name = "size", defaultValue = "10") String size) {
-        String userId = request.getAttribute("userId").toString();
+        String userId = loginUser.getUserId();
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
                         .userId(userId)
                         .subject(subject)
                         .jobGroup(jobGroup)
                         .category(category)
-                        .pinIndicator(Boolean.valueOf(pinIndecator))
-                        .myQuestionIndicator(Boolean.valueOf(myQuestionIndecator))
+                        .pinIndicator(Boolean.valueOf(pinIndicator))
+                        .myQuestionIndicator(Boolean.valueOf(myQuestionIndicator))
                         .size(size)
-                        .offset(offest)
+                        .offset(offset)
                         .build();
         return RestResponse.success(retrieveQuestionBusiness.execute(dto));
     }

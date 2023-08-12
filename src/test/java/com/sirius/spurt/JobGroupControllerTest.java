@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness;
 import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness;
 import com.sirius.spurt.service.controller.jobgroup.JobGroupController;
@@ -22,8 +23,12 @@ public class JobGroupControllerTest extends BaseMvcTest {
 
     @Test
     void 유저_직군_저장() throws Exception {
+        LoginUser loginUser = new LoginUser("admin", "email");
         SaveJobGroupBusiness.Dto dto =
-                SaveJobGroupBusiness.Dto.builder().userId("admin").jobGroup(JobGroup.DEVELOPER).build();
+                SaveJobGroupBusiness.Dto.builder()
+                        .loginUser(loginUser)
+                        .jobGroup(JobGroup.DEVELOPER)
+                        .build();
         when(saveJobGroupBusiness.execute(dto)).thenReturn(new SaveJobGroupBusiness.Result());
         this.mockMvc
                 .perform(
@@ -37,8 +42,12 @@ public class JobGroupControllerTest extends BaseMvcTest {
 
     @Test
     void 유저_직군_수정() throws Exception {
+        LoginUser loginUser = new LoginUser("admin", "email");
         UpdateJobGroupBusiness.Dto dto =
-                UpdateJobGroupBusiness.Dto.builder().userId("admin").jobGroup(JobGroup.DEVELOPER).build();
+                UpdateJobGroupBusiness.Dto.builder()
+                        .loginUser(loginUser)
+                        .jobGroup(JobGroup.DEVELOPER)
+                        .build();
         when(updateJobGroupBusiness.execute(dto)).thenReturn(new UpdateJobGroupBusiness.Result());
         this.mockMvc
                 .perform(

@@ -33,6 +33,13 @@ public class RandomQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
+
+        // 비로그인 유저
+        if (input.getUserId() == null) {
+            return RandomQuestionBusinessMapper.INSTANCE.toResult(
+                    questionProvider.randomQuestion(null, null, input.getCount()));
+        }
+
         final UserVo userVo = userProvider.getUserInfo(input.getUserId());
         JobGroup jobGroup = userVo.getJobGroup();
         return RandomQuestionBusinessMapper.INSTANCE.toResult(
