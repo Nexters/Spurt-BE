@@ -24,11 +24,11 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 
     @Override
     public List<QuestionEntity> RandomQuestion(
-            final JobGroup jobGroup, final String userId, final Integer count) {
+            final JobGroup jobGroup, final String userId, final Integer count, final Category category) {
         return jpaQueryFactory
                 .selectFrom(QQuestionEntity.questionEntity)
                 .leftJoin(QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
-                .where(eqJobGroup(jobGroup), neUserId(userId))
+                .where(eqJobGroup(jobGroup), neUserId(userId), eqCategory(category))
                 .limit(count)
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .fetch();

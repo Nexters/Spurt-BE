@@ -19,5 +19,5 @@ public interface QuestionRepositoryCustom {
             final PageRequest pageRequest);
 
     List<QuestionEntity> RandomQuestion(
-            final JobGroup jobGroup, final String userId, final Integer count);
+            final JobGroup jobGroup, final String userId, final Integer count, final Category category);
 }

@@ -899,11 +899,10 @@ Content-Length: 431
 <p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
-<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
@@ -927,7 +926,7 @@ Content-Length: 431
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question' -i -X POST \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
-    -d '{"subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["MOTVE"],"jobGroup":"DEVELOPER","userId":null}'</code></pre>
+    -d '{"subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["MOTVE"],"experienceId":null,"userId":null}'</code></pre>
 </div>
 </div>
 </div>
@@ -1005,12 +1004,6 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Pin 여부 확인.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">keyWordList</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -1022,13 +1015,6 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
 <p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">jobGroup</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">직군.</p>
-<p class="tableblock">Must be one of [DEVELOPER, DESIGNER, MARKETER, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
@@ -1052,7 +1038,7 @@ Content-Length: 79
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question' -i -X PUT \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
-    -d '{"questionId":"2","subject":"test 질문","mainText":"test 내용","pinIndicator":null,"keyWordList":["testKeyword"],"categoryList":["MOTVE"],"jobGroup":"DEVELOPER","userId":null}'</code></pre>
+    -d '{"questionId":"2","subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["MOTVE"],"userId":null}'</code></pre>
 </div>
 </div>
 </div>
@@ -1354,7 +1340,13 @@ Content-Length: 79
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">offest</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">category</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">offset</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">랜덤 질문 갯수.</p>
@@ -1413,7 +1405,7 @@ Content-Length: 79
 <h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question/random' -i -X GET \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question/random?category=MOTVE' -i -X GET \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;'</code></pre>
 </div>

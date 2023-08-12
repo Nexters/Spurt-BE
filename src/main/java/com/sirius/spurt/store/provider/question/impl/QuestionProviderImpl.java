@@ -34,12 +34,44 @@ public class QuestionProviderImpl implements QuestionProvider {
     private final UserRepository userRepository;
 
     @Override
+    public void putPinQuestion(
+            final String questionId, final String userId, final Boolean pinIndicator) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
+
+        QuestionEntity previous =
+                questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
+
+        if (previous == null) {
+            throw new GlobalException(NOT_QUESTION_OWNER);
+        }
+
+        QuestionEntity questionEntity =
+                QuestionEntity.builder()
+                        .questionId(Long.valueOf(questionId))
+                        .categoryEntityList(previous.getCategoryEntityList())
+                        .KeyWordEntityList(previous.getKeyWordEntityList())
+                        .subject(previous.getSubject())
+                        .mainText(previous.getMainText())
+                        .jobGroup(userEntity.getJobGroup())
+                        .experienceId(previous.getExperienceId())
+                        .userId(userId)
+                        .pinIndicator(pinIndicator)
+                        .build();
+
+        questionRepository.save(questionEntity);
+    }
+
+    @Override
     public QuestionVoList randomQuestion(
-            final JobGroup jobGroup, final String userId, final Integer count) {
+            final JobGroup jobGroup, final String userId, final Integer count, final Category category) {
         return QuestionVoList.builder()
                 .questions(
                         QuestionProviderImplMapper.INSTANCE.toQuestionVos(
-                                questionRepository.RandomQuestion(jobGroup, userId, count)))
+                                questionRepository.RandomQuestion(jobGroup, userId, count, category)))
                 .build();
     }
 

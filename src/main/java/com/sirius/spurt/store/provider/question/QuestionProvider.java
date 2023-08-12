@@ -9,7 +9,10 @@ import org.springframework.data.domain.PageRequest;
 
 public interface QuestionProvider {
 
-    QuestionVoList randomQuestion(final JobGroup jobGroup, final String userId, final Integer count);
+    void putPinQuestion(final String questionId, final String userId, final Boolean pinIndicator);
+
+    QuestionVoList randomQuestion(
+            final JobGroup jobGroup, final String userId, final Integer count, final Category category);
 
     void deleteQuestion(final String userId, final Long questionId);
 

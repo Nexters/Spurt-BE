@@ -13,6 +13,7 @@ import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
+import com.sirius.spurt.service.business.question.PutPinQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutQuestionBusiness;
 import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
@@ -32,6 +33,21 @@ public class QuestionControllerTest extends BaseMvcTest {
     @MockBean private GetQuestionBusiness getQuestionBusiness;
     @MockBean private DeleteQuestionBusiness deleteQuestionBusiness;
     @MockBean private RandomQuestionBusiness randomQuestionBusiness;
+    @MockBean private PutPinQuestionBusiness putPinQuestionBusiness;
+
+    @Test
+    void 질문_핀_수정() throws Exception {
+        PutPinQuestionBusiness.Dto dto =
+                PutPinQuestionBusiness.Dto.builder().questionId("2").pinIndicator(true).build();
+        when(putPinQuestionBusiness.execute(any())).thenReturn(new PutPinQuestionBusiness.Result());
+        this.mockMvc
+                .perform(
+                        put("/v1/question/pin")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 
     @Test
     void 질문_랜덤_조회() throws Exception {
@@ -46,7 +62,10 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .build();
         when(randomQuestionBusiness.execute(any())).thenReturn(result);
         this.mockMvc
-                .perform(get("/v1/question/random").contentType(MediaType.APPLICATION_JSON))
+                .perform(
+                        get("/v1/question/random")
+                                .param("category", "MOTVE")
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
