@@ -1,5 +1,8 @@
 package com.sirius.spurt.store.provider.experience;
 
+import com.sirius.spurt.store.provider.experience.vo.ExperienceVo;
+import com.sirius.spurt.store.provider.experience.vo.ExperienceVoList;
+
 public interface ExperienceProvider {
     void saveExperience(
             final String title,
@@ -19,4 +22,8 @@ public interface ExperienceProvider {
             final String userId);
 
     void deleteExperience(final Long experienceId, final String userId);
+
+    ExperienceVoList getAllExperience(final String userId);
+
+    ExperienceVo getExperience(final Long experienceId, final String userId);
 }

@@ -12,7 +12,7 @@ public enum Category implements CommonEnum {
     CONFLICT("갈등경험"),
     PRACTICAL("실무경험"),
     UNDERSTANDING("직무이해도"),
-    EXPERIANCE("직무경험"),
+    EXPERIENCE("직무경험"),
     MAJOR("전공지식"),
     MOTVE("지원동기");
 
