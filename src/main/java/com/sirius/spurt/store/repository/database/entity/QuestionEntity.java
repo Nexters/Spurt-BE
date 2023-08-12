@@ -44,6 +44,9 @@ public class QuestionEntity extends BaseEntity {
 
     @Column private Boolean pinIndicator;
 
+    @Column(nullable = false)
+    private Long experienceId;
+
     // 키워드 테이블 조인
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "questionId")
