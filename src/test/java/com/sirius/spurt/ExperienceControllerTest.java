@@ -96,7 +96,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .subject("질문제목1")
                         .mainText("질문내용1")
                         .pinIndicator(false)
-                        .categoryList(List.of(Category.EXPERIANCE))
+                        .categoryList(List.of(Category.EXPERIENCE))
                         .build();
         GetAllExperienceBusiness.Result.Experience.QuestionList questionList =
                 GetAllExperienceBusiness.Result.Experience.QuestionList.builder()
@@ -129,7 +129,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .subject("질문제목1")
                         .mainText("질문내용1")
                         .pinIndicator(false)
-                        .categoryList(List.of(Category.EXPERIANCE))
+                        .categoryList(List.of(Category.EXPERIENCE))
                         .build();
         GetExperienceBusiness.Result.QuestionList questionList =
                 GetExperienceBusiness.Result.QuestionList.builder()
