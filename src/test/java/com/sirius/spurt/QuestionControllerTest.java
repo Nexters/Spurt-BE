@@ -18,8 +18,6 @@ import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.question.QuestionController;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -75,7 +73,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .subject("제목")
                         .jobGroup(JobGroup.DEVELOPER)
                         .mainText("본문")
-                        .createTimestamp(Timestamp.from(Instant.now()))
+                        .createTime("2023-08-13 01:39:21")
                         .categoryList(List.of(Category.MOTVE))
                         .keyWordList(List.of("키워드"))
                         .build();
@@ -136,7 +134,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                                                 .categoryList(List.of(Category.MOTVE))
                                                 .jobGroup(JobGroup.DEVELOPER)
                                                 .mainText("본문")
-                                                .createTimestamp(Timestamp.from(Instant.now()))
+                                                .createTime("2023-08-13 01:39:21")
                                                 .build()))
                         .meta(
                                 RetrieveQuestionBusiness.Result.MetaData.builder()

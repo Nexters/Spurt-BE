@@ -11,7 +11,6 @@ import com.sirius.spurt.store.provider.question.vo.CategoryVo;
 import com.sirius.spurt.store.provider.question.vo.KeyWordVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,7 +61,7 @@ public class GetQuestionBusiness implements Business<Dto, Result> {
         /** 직군 */
         private JobGroup jobGroup;
         /** 생성시간 */
-        private Timestamp createTimestamp;
+        private String createTime;
         /** 유저 Key */
         private String userId;
         /** pin 여부 확인 */
