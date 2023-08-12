@@ -96,6 +96,8 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
             private String subject;
             /** 본문 */
             private String mainText;
+            /** pin 여부 */
+            private Boolean pinIndicator;
 
             /** 키워드 리스트 */
             private List<String> keyWordList;
