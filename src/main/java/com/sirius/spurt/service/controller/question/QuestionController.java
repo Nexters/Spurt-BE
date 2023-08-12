@@ -46,7 +46,7 @@ public class QuestionController {
      */
     @GetMapping("/question/random")
     public RestResponse<RandomQuestionBusiness.Result> questionRandom(
-            NonLoginUser loginUser, @RequestParam(name = "offest", defaultValue = "4") String count) {
+            NonLoginUser loginUser, @RequestParam(name = "offset", defaultValue = "4") String count) {
         RandomQuestionBusiness.Dto dto =
                 RandomQuestionBusiness.Dto.builder()
                         .userId(loginUser.getUserId())

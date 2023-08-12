@@ -18,7 +18,7 @@ public interface QuestionProvider {
             final String mainText,
             final List<String> keyWordList,
             final List<Category> categoryList,
-            final JobGroup jobGroup,
+            final Long experienceId,
             final String userId);
 
     void putQuestion(
@@ -27,7 +27,7 @@ public interface QuestionProvider {
             final String mainText,
             final List<String> keyWordList,
             final List<Category> categoryList,
-            final JobGroup jobGroup,
+            final Long experienceId,
             final String userId);
 
     QuestionVo getQuestion(final Long questionId);

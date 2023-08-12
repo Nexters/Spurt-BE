@@ -5,7 +5,6 @@ import static com.sirius.spurt.common.meta.ResultCode.NOT_ALL_CATEGORY;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
-import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Result;
@@ -15,6 +14,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,7 +42,7 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
                 input.getMainText(),
                 input.getKeyWordList(),
                 input.getCategoryList(),
-                input.getJobGroup(),
+                input.getExperienceId(),
                 input.getUserId());
         return new Result();
     }
@@ -51,6 +51,8 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
     @Data
     @Validated
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Dto implements Business.Dto, Serializable {
         @Serial private static final long serialVersionUID = 3250576285065388951L;
         /** 제목 (최대 35자) */
@@ -66,8 +68,8 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
         private List<String> keyWordList;
         /** 카테고리 */
         private List<Category> categoryList;
-        /** 직군 */
-        private JobGroup jobGroup;
+        /** experienceId */
+        private Long experienceId;
         /** 사용자 ID (프론트 전달 x) */
         private String userId;
     }
