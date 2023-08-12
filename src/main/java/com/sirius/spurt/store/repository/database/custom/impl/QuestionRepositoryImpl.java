@@ -57,7 +57,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                                 eqCategory(category))
                         .offset(pageRequest.getOffset())
                         .limit(pageRequest.getPageSize())
-                        .orderBy(QQuestionEntity.questionEntity.createTimestamp.desc())
+                        .orderBy(
+                                QQuestionEntity.questionEntity.pinIndicator.desc(),
+                                QQuestionEntity.questionEntity.createTimestamp.desc())
                         .fetch();
 
         int count =

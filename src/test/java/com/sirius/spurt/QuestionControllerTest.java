@@ -150,6 +150,7 @@ public class QuestionControllerTest extends BaseMvcTest {
                 .perform(
                         get("/v1/question")
                                 .param("subject", "제목")
+                                .param("pinIndicator", "false")
                                 .param("jobGroup", JobGroup.DEVELOPER.name())
                                 .param("category", Category.MOTVE.name()))
                 .andExpect(status().isOk())

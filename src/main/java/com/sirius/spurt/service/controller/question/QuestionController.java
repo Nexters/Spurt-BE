@@ -120,18 +120,17 @@ public class QuestionController {
             @RequestParam(name = "subject", required = false) String subject,
             @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
             @RequestParam(name = "category", required = false) Category category,
-            @RequestParam(name = "pinIndicator", defaultValue = "false") String pinIndicator,
+            @RequestParam(name = "pinIndicator", required = false) Boolean pinIndicator,
             @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndicator,
             @RequestParam(name = "offset", defaultValue = "0") String offset,
             @RequestParam(name = "size", defaultValue = "10") String size) {
-        String userId = loginUser.getUserId();
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
-                        .userId(userId)
+                        .userId(loginUser.getUserId())
                         .subject(subject)
                         .jobGroup(jobGroup)
                         .category(category)
-                        .pinIndicator(Boolean.valueOf(pinIndicator))
+                        .pinIndicator(pinIndicator)
                         .myQuestionIndicator(Boolean.valueOf(myQuestionIndicator))
                         .size(size)
                         .offset(offset)

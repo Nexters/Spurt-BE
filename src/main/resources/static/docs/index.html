@@ -482,6 +482,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-experience-controller-test-본인_경험_저장">나의 경험 저장 api</a></li>
 <li><a href="#resources-experience-controller-test-본인_경험_수정">나의 경험 수정 api</a></li>
 <li><a href="#resources-experience-controller-test-본인_경험_삭제">나의 경험 삭제 api</a></li>
+<li><a href="#resources-experience-controller-test-본인_경험_단건_조회">나의 경험 단건 조회 api</a></li>
+<li><a href="#resources-experience-controller-test-본인_경험_전체_조회">나의 모든 경험 조회 api</a></li>
 </ul>
 </li>
 </ul>
@@ -663,10 +665,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">10분노트 여부 true/fasle.</p>
-<p class="tableblock">Default value: 'false'.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10분노트 여부 true/fasle.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">myQuestionIndicator</p></td>
@@ -791,7 +792,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_example_request"><a class="link" href="#_example_request">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question?subject=%EC%A0%9C%EB%AA%A9&amp;jobGroup=DEVELOPER&amp;category=MOTVE' -i -X GET \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question?subject=%EC%A0%9C%EB%AA%A9&amp;pinIndicator=false&amp;jobGroup=DEVELOPER&amp;category=MOTVE' -i -X GET \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;'</code></pre>
 </div>
 </div>
@@ -815,7 +816,7 @@ Content-Length: 417
       "keyWordList" : null,
       "categoryList" : [ "MOTVE" ],
       "jobGroup" : "DEVELOPER",
-      "createTimestamp" : "2023-08-12T16:35:22.458+00:00"
+      "createTimestamp" : "2023-08-12T17:16:22.647+00:00"
     } ],
     "meta" : {
       "totalCount" : 1,
@@ -1214,7 +1215,7 @@ Content-Length: 364
     "subject" : "제목",
     "mainText" : "본문",
     "jobGroup" : "DEVELOPER",
-    "createTimestamp" : "2023-08-12T16:35:22.481+00:00",
+    "createTimestamp" : "2023-08-12T17:16:22.669+00:00",
     "userId" : null,
     "pinIndicator" : null,
     "keyWordList" : [ "키워드" ],
@@ -2049,13 +2050,374 @@ Content-Length: 80
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resources-experience-controller-test-본인_경험_단건_조회"><a class="link" href="#resources-experience-controller-test-본인_경험_단건_조회">나의 경험 단건 조회 api</a></h3>
+<div class="paragraph">
+<p><code>GET /v1/experience/{experienceId}</code></p>
+</div>
+<div class="paragraph">
+<p>@param experienceId.</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_13"><a class="link" href="#_path_parameters_13">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_13"><a class="link" href="#_query_parameters_13">Query parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_fields_13"><a class="link" href="#_request_fields_13">Request fields</a></h4>
+<div class="paragraph">
+<p>No request body.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_13"><a class="link" href="#_response_fields_13">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목 (최대 30자).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">content</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">link</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 링크.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Object</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 질문들.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[Object]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 질문들.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].questionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QuestionId.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].subject</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].mainText</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].pinIndicator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">핀 여부.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].categoryList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트.</p>
+<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].keyWordList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 리스트.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionList.totalCount</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 질문 갯수.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_request_13"><a class="link" href="#_example_request_13">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience/1' -i -X GET \
+    -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_13"><a class="link" href="#_example_response_13">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 80
+
+{
+  "code" : 0,
+  "message" : "정상 처리 되었습니다",
+  "data" : null
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="resources-experience-controller-test-본인_경험_전체_조회"><a class="link" href="#resources-experience-controller-test-본인_경험_전체_조회">나의 모든 경험 조회 api</a></h3>
+<div class="paragraph">
+<p><code>GET /v1/experience</code></p>
+</div>
+<div class="paragraph">
+<p>@param.</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_14"><a class="link" href="#_path_parameters_14">Path parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_14"><a class="link" href="#_query_parameters_14">Query parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_fields_14"><a class="link" href="#_request_fields_14">Request fields</a></h4>
+<div class="paragraph">
+<p>No request body.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_14"><a class="link" href="#_response_fields_14">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[Object]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].experienceId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목 (최대 30자).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].content</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].startDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].endDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].link</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 링크.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Object</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 질문들.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[Object]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 질문들.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].questionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QuestionId.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].subject</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].mainText</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].pinIndicator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">핀 여부.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].categoryList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트.</p>
+<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].keyWordList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 리스트.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.totalCount</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 질문 갯수.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">totalCount</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X GET \
+    -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_14"><a class="link" href="#_example_response_14">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 80
+
+{
+  "code" : 0,
+  "message" : "정상 처리 되었습니다",
+  "data" : null
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-12 17:20:16 +0900
+Last updated 2023-08-13 01:39:21 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
