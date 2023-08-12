@@ -35,7 +35,7 @@ public class PutQuestionBusiness implements Business<Dto, Result> {
     @Override
     public Result execute(Dto input) {
 
-        if (input.getCategoryList().contains(Category.ALL)) {
+        if (input.getCategoryList() != null && input.getCategoryList().contains(Category.ALL)) {
             throw new GlobalException(NOT_ALL_CATEGORY);
         }
         questionProvider.putQuestion(
