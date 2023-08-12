@@ -67,9 +67,9 @@ public class GetAllExperienceBusiness implements Business<Dto, Result> {
             private String title;
             /** 본문 (최대 1000자) */
             private String content;
-            /** 시작 날짜 */
+            /** 시작 날짜 (yyyy-MM) */
             private String startDate;
-            /** 종료 날짜 */
+            /** 종료 날짜 (yyyy-MM) */
             private String endDate;
             /** 관련 링크 */
             private String link;
