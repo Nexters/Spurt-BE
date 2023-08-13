@@ -48,7 +48,7 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
                         input.getPinIndicator(),
                         input.getMyQuestionIndicator(),
                         input.getUserId(),
-                        PageRequest.of(Integer.parseInt(input.getOffset()), Integer.parseInt(input.getSize())));
+                        PageRequest.of(input.getOffset(), Integer.parseInt(input.getSize())));
 
         return RetrieveQuestionBusinessMapper.INSTANCE.toResult(questionVoList);
     }
@@ -67,7 +67,7 @@ public class RetrieveQuestionBusiness implements Business<Dto, Result> {
         private Boolean pinIndicator;
         private Boolean myQuestionIndicator;
         private String size;
-        private String offset;
+        private Integer offset;
     }
 
     @Setter
