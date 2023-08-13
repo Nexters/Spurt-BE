@@ -68,6 +68,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         .selectFrom(QQuestionEntity.questionEntity)
                         .leftJoin(
                                 QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
+                        .distinct()
                         .where(
                                 containSubject(subject),
                                 eqJobGroup(jobGroup),
