@@ -141,7 +141,7 @@ public class QuestionController {
             @RequestParam(name = "category", required = false) Category category,
             @RequestParam(name = "pinIndicator", required = false) Boolean pinIndicator,
             @RequestParam(name = "myQuestionIndicator", defaultValue = "true") String myQuestionIndicator,
-            @RequestParam(name = "offset", defaultValue = "0") String offset,
+            @RequestParam(name = "offset", defaultValue = "1") String offset,
             @RequestParam(name = "size", defaultValue = "10") String size) {
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
@@ -152,7 +152,7 @@ public class QuestionController {
                         .pinIndicator(pinIndicator)
                         .myQuestionIndicator(Boolean.valueOf(myQuestionIndicator))
                         .size(size)
-                        .offset(offset)
+                        .offset(Integer.parseInt(offset) - 1)
                         .build();
         return RestResponse.success(retrieveQuestionBusiness.execute(dto));
     }
