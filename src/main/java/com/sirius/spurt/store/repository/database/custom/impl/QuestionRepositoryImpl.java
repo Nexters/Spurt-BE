@@ -47,6 +47,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         List<QuestionEntity> questionEntityList =
                 jpaQueryFactory
                         .selectFrom(QQuestionEntity.questionEntity)
+                        .leftJoin(
+                                QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
+                        .distinct()
                         .where(
                                 containSubject(subject),
                                 eqJobGroup(jobGroup),
