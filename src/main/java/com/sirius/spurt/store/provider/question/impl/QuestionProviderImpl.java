@@ -164,7 +164,7 @@ public class QuestionProviderImpl implements QuestionProvider {
 
     @Override
     @Transactional
-    public void saveQuestion(
+    public QuestionVo saveQuestion(
             final String subject,
             final String mainText,
             final List<String> keyWordList,
@@ -200,7 +200,8 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .pinUpdatedTime(Timestamp.valueOf(LocalDateTime.now()))
                         .build();
 
-        questionRepository.save(questionEntity);
+        return QuestionProviderImplMapper.INSTANCE.toQuestionVo(
+                questionRepository.save(questionEntity));
     }
 
     @Mapper
