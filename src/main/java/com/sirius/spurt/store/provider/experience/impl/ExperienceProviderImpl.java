@@ -171,7 +171,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
                             if (o1.getPinIndicator() != o2.getPinIndicator()) {
                                 return o2.getPinIndicator().compareTo(o1.getPinIndicator());
                             } else {
-                                return o2.getCreateTimestamp().compareTo(o1.getCreateTimestamp());
+                                return o2.getPinUpdatedTime().compareTo(o1.getPinUpdatedTime());
                             }
                         }));
             }

@@ -60,7 +60,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         .limit(pageRequest.getPageSize())
                         .orderBy(
                                 QQuestionEntity.questionEntity.pinIndicator.desc(),
-                                QQuestionEntity.questionEntity.createTimestamp.desc())
+                                QQuestionEntity.questionEntity.pinUpdatedTime.desc())
                         .fetch();
 
         int count =

@@ -17,6 +17,8 @@ import com.sirius.spurt.store.repository.database.repository.ExperienceRepositor
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
@@ -60,6 +62,7 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .experienceId(previous.getExperienceId())
                         .userId(userId)
                         .pinIndicator(pinIndicator)
+                        .pinUpdatedTime(Timestamp.valueOf(LocalDateTime.now()))
                         .build();
 
         questionRepository.save(questionEntity);
@@ -153,6 +156,7 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .experienceId(previous.getExperienceId())
                         .userId(userId)
                         .pinIndicator(previous.getPinIndicator())
+                        .pinUpdatedTime(previous.getPinUpdatedTime())
                         .build();
 
         questionRepository.save(questionEntity);
@@ -193,6 +197,7 @@ public class QuestionProviderImpl implements QuestionProvider {
                         .experienceId(experienceId)
                         .userId(userId)
                         .pinIndicator(false)
+                        .pinUpdatedTime(Timestamp.valueOf(LocalDateTime.now()))
                         .build();
 
         questionRepository.save(questionEntity);
