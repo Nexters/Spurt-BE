@@ -32,7 +32,7 @@ public class QuestionEntity extends BaseEntity {
     @Column(nullable = false)
     private String userId;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(30) CHARACTER SET UTF8")
+    @Column(nullable = false, columnDefinition = "VARCHAR(35) CHARACTER SET UTF8")
     private String subject;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(1000) CHARACTER SET UTF8")

@@ -162,8 +162,22 @@ public class ExperienceProviderImpl implements ExperienceProvider {
         QuestionVo toQuestionVo(QuestionEntity questionEntity);
 
         default QuestionVoList toQuestionVoList(List<QuestionEntity> questionEntityList) {
+            List<QuestionVo> unorderedQuestionList =
+                    new java.util.ArrayList<>(questionEntityList.stream().map(this::toQuestionVo).toList());
+
+            if (!CollectionUtils.isEmpty(unorderedQuestionList)) {
+                unorderedQuestionList.sort(
+                        ((o1, o2) -> {
+                            if (o1.getPinIndicator() != o2.getPinIndicator()) {
+                                return o2.getPinIndicator().compareTo(o1.getPinIndicator());
+                            } else {
+                                return o2.getCreateTimestamp().compareTo(o1.getCreateTimestamp());
+                            }
+                        }));
+            }
+
             return QuestionVoList.builder()
-                    .questionVoList(questionEntityList.stream().map(this::toQuestionVo).toList())
+                    .questionVoList(unorderedQuestionList)
                     .totalCount(questionEntityList.size())
                     .build();
         }
