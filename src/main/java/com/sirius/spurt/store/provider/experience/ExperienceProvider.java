@@ -4,7 +4,7 @@ import com.sirius.spurt.store.provider.experience.vo.ExperienceVo;
 import com.sirius.spurt.store.provider.experience.vo.ExperienceVoList;
 
 public interface ExperienceProvider {
-    void saveExperience(
+    ExperienceVo saveExperience(
             final String title,
             final String content,
             final String startDate,
