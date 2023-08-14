@@ -1,6 +1,7 @@
 package com.sirius.spurt.store.provider.experience.vo;
 
 import com.sirius.spurt.common.meta.JobGroup;
+import java.sql.Timestamp;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class QuestionVo {
     private String mainText;
     private JobGroup jobGroup;
     private Boolean pinIndicator;
+    private Timestamp createTimestamp;
     private List<KeyWordVo> keyWordVoList;
     private List<CategoryVo> categoryVoList;
 }
