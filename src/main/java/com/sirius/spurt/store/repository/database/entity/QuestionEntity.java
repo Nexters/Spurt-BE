@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.sql.Timestamp;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,7 @@ public class QuestionEntity extends BaseEntity {
     private JobGroup jobGroup;
 
     @Column private Boolean pinIndicator;
+    @Column private Timestamp pinUpdatedTime;
 
     @Column(nullable = false)
     private Long experienceId;

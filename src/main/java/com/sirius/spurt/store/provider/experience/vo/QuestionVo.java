@@ -21,7 +21,7 @@ public class QuestionVo {
     private String mainText;
     private JobGroup jobGroup;
     private Boolean pinIndicator;
-    private Timestamp createTimestamp;
+    private Timestamp pinUpdatedTime;
     private List<KeyWordVo> keyWordVoList;
     private List<CategoryVo> categoryVoList;
 }
