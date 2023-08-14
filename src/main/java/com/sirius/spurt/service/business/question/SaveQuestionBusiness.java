@@ -9,6 +9,7 @@ import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Result;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
+import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
@@ -21,6 +22,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -37,14 +40,15 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
         if (input.getCategoryList().contains(Category.ALL)) {
             throw new GlobalException(NOT_ALL_CATEGORY);
         }
-        questionProvider.saveQuestion(
-                input.getSubject(),
-                input.getMainText(),
-                input.getKeyWordList(),
-                input.getCategoryList(),
-                input.getExperienceId(),
-                input.getUserId());
-        return new Result();
+
+        return SaveQuestionBusinessMapper.INSTANCE.toResult(
+                questionProvider.saveQuestion(
+                        input.getSubject(),
+                        input.getMainText(),
+                        input.getKeyWordList(),
+                        input.getCategoryList(),
+                        input.getExperienceId(),
+                        input.getUserId()));
     }
 
     @JsonIgnoreProperties
@@ -79,5 +83,16 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
     @Data
     @JsonIgnoreProperties
     @Builder
-    public static class Result implements Business.Result, Serializable {}
+    @AllArgsConstructor
+    public static class Result implements Business.Result, Serializable {
+        /** questionId */
+        private Long questionId;
+    }
+
+    @Mapper
+    public interface SaveQuestionBusinessMapper {
+        SaveQuestionBusinessMapper INSTANCE = Mappers.getMapper(SaveQuestionBusinessMapper.class);
+
+        SaveQuestionBusiness.Result toResult(QuestionVo vo);
+    }
 }

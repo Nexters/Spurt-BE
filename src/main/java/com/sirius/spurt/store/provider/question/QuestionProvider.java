@@ -16,7 +16,7 @@ public interface QuestionProvider {
 
     void deleteQuestion(final String userId, final Long questionId);
 
-    void saveQuestion(
+    QuestionVo saveQuestion(
             final String subject,
             final String mainText,
             final List<String> keyWordList,
