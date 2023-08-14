@@ -22,6 +22,7 @@ import com.sirius.spurt.store.repository.database.repository.ExperienceRepositor
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
     @Override
     @Transactional
-    public void saveExperience(
+    public ExperienceVo saveExperience(
             final String title,
             final String content,
             final String startDate,
@@ -65,7 +66,8 @@ public class ExperienceProviderImpl implements ExperienceProvider {
                         .userEntity(userEntity)
                         .build();
 
-        experienceRepository.save(experienceEntity);
+        return ExperienceProviderImplMapper.INSTANCE.toExperienceVo(
+                experienceRepository.save(experienceEntity));
     }
 
     @Override
@@ -162,23 +164,26 @@ public class ExperienceProviderImpl implements ExperienceProvider {
         QuestionVo toQuestionVo(QuestionEntity questionEntity);
 
         default QuestionVoList toQuestionVoList(List<QuestionEntity> questionEntityList) {
-            List<QuestionVo> unorderedQuestionList =
-                    new java.util.ArrayList<>(questionEntityList.stream().map(this::toQuestionVo).toList());
+            List<QuestionVo> unorderedQuestionList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(questionEntityList)) {
+                unorderedQuestionList =
+                        new java.util.ArrayList<>(questionEntityList.stream().map(this::toQuestionVo).toList());
 
-            if (!CollectionUtils.isEmpty(unorderedQuestionList)) {
-                unorderedQuestionList.sort(
-                        ((o1, o2) -> {
-                            if (o1.getPinIndicator() != o2.getPinIndicator()) {
-                                return o2.getPinIndicator().compareTo(o1.getPinIndicator());
-                            } else {
-                                return o2.getPinUpdatedTime().compareTo(o1.getPinUpdatedTime());
-                            }
-                        }));
+                if (!CollectionUtils.isEmpty(unorderedQuestionList)) {
+                    unorderedQuestionList.sort(
+                            ((o1, o2) -> {
+                                if (o1.getPinIndicator() != o2.getPinIndicator()) {
+                                    return o2.getPinIndicator().compareTo(o1.getPinIndicator());
+                                } else {
+                                    return o2.getPinUpdatedTime().compareTo(o1.getPinUpdatedTime());
+                                }
+                            }));
+                }
             }
 
             return QuestionVoList.builder()
                     .questionVoList(unorderedQuestionList)
-                    .totalCount(questionEntityList.size())
+                    .totalCount(questionEntityList == null ? 0 : questionEntityList.size())
                     .build();
         }
 
