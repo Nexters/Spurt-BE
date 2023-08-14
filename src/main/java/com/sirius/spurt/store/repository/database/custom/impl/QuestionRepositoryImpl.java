@@ -28,6 +28,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         return jpaQueryFactory
                 .selectFrom(QQuestionEntity.questionEntity)
                 .leftJoin(QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
+                .distinct()
                 .where(eqJobGroup(jobGroup), neUserId(userId), eqCategory(category))
                 .limit(count)
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
