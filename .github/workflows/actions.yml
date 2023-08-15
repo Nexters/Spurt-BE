@@ -89,4 +89,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.NCP_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.NCP_SECRET_KEY }}
         run: |
-          aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp index.html s3://spurt-backend-docs
+          aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp api-docs s3://spurt-backend-docs
