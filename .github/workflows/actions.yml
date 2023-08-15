@@ -75,22 +75,23 @@ jobs:
             docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
             docker image prune -f
 
-#  upload_docs:
-#    name: upload api docs
-#    needs: push_to_registry
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: connect ssh
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.DEV_HOST }}
-#          username: ${{ secrets.DEV_USERNAME }}
-#          password: ${{ secrets.DEV_PASSWORD }}
-#          port: ${{ secrets.DEV_PORT }}
-#          script: |
-#            docker login ${{ secrets.NCP_CONTAINER_REGISTRY }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
-#            docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-#            docker stop $(docker ps -a -q)
-#            docker rm $(docker ps -a -q)
-#            docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-#            docker image prune -f
+  upload_docs:
+    name: upload api docs
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: connect ssh
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.NCP_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.NCP_SECRET_KEY }}
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: api-docs  # Artifact name
+          path: artifact  # Directory to store the artifact contents
+      - name: Upload Files to S3
+        run: |
+          aws --endpoint-url=https://kr.object.ncloudstorage.com
+          s3 cp --recursive artifact/ s3://spurt-backend-docs
