@@ -88,5 +88,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.NCP_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.NCP_SECRET_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
         run: |
           aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp api-docs/index.html s3://spurt-backend-docs
