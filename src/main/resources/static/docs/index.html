@@ -460,6 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-question-controller-test-질문_단건_조회">질문 단건 조회</a></li>
 <li><a href="#resources-question-controller-test-질문_삭제">질문 삭제</a></li>
 <li><a href="#resources-question-controller-test-질문_랜덤_조회">같은 직군 질문 랜덤 조회</a></li>
+<li><a href="#resources-question-controller-test-질문_핀_수정">pin 고정/비고정</a></li>
 </ul>
 </li>
 <li><a href="#_카테고리_api">카테고리 API</a>
@@ -661,7 +662,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
@@ -681,7 +682,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 (시작 0).</p>
-<p class="tableblock">Default value: '0'.</p></td>
+<p class="tableblock">Default value: '1'.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">size</p></td>
@@ -758,7 +759,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questions[].jobGroup</p></td>
@@ -798,7 +799,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_example_request"><a class="link" href="#_example_request">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question?subject=%EC%A0%9C%EB%AA%A9&amp;pinIndicator=false&amp;jobGroup=DEVELOPER&amp;category=MOTVE' -i -X GET \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question?subject=%EC%A0%9C%EB%AA%A9&amp;pinIndicator=false&amp;jobGroup=DEVELOPER&amp;category=CONFLICT' -i -X GET \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;'</code></pre>
 </div>
 </div>
@@ -809,7 +810,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 431
+Content-Length: 434
 
 {
   "code" : 0,
@@ -821,7 +822,7 @@ Content-Length: 431
       "mainText" : "본문",
       "pinIndicator" : null,
       "keyWordList" : null,
-      "categoryList" : [ "MOTVE" ],
+      "categoryList" : [ "CONFLICT" ],
       "jobGroup" : "DEVELOPER",
       "createTime" : "2023-08-13 01:39:21"
     } ],
@@ -896,7 +897,7 @@ Content-Length: 431
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
@@ -915,9 +916,30 @@ Content-Length: 431
 </div>
 <div class="sect3">
 <h4 id="_response_fields_2"><a class="link" href="#_response_fields_2">Response fields</a></h4>
-<div class="paragraph">
-<p>No response body.</p>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QuestionId.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_example_request_2"><a class="link" href="#_example_request_2">Example request</a></h4>
@@ -926,7 +948,7 @@ Content-Length: 431
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question' -i -X POST \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
-    -d '{"subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["MOTVE"],"experienceId":null,"userId":null}'</code></pre>
+    -d '{"subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["CONFLICT"],"experienceId":null,"userId":null}'</code></pre>
 </div>
 </div>
 </div>
@@ -936,12 +958,14 @@ Content-Length: 431
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 79
+Content-Length: 105
 
 {
   "code" : 0,
   "message" : "정상 처리 되었습니다",
-  "data" : { }
+  "data" : {
+    "questionId" : null
+  }
 }</code></pre>
 </div>
 </div>
@@ -1014,7 +1038,7 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
@@ -1038,7 +1062,7 @@ Content-Length: 79
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question' -i -X PUT \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
-    -d '{"questionId":"2","subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["MOTVE"],"userId":null}'</code></pre>
+    -d '{"questionId":"2","subject":"test 질문","mainText":"test 내용","keyWordList":["testKeyword"],"categoryList":["CONFLICT"],"userId":null}'</code></pre>
 </div>
 </div>
 </div>
@@ -1178,7 +1202,7 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 </tbody>
 </table>
@@ -1198,7 +1222,7 @@ Content-Length: 79
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 349
+Content-Length: 352
 
 {
   "code" : 0,
@@ -1212,7 +1236,7 @@ Content-Length: 349
     "userId" : null,
     "pinIndicator" : null,
     "keyWordList" : [ "키워드" ],
-    "categoryList" : [ "MOTVE" ]
+    "categoryList" : [ "CONFLICT" ]
   }
 }</code></pre>
 </div>
@@ -1343,7 +1367,7 @@ Content-Length: 79
 <td class="tableblock halign-left valign-top"><p class="tableblock">category</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">offset</p></td>
@@ -1405,7 +1429,7 @@ Content-Length: 79
 <h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question/random?category=MOTVE' -i -X GET \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question/random?category=CONFLICT' -i -X GET \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;'</code></pre>
 </div>
@@ -1433,18 +1457,13 @@ Content-Length: 170
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_카테고리_api"><a class="link" href="#_카테고리_api">카테고리 API</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-category-controller-test-카테고리_전체_조회_테스트"><a class="link" href="#resources-category-controller-test-카테고리_전체_조회_테스트">카테고리 전체 조회</a></h3>
+<h3 id="resources-question-controller-test-질문_핀_수정"><a class="link" href="#resources-question-controller-test-질문_핀_수정">pin 고정/비고정</a></h3>
 <div class="paragraph">
-<p><code>GET /v1/category</code></p>
+<p><code>PUT /v1/question/pin</code></p>
 </div>
 <div class="paragraph">
-<p>@return categoryList.</p>
+<p>@param loginUser.</p>
 </div>
 <div class="sect3">
 <h4 id="_path_parameters_7"><a class="link" href="#_path_parameters_7">Path parameters</a></h4>
@@ -1460,12 +1479,110 @@ Content-Length: 170
 </div>
 <div class="sect3">
 <h4 id="_request_fields_7"><a class="link" href="#_request_fields_7">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QuestionID.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 ID (프론트 전달 x).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pinIndicator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pin 여부 변경 값.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_7"><a class="link" href="#_response_fields_7">Response fields</a></h4>
+<div class="paragraph">
+<p>No response body.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/question/pin' -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
+    -d '{"questionId":"2","userId":null,"pinIndicator":true}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_7"><a class="link" href="#_example_response_7">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 79
+
+{
+  "code" : 0,
+  "message" : "정상 처리 되었습니다",
+  "data" : { }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_카테고리_api"><a class="link" href="#_카테고리_api">카테고리 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="resources-category-controller-test-카테고리_전체_조회_테스트"><a class="link" href="#resources-category-controller-test-카테고리_전체_조회_테스트">카테고리 전체 조회</a></h3>
+<div class="paragraph">
+<p><code>GET /v1/category</code></p>
+</div>
+<div class="paragraph">
+<p>@return categoryList.</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_8"><a class="link" href="#_path_parameters_8">Path parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_8"><a class="link" href="#_query_parameters_8">Query parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_fields_8"><a class="link" href="#_request_fields_8">Request fields</a></h4>
 <div class="paragraph">
 <p>No request body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_7"><a class="link" href="#_response_fields_7">Response fields</a></h4>
+<h4 id="_response_fields_8"><a class="link" href="#_response_fields_8">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1504,7 +1621,7 @@ Content-Length: 170
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example request</a></h4>
+<h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/category' -i -X GET \
@@ -1513,12 +1630,12 @@ Content-Length: 170
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_7"><a class="link" href="#_example_response_7">Example response</a></h4>
+<h4 id="_example_response_8"><a class="link" href="#_example_response_8">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 324
+Content-Length: 314
 
 {
   "code" : 0,
@@ -1528,11 +1645,11 @@ Content-Length: 324
       "value" : "ALL",
       "description" : "전체"
     }, {
-      "value" : "COLLABORATION",
-      "description" : "협업경험"
+      "value" : "MAJOR",
+      "description" : "직무지식"
     }, {
-      "value" : "PROSANDCONS",
-      "description" : "장점단점"
+      "value" : "PRACTICAL",
+      "description" : "직무경험"
     } ]
   }
 }</code></pre>
@@ -1554,19 +1671,19 @@ Content-Length: 324
 <p>@param dto.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_8"><a class="link" href="#_path_parameters_8">Path parameters</a></h4>
+<h4 id="_path_parameters_9"><a class="link" href="#_path_parameters_9">Path parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_8"><a class="link" href="#_query_parameters_8">Query parameters</a></h4>
+<h4 id="_query_parameters_9"><a class="link" href="#_query_parameters_9">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_8"><a class="link" href="#_request_fields_8">Request fields</a></h4>
+<h4 id="_request_fields_9"><a class="link" href="#_request_fields_9">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1612,13 +1729,13 @@ Content-Length: 324
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_8"><a class="link" href="#_response_fields_8">Response fields</a></h4>
+<h4 id="_response_fields_9"><a class="link" href="#_response_fields_9">Response fields</a></h4>
 <div class="paragraph">
 <p>No response body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example request</a></h4>
+<h4 id="_example_request_9"><a class="link" href="#_example_request_9">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/jobgroup' -i -X POST \
@@ -1629,7 +1746,7 @@ Content-Length: 324
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_8"><a class="link" href="#_example_response_8">Example response</a></h4>
+<h4 id="_example_response_9"><a class="link" href="#_example_response_9">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1659,25 +1776,25 @@ Content-Length: 80
 <p>@return.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_9"><a class="link" href="#_path_parameters_9">Path parameters</a></h4>
+<h4 id="_path_parameters_10"><a class="link" href="#_path_parameters_10">Path parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_9"><a class="link" href="#_query_parameters_9">Query parameters</a></h4>
+<h4 id="_query_parameters_10"><a class="link" href="#_query_parameters_10">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_9"><a class="link" href="#_request_fields_9">Request fields</a></h4>
+<h4 id="_request_fields_10"><a class="link" href="#_request_fields_10">Request fields</a></h4>
 <div class="paragraph">
 <p>No request body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_9"><a class="link" href="#_response_fields_9">Response fields</a></h4>
+<h4 id="_response_fields_10"><a class="link" href="#_response_fields_10">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1704,7 +1821,7 @@ Content-Length: 80
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_9"><a class="link" href="#_example_request_9">Example request</a></h4>
+<h4 id="_example_request_10"><a class="link" href="#_example_request_10">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/user/exist' -i -X GET \
@@ -1713,7 +1830,7 @@ Content-Length: 80
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_9"><a class="link" href="#_example_response_9">Example response</a></h4>
+<h4 id="_example_response_10"><a class="link" href="#_example_response_10">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1738,117 +1855,6 @@ Content-Length: 80
 <h3 id="resources-experience-controller-test-본인_경험_저장"><a class="link" href="#resources-experience-controller-test-본인_경험_저장">나의 경험 저장 api</a></h3>
 <div class="paragraph">
 <p><code>POST /v1/experience</code></p>
-</div>
-<div class="paragraph">
-<p>@param dto.</p>
-</div>
-<div class="sect3">
-<h4 id="_path_parameters_10"><a class="link" href="#_path_parameters_10">Path parameters</a></h4>
-<div class="paragraph">
-<p>No parameters.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_query_parameters_10"><a class="link" href="#_query_parameters_10">Query parameters</a></h4>
-<div class="paragraph">
-<p>No parameters.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_request_fields_10"><a class="link" href="#_request_fields_10">Request fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Optional</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제목 (최대 30자).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">content</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜 (yyyy-MM).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜 (yyyy-MM).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">link</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">관련 링크.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UserId 프론트 전달 x.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_10"><a class="link" href="#_response_fields_10">Response fields</a></h4>
-<div class="paragraph">
-<p>No response body.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_example_request_10"><a class="link" href="#_example_request_10">Example request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X POST \
-    -H 'Content-Type: application/json' \
-    -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
-    -d '{"title":"title","content":"content","startDate":"2023-07","endDate":"2023-08","link":"link","userId":"admin"}'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_10"><a class="link" href="#_example_response_10">Example response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 80
-
-{
-  "code" : 0,
-  "message" : "정상 처리 되었습니다",
-  "data" : null
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="resources-experience-controller-test-본인_경험_수정"><a class="link" href="#resources-experience-controller-test-본인_경험_수정">나의 경험 수정 api</a></h3>
-<div class="paragraph">
-<p><code>PUT /v1/experience</code></p>
 </div>
 <div class="paragraph">
 <p>@param dto.</p>
@@ -1883,12 +1889,6 @@ Content-Length: 80
 </tr>
 </thead>
 <tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
-</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
@@ -1930,18 +1930,39 @@ Content-Length: 80
 </div>
 <div class="sect3">
 <h4 id="_response_fields_11"><a class="link" href="#_response_fields_11">Response fields</a></h4>
-<div class="paragraph">
-<p>No response body.</p>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_example_request_11"><a class="link" href="#_example_request_11">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X PUT \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X POST \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
-    -d '{"experienceId":1,"title":"title","content":"content","startDate":"2023-07","endDate":"2023-08","link":"link","userId":"admin"}'</code></pre>
+    -d '{"title":"title","content":"content","startDate":"2023-07","endDate":"2023-08","link":"link","userId":"admin"}'</code></pre>
 </div>
 </div>
 </div>
@@ -1963,9 +1984,9 @@ Content-Length: 80
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources-experience-controller-test-본인_경험_삭제"><a class="link" href="#resources-experience-controller-test-본인_경험_삭제">나의 경험 삭제 api</a></h3>
+<h3 id="resources-experience-controller-test-본인_경험_수정"><a class="link" href="#resources-experience-controller-test-본인_경험_수정">나의 경험 수정 api</a></h3>
 <div class="paragraph">
-<p><code>DELETE /v1/experience</code></p>
+<p><code>PUT /v1/experience</code></p>
 </div>
 <div class="paragraph">
 <p>@param dto.</p>
@@ -2007,6 +2028,36 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목 (최대 30자).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">content</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">본문 (최대 1000자).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜 (yyyy-MM).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 날짜 (yyyy-MM).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">link</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관련 링크.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -2025,6 +2076,93 @@ Content-Length: 80
 <h4 id="_example_request_12"><a class="link" href="#_example_request_12">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
+    -d '{"experienceId":1,"title":"title","content":"content","startDate":"2023-07","endDate":"2023-08","link":"link","userId":"admin"}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_12"><a class="link" href="#_example_response_12">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 80
+
+{
+  "code" : 0,
+  "message" : "정상 처리 되었습니다",
+  "data" : null
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="resources-experience-controller-test-본인_경험_삭제"><a class="link" href="#resources-experience-controller-test-본인_경험_삭제">나의 경험 삭제 api</a></h3>
+<div class="paragraph">
+<p><code>DELETE /v1/experience</code></p>
+</div>
+<div class="paragraph">
+<p>@param dto.</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_13"><a class="link" href="#_path_parameters_13">Path parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_13"><a class="link" href="#_query_parameters_13">Query parameters</a></h4>
+<div class="paragraph">
+<p>No parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_fields_13"><a class="link" href="#_request_fields_13">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Optional</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">experienceId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ExperienceId.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UserId 프론트 전달 x.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_13"><a class="link" href="#_response_fields_13">Response fields</a></h4>
+<div class="paragraph">
+<p>No response body.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_request_13"><a class="link" href="#_example_request_13">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X DELETE \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer &lt;&lt;전달받은토큰값&gt;&gt;' \
@@ -2033,7 +2171,7 @@ Content-Length: 80
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_12"><a class="link" href="#_example_response_12">Example response</a></h4>
+<h4 id="_example_response_13"><a class="link" href="#_example_response_13">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2058,7 +2196,7 @@ Content-Length: 80
 <p>@param experienceId.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_13"><a class="link" href="#_path_parameters_13">Path parameters</a></h4>
+<h4 id="_path_parameters_14"><a class="link" href="#_path_parameters_14">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2085,19 +2223,19 @@ Content-Length: 80
 </table>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_13"><a class="link" href="#_query_parameters_13">Query parameters</a></h4>
+<h4 id="_query_parameters_14"><a class="link" href="#_query_parameters_14">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_13"><a class="link" href="#_request_fields_13">Request fields</a></h4>
+<h4 id="_request_fields_14"><a class="link" href="#_request_fields_14">Request fields</a></h4>
 <div class="paragraph">
 <p>No request body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_13"><a class="link" href="#_response_fields_13">Response fields</a></h4>
+<h4 id="_response_fields_14"><a class="link" href="#_response_fields_14">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2191,7 +2329,7 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">questionList.questionList[].keyWordList</p></td>
@@ -2209,7 +2347,7 @@ Content-Length: 80
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_13"><a class="link" href="#_example_request_13">Example request</a></h4>
+<h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience/1' -i -X GET \
@@ -2218,7 +2356,7 @@ Content-Length: 80
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_13"><a class="link" href="#_example_response_13">Example response</a></h4>
+<h4 id="_example_response_14"><a class="link" href="#_example_response_14">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2243,25 +2381,25 @@ Content-Length: 80
 <p>@param.</p>
 </div>
 <div class="sect3">
-<h4 id="_path_parameters_14"><a class="link" href="#_path_parameters_14">Path parameters</a></h4>
+<h4 id="_path_parameters_15"><a class="link" href="#_path_parameters_15">Path parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_parameters_14"><a class="link" href="#_query_parameters_14">Query parameters</a></h4>
+<h4 id="_query_parameters_15"><a class="link" href="#_query_parameters_15">Query parameters</a></h4>
 <div class="paragraph">
 <p>No parameters.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_fields_14"><a class="link" href="#_request_fields_14">Request fields</a></h4>
+<h4 id="_request_fields_15"><a class="link" href="#_request_fields_15">Request fields</a></h4>
 <div class="paragraph">
 <p>No request body.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_14"><a class="link" href="#_response_fields_14">Response fields</a></h4>
+<h4 id="_response_fields_15"><a class="link" href="#_response_fields_15">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2361,7 +2499,7 @@ Content-Length: 80
 <td class="tableblock halign-left valign-top"><p class="tableblock">Array[String]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트.</p>
-<p class="tableblock">Must be one of [ALL, COLLABORATION, PROSANDCONS, CONFLICT, PRACTICAL, UNDERSTANDING, EXPERIENCE, MAJOR, MOTVE].</p></td>
+<p class="tableblock">Must be one of [ALL, MAJOR, PRACTICAL, COLLABORATION, PROSANDCONS, CONFLICT, ETC].</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">experienceList[].questionList.questionList[].keyWordList</p></td>
@@ -2385,7 +2523,7 @@ Content-Length: 80
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example request</a></h4>
+<h4 id="_example_request_15"><a class="link" href="#_example_request_15">Example request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/v1/experience' -i -X GET \
@@ -2394,7 +2532,7 @@ Content-Length: 80
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_14"><a class="link" href="#_example_response_14">Example response</a></h4>
+<h4 id="_example_response_15"><a class="link" href="#_example_response_15">Example response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2416,7 +2554,7 @@ Content-Length: 80
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-13 01:39:21 +0900
+Last updated 2023-08-13 05:31:53 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
