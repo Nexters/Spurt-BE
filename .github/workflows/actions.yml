@@ -92,3 +92,4 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
         run: |
           aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp artifact/index.html s3://spurt-backend-docs
+          aws --endpoint-url=https://kr.object.ncloudstorage.com/ s3 ls s3://spurt-backend-docs --recursive | awk '{cmd="aws --endpoint-url=https://kr.object.ncloudstorage.com/ s3api put-object-acl --bucket <bucket_name> --acl public-read --key "$4; system(cmd)}'
