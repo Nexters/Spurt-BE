@@ -1,6 +1,6 @@
 package com.sirius.spurt.common.resolver;
 
-import com.sirius.spurt.common.resolver.user.LoginUser;
+import com.sirius.spurt.common.resolver.user.NonLoginUser;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
 import com.sirius.spurt.store.provider.auth.vo.AuthVo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(LoginUser.class);
+        return parameter.getParameterType().equals(NonLoginUser.class);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
 
         String accessHeader = request.getHeader("Authorization");
         if (!StringUtils.hasLength(accessHeader) || !accessHeader.startsWith(TOKEN_TYPE)) {
-            return new LoginUser(null, null);
+            return new NonLoginUser(null, null);
         }
 
         AuthVo userInfo = new AuthVo();
@@ -47,6 +47,6 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
             userInfo = authProvider.getUserId(accessToken);
         }
 
-        return new LoginUser(userInfo.getUserId(), userInfo.getEmail());
+        return new NonLoginUser(userInfo.getUserId(), userInfo.getEmail());
     }
 }
