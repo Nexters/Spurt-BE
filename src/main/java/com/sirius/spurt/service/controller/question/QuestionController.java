@@ -2,8 +2,8 @@ package com.sirius.spurt.service.controller.question;
 
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
-import com.sirius.spurt.common.resolver.NonLoginUser;
 import com.sirius.spurt.common.resolver.user.LoginUser;
+import com.sirius.spurt.common.resolver.user.NonLoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
 import com.sirius.spurt.service.business.question.PutPinQuestionBusiness;
@@ -61,13 +61,13 @@ public class QuestionController {
      */
     @GetMapping("/question/random")
     public RestResponse<RandomQuestionBusiness.Result> questionRandom(
-            NonLoginUser loginUser,
+            NonLoginUser nonLoginUser,
             @RequestParam(name = "category") Category category,
             @RequestParam(name = "offset", defaultValue = "4") String count) {
 
         RandomQuestionBusiness.Dto dto =
                 RandomQuestionBusiness.Dto.builder()
-                        .userId(loginUser.getUserId())
+                        .userId(nonLoginUser.getUserId())
                         .count(Integer.valueOf(count))
                         .category(category)
                         .build();
