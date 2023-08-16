@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: api-docs  # Artifact name
           path: artifact
@@ -91,4 +91,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.NCP_SECRET_KEY }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
-          aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp artifact/ s3://spurt-backend-docs
+          aws --endpoint-url=https://kr.object.ncloudstorage.com s3 cp artifact/index.html s3://spurt-backend-docs
