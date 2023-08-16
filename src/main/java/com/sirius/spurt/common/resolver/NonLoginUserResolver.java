@@ -33,7 +33,7 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
 
         String testHeader = request.getHeader("test");
         if (StringUtils.hasLength(testHeader)) {
-            return new LoginUser("admin", "email");
+            return new NonLoginUser("admin", "email");
         }
 
         String accessHeader = request.getHeader("Authorization");
