@@ -107,7 +107,10 @@ public class QuestionController {
     public RestResponse<GetQuestionBusiness.Result> questionGet(
             LoginUser loginUser, @PathVariable("questionId") String questionId) {
         GetQuestionBusiness.Dto dto =
-                GetQuestionBusiness.Dto.builder().questionId(Long.parseLong(questionId)).build();
+                GetQuestionBusiness.Dto.builder()
+                        .questionId(Long.parseLong(questionId))
+                        .userId(loginUser.getUserId())
+                        .build();
         return RestResponse.success(getQuestionBusiness.execute(dto));
     }
     /**

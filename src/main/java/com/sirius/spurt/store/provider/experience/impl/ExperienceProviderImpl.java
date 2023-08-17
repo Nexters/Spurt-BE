@@ -145,6 +145,14 @@ public class ExperienceProviderImpl implements ExperienceProvider {
         return ExperienceProviderImplMapper.INSTANCE.toExperienceVo(experienceEntity);
     }
 
+    @Override
+    public String getQuestionExperienceTitle(final Long experienceId, final String userId) {
+        ExperienceEntity experienceEntity =
+                experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
+
+        return experienceEntity != null ? experienceEntity.getTitle() : null;
+    }
+
     @Mapper
     public interface ExperienceProviderImplMapper {
         ExperienceProviderImplMapper INSTANCE = Mappers.getMapper(ExperienceProviderImplMapper.class);

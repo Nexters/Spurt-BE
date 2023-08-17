@@ -6,6 +6,7 @@ import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.template.Business;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness.Result;
+import com.sirius.spurt.store.provider.experience.ExperienceProvider;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
 import com.sirius.spurt.store.provider.question.vo.CategoryVo;
 import com.sirius.spurt.store.provider.question.vo.KeyWordVo;
@@ -30,11 +31,18 @@ import org.springframework.validation.annotation.Validated;
 public class GetQuestionBusiness implements Business<Dto, Result> {
 
     private final QuestionProvider questionProvider;
+    private final ExperienceProvider experienceProvider;
 
     @Override
     public Result execute(Dto input) {
-        return GetQuestionBusinessMapper.INSTANCE.toResult(
-                questionProvider.getQuestion(input.getQuestionId()));
+        Result result =
+                GetQuestionBusinessMapper.INSTANCE.toResult(
+                        questionProvider.getQuestion(input.getQuestionId()));
+
+        String experienceTitle =
+                experienceProvider.getQuestionExperienceTitle(result.getExperienceId(), input.getUserId());
+        result.setExperienceTitle(experienceTitle);
+        return result;
     }
 
     @JsonIgnoreProperties
@@ -43,6 +51,7 @@ public class GetQuestionBusiness implements Business<Dto, Result> {
     @Builder
     public static class Dto implements Business.Dto, Serializable {
         private Long questionId;
+        private String userId;
     }
 
     @Setter
@@ -66,6 +75,10 @@ public class GetQuestionBusiness implements Business<Dto, Result> {
         private String userId;
         /** pin 여부 확인 */
         private Boolean pinIndicator;
+        /** 경험 ID */
+        private Long experienceId;
+        /** 경험 title */
+        private String experienceTitle;
         /** 키워드 리스트 */
         private List<String> keyWordList;
         /** 카테고리 리스트 */
