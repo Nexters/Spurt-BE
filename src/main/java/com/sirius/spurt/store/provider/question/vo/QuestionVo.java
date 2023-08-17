@@ -28,6 +28,8 @@ public class QuestionVo {
     private Boolean pinIndicator;
     private String createTime;
 
+    private Long experienceId;
+
     private Timestamp createTimestamp;
 
     private List<KeyWordVo> keyWordList;

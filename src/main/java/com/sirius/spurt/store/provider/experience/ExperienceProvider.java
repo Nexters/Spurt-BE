@@ -26,4 +26,6 @@ public interface ExperienceProvider {
     ExperienceVoList getAllExperience(final String userId);
 
     ExperienceVo getExperience(final Long experienceId, final String userId);
+
+    String getQuestionExperienceTitle(final Long experienceId, final String userId);
 }
