@@ -8,6 +8,7 @@ import com.sirius.spurt.store.provider.question.QuestionProvider;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,8 @@ public class PutPinQuestionBusiness implements Business<Dto, Result> {
     @Data
     @Validated
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Dto implements Business.Dto, Serializable {
 
         /** questionID */

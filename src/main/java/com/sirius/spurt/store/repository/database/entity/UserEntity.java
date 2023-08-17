@@ -27,4 +27,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private Boolean hasPined;
 }

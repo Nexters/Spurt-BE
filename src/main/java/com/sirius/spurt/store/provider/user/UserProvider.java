@@ -6,4 +6,6 @@ public interface UserProvider {
     boolean checkUserExists(String userId);
 
     UserVo getUserInfo(String userId);
+
+    boolean checkHasPined(String userId);
 }

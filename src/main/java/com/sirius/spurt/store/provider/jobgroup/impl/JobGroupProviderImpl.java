@@ -1,5 +1,8 @@
 package com.sirius.spurt.store.provider.jobgroup.impl;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
+
+import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.store.provider.jobgroup.JobGroupProvider;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
@@ -17,13 +20,29 @@ public class JobGroupProviderImpl implements JobGroupProvider {
     @Transactional
     public void saveJobGroup(final String userId, final String email, final JobGroup jobGroup) {
         userRepository.save(
-                UserEntity.builder().userId(userId).email(email).jobGroup(jobGroup).build());
+                UserEntity.builder()
+                        .userId(userId)
+                        .email(email)
+                        .jobGroup(jobGroup)
+                        .hasPined(false)
+                        .build());
     }
 
     @Override
     @Transactional
     public void updateJobGroup(final String userId, final String email, final JobGroup jobGroup) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
+
         userRepository.save(
-                UserEntity.builder().userId(userId).email(email).jobGroup(jobGroup).build());
+                UserEntity.builder()
+                        .userId(userId)
+                        .email(email)
+                        .jobGroup(jobGroup)
+                        .hasPined(userEntity.getHasPined())
+                        .build());
     }
 }
