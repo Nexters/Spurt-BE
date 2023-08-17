@@ -1,5 +1,8 @@
 package com.sirius.spurt.store.provider.user.impl;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
+
+import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.store.provider.user.UserProvider;
 import com.sirius.spurt.store.provider.user.vo.UserVo;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
@@ -22,6 +25,17 @@ public class UserProviderImpl implements UserProvider {
     @Override
     public boolean checkUserExists(String userId) {
         return userRepository.existsByUserId(userId);
+    }
+
+    @Override
+    public boolean checkHasPined(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
+
+        return userEntity.getHasPined();
     }
 
     @Mapper

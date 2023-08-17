@@ -36,6 +36,7 @@ public class QuestionProviderImpl implements QuestionProvider {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public void putPinQuestion(
             final String questionId, final String userId, final Boolean pinIndicator) {
         UserEntity userEntity = userRepository.findByUserId(userId);
@@ -49,6 +50,16 @@ public class QuestionProviderImpl implements QuestionProvider {
 
         if (previous == null) {
             throw new GlobalException(NOT_QUESTION_OWNER);
+        }
+
+        if (!userEntity.getHasPined()) {
+            userRepository.save(
+                    UserEntity.builder()
+                            .userId(userId)
+                            .email(userEntity.getEmail())
+                            .jobGroup(userEntity.getJobGroup())
+                            .hasPined(true)
+                            .build());
         }
 
         QuestionEntity questionEntity =
