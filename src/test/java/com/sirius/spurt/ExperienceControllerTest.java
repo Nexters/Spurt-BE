@@ -1,5 +1,6 @@
 package com.sirius.spurt;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +41,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .link("link")
                         .userId("admin")
                         .build();
-        when(saveExperienceBusiness.execute(dto)).thenReturn(new SaveExperienceBusiness.Result());
+        when(saveExperienceBusiness.execute(any())).thenReturn(new SaveExperienceBusiness.Result());
         this.mockMvc
                 .perform(
                         post("/v1/experience")
@@ -62,7 +63,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .link("link")
                         .userId("admin")
                         .build();
-        when(updateExperienceBusiness.execute(dto)).thenReturn(new UpdateExperienceBusiness.Result());
+        when(updateExperienceBusiness.execute(any())).thenReturn(new UpdateExperienceBusiness.Result());
         this.mockMvc
                 .perform(
                         put("/v1/experience")
@@ -76,7 +77,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
     void 본인_경험_삭제() throws Exception {
         DeleteExperienceBusiness.Dto dto =
                 DeleteExperienceBusiness.Dto.builder().experienceId(1L).userId("admin").build();
-        when(deleteExperienceBusiness.execute(dto)).thenReturn(new DeleteExperienceBusiness.Result());
+        when(deleteExperienceBusiness.execute(any())).thenReturn(new DeleteExperienceBusiness.Result());
         this.mockMvc
                 .perform(
                         delete("/v1/experience")
@@ -115,7 +116,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .build();
         GetAllExperienceBusiness.Result result =
                 GetAllExperienceBusiness.Result.builder().experienceList(List.of(experience)).build();
-        when(getAllExperienceBusiness.execute(dto)).thenReturn(result);
+        when(getAllExperienceBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/experience")).andExpect(status().isOk()).andDo(print());
     }
 
@@ -146,7 +147,7 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .link("link")
                         .questionList(questionList)
                         .build();
-        when(getExperienceBusiness.execute(dto)).thenReturn(result);
+        when(getExperienceBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/experience/1")).andExpect(status().isOk()).andDo(print());
     }
 }
