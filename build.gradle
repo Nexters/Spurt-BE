@@ -115,16 +115,16 @@ asciidoctor.doFirst {
 }
 
 // build/docs/asciidoc 파일을 src/main/resources/static/docs 패키지로 이동
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-}
+//task copyDocument(type: Copy) {
+//    dependsOn asciidoctor
+////    from file("build/docs/asciidoc")
+////    into file("src/main/resources/static/docs")
+//}
 
 // assemble을 copyDocument에 의존하게 하여, assemble보다 copyDocument가 먼저 실행되도록 함
 // jar 파일은 copyDocument가 끝나야 생성이 됨
 assemble {
-    dependsOn copyDocument
+    dependsOn asciidoctor
 }
 
 bootJar{

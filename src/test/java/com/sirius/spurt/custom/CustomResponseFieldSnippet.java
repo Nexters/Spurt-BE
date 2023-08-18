@@ -1,4 +1,4 @@
-package com.sirius.spurt;
+package com.sirius.spurt.custom;
 
 import static capital.scalable.restdocs.util.TypeUtil.firstGenericType;
 

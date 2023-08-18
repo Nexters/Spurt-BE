@@ -6,6 +6,8 @@ import capital.scalable.restdocs.AutoDocumentation;
 import capital.scalable.restdocs.jackson.JacksonResultHandlers;
 import capital.scalable.restdocs.response.ResponseModifyingPreprocessors;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sirius.spurt.custom.CustomRequestFieldSnippet;
+import com.sirius.spurt.custom.CustomResponseFieldSnippet;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
 import com.sirius.spurt.store.provider.auth.vo.AuthVo;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,9 +68,9 @@ public class BaseMvcTest {
                                                 CliDocumentation.curlRequest(),
                                                 HttpDocumentation.httpRequest(),
                                                 HttpDocumentation.httpResponse(),
-                                                AutoDocumentation.requestFields(),
+                                                new CustomRequestFieldSnippet(),
+                                                // AutoDocumentation.requestFields(),
                                                 new CustomResponseFieldSnippet(),
-                                                //
                                                 // AutoDocumentation.responseFields(),
                                                 AutoDocumentation.pathParameters(),
                                                 AutoDocumentation.requestParameters(),
