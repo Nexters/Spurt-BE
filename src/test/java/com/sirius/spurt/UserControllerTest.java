@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.sirius.spurt.service.business.user.CheckUserExistsBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPinedBusiness;
+import com.sirius.spurt.service.business.user.CheckUserHasPostedBusiness;
 import com.sirius.spurt.service.controller.user.UserController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 public class UserControllerTest extends BaseMvcTest {
     @MockBean private CheckUserExistsBusiness checkUserExistsBusiness;
     @MockBean private CheckUserHasPinedBusiness checkUserHasPinedBusiness;
+    @MockBean private CheckUserHasPostedBusiness checkUserHasPostedBusiness;
 
     @Test
     void 유저_존재_확인() throws Exception {
@@ -35,5 +37,15 @@ public class UserControllerTest extends BaseMvcTest {
                 CheckUserHasPinedBusiness.Result.builder().hasPined(false).build();
         when(checkUserHasPinedBusiness.execute(dto)).thenReturn(result);
         this.mockMvc.perform(get("/v1/user/pin")).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 유저_최초_질문_답변_작성_확인() throws Exception {
+        CheckUserHasPostedBusiness.Dto dto =
+                CheckUserHasPostedBusiness.Dto.builder().userId("admin").build();
+        CheckUserHasPostedBusiness.Result result =
+                CheckUserHasPostedBusiness.Result.builder().hasPosted(false).build();
+        when(checkUserHasPostedBusiness.execute(dto)).thenReturn(result);
+        this.mockMvc.perform(get("/v1/user/posting")).andExpect(status().isOk()).andDo(print());
     }
 }
