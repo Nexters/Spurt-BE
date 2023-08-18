@@ -30,4 +30,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean hasPined;
+
+    @Column(nullable = false)
+    private Boolean hasPosted;
 }

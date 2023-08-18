@@ -38,6 +38,17 @@ public class UserProviderImpl implements UserProvider {
         return userEntity.getHasPined();
     }
 
+    @Override
+    public boolean checkHasPosted(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new GlobalException(NOT_EXIST_USER);
+        }
+
+        return userEntity.getHasPosted();
+    }
+
     @Mapper
     public interface UserProviderImplMapper {
         UserProviderImpl.UserProviderImplMapper INSTANCE =

@@ -8,4 +8,6 @@ public interface UserProvider {
     UserVo getUserInfo(String userId);
 
     boolean checkHasPined(String userId);
+
+    boolean checkHasPosted(String userId);
 }
