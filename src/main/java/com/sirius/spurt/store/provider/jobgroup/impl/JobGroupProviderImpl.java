@@ -25,6 +25,7 @@ public class JobGroupProviderImpl implements JobGroupProvider {
                         .email(email)
                         .jobGroup(jobGroup)
                         .hasPined(false)
+                        .hasPosted(false)
                         .build());
     }
 
@@ -43,6 +44,7 @@ public class JobGroupProviderImpl implements JobGroupProvider {
                         .email(email)
                         .jobGroup(jobGroup)
                         .hasPined(userEntity.getHasPined())
+                        .hasPosted(userEntity.getHasPosted())
                         .build());
     }
 }

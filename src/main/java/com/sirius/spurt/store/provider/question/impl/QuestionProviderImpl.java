@@ -59,6 +59,7 @@ public class QuestionProviderImpl implements QuestionProvider {
                             .email(userEntity.getEmail())
                             .jobGroup(userEntity.getJobGroup())
                             .hasPined(true)
+                            .hasPosted(userEntity.getHasPosted())
                             .build());
         }
 
@@ -197,6 +198,17 @@ public class QuestionProviderImpl implements QuestionProvider {
                 keyWordList.stream()
                         .map(keyWord -> KeyWordEntity.builder().keyWord(keyWord).build())
                         .toList();
+
+        if (!userEntity.getHasPosted()) {
+            userRepository.save(
+                    UserEntity.builder()
+                            .userId(userId)
+                            .email(userEntity.getEmail())
+                            .jobGroup(userEntity.getJobGroup())
+                            .hasPined(userEntity.getHasPined())
+                            .hasPosted(true)
+                            .build());
+        }
 
         QuestionEntity questionEntity =
                 QuestionEntity.builder()
