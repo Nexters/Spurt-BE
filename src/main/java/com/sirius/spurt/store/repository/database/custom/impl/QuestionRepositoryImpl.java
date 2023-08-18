@@ -29,7 +29,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .selectFrom(QQuestionEntity.questionEntity)
                 .leftJoin(QQuestionEntity.questionEntity.categoryEntityList, QCategoryEntity.categoryEntity)
                 .distinct()
-                .where(eqJobGroup(jobGroup), neUserId(userId), eqCategory(category))
+                .where(eqJobGroup(jobGroup), neUserId(userId), eqCategory(category), notExperience())
                 .limit(count)
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .fetch();
@@ -80,6 +80,10 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         .size();
 
         return new PageImpl<>(questionEntityList, pageRequest, count);
+    }
+
+    private BooleanExpression notExperience() {
+        return QQuestionEntity.questionEntity.experienceId.isNull();
     }
 
     private BooleanExpression containSubject(String subject) {

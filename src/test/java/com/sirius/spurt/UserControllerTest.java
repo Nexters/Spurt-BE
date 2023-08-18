@@ -1,5 +1,6 @@
 package com.sirius.spurt;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,7 +26,7 @@ public class UserControllerTest extends BaseMvcTest {
                 CheckUserExistsBusiness.Dto.builder().userId("test-admin").build();
         CheckUserExistsBusiness.Result result =
                 CheckUserExistsBusiness.Result.builder().isUserExists(false).build();
-        when(checkUserExistsBusiness.execute(dto)).thenReturn(result);
+        when(checkUserExistsBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/user/exist")).andExpect(status().isOk()).andDo(print());
     }
 
@@ -35,7 +36,7 @@ public class UserControllerTest extends BaseMvcTest {
                 CheckUserHasPinedBusiness.Dto.builder().userId("admin").build();
         CheckUserHasPinedBusiness.Result result =
                 CheckUserHasPinedBusiness.Result.builder().hasPined(false).build();
-        when(checkUserHasPinedBusiness.execute(dto)).thenReturn(result);
+        when(checkUserHasPinedBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/user/pin")).andExpect(status().isOk()).andDo(print());
     }
 
@@ -45,7 +46,7 @@ public class UserControllerTest extends BaseMvcTest {
                 CheckUserHasPostedBusiness.Dto.builder().userId("admin").build();
         CheckUserHasPostedBusiness.Result result =
                 CheckUserHasPostedBusiness.Result.builder().hasPosted(false).build();
-        when(checkUserHasPostedBusiness.execute(dto)).thenReturn(result);
+        when(checkUserHasPostedBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/user/posting")).andExpect(status().isOk()).andDo(print());
     }
 }
