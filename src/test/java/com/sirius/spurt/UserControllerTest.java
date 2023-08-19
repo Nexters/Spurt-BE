@@ -6,9 +6,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.user.CheckUserExistsBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPinedBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPostedBusiness;
+import com.sirius.spurt.service.business.user.UserInfoBusiness;
 import com.sirius.spurt.service.controller.user.UserController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,6 +21,15 @@ public class UserControllerTest extends BaseMvcTest {
     @MockBean private CheckUserExistsBusiness checkUserExistsBusiness;
     @MockBean private CheckUserHasPinedBusiness checkUserHasPinedBusiness;
     @MockBean private CheckUserHasPostedBusiness checkUserHasPostedBusiness;
+    @MockBean private UserInfoBusiness userInfoBusiness;
+
+    @Test
+    void 유저_정보_조회() throws Exception {
+        UserInfoBusiness.Result result =
+                UserInfoBusiness.Result.builder().userId("wieribwer").jobGroup(JobGroup.DEVELOPER).build();
+        when(userInfoBusiness.execute(any())).thenReturn(result);
+        this.mockMvc.perform(get("/v1/user/info")).andExpect(status().isOk()).andDo(print());
+    }
 
     @Test
     void 유저_존재_확인() throws Exception {
