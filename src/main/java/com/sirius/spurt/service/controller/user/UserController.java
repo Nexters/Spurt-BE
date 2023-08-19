@@ -4,6 +4,7 @@ import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.user.CheckUserExistsBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPinedBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPostedBusiness;
+import com.sirius.spurt.service.business.user.UserInfoBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class UserController {
     private final CheckUserExistsBusiness checkUserExistsBusiness;
     private final CheckUserHasPinedBusiness checkUserHasPinedBusiness;
     private final CheckUserHasPostedBusiness checkUserHasPostedBusiness;
+    private final UserInfoBusiness userInfoBusiness;
 
     /**
      * @return
@@ -51,5 +53,16 @@ public class UserController {
         return RestResponse.success(
                 checkUserHasPostedBusiness.execute(
                         CheckUserHasPostedBusiness.Dto.builder().userId(loginUser.getUserId()).build()));
+    }
+
+    /**
+     * @return
+     * @title 유저 정보 조회
+     */
+    @GetMapping("/info")
+    public RestResponse<UserInfoBusiness.Result> getUserInfo(LoginUser loginUser) {
+        return RestResponse.success(
+                userInfoBusiness.execute(
+                        UserInfoBusiness.Dto.builder().userId(loginUser.getUserId()).build()));
     }
 }
