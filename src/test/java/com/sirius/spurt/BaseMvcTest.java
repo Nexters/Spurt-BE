@@ -10,6 +10,8 @@ import com.sirius.spurt.custom.CustomRequestFieldSnippet;
 import com.sirius.spurt.custom.CustomResponseFieldSnippet;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
 import com.sirius.spurt.store.provider.auth.vo.AuthVo;
+import com.sirius.spurt.store.provider.jobgroup.JobGroupProvider;
+import com.sirius.spurt.store.provider.user.UserProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -34,6 +36,8 @@ public class BaseMvcTest {
     @Autowired protected ObjectMapper objectMapper;
 
     @MockBean private AuthProvider authProvider;
+    @MockBean private UserProvider userProvider;
+    @MockBean private JobGroupProvider jobGroupProvider;
     protected MockMvc mockMvc;
 
     @BeforeEach
