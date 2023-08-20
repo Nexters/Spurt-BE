@@ -53,13 +53,12 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
         if (StringUtils.hasLength(accessHeader) && accessHeader.startsWith(TOKEN_TYPE)) {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             userInfo = authProvider.getUserId(accessToken);
-
             // 로그인 이후 직군 미선택 유저 추가 체크
-            UserVo userVo = userProvider.getUserInfo(userInfo.getUserId());
-            if (userVo == null) {
-                jobGroupProvider.saveJobGroup(
-                        userInfo.getUserId(), userInfo.getEmail(), JobGroup.DEVELOPER);
-            }
+//            UserVo userVo = userProvider.getUserInfo(userInfo.getUserId());
+//            if (userVo == null) {
+//                jobGroupProvider.saveJobGroup(
+//                        userInfo.getUserId(), userInfo.getEmail(), JobGroup.DEVELOPER);
+//            }
         }
         return new LoginUser(userInfo.getUserId(), userInfo.getEmail());
     }
