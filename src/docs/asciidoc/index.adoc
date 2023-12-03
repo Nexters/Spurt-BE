@@ -21,7 +21,7 @@ endif::[]
 |BASE URL
 
 |DEV
-|https://spurtapp.com
+|https://api.spurtapp.com
 |===
 
 == Header 정보
