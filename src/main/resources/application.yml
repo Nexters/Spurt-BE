@@ -4,10 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://www-db.cs5hxgrfatc3.ap-northeast-2.rds.amazonaws.com:3306/www?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://www-db.cs5hxgrfatc3.ap-northeast-2.rds.amazonaws.com:3306/spurt?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=utf8&allowPublicKeyRetrieval=true
     username: www
     password: www1234321!
-
 
   jpa:
     open-in-view: true
