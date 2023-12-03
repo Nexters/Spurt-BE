@@ -3,11 +3,11 @@ name: spurt CICD
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   push_to_registry:
-    name: Push to ncp container registry
+    name: Push to aws container registry
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,8 +25,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
         with:
-         arguments: build -x spotlessJavaCheck
-         cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+          arguments: build -x spotlessJavaCheck
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
 
       - name: save docs file
         uses: actions/upload-artifact@v3
@@ -37,43 +37,35 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to NCP Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.NCP_CONTAINER_REGISTRY }}
-          username: ${{ secrets.NCP_ACCESS_KEY }}
-          password: ${{ secrets.NCP_SECRET_KEY }}
+      - name: Docker build & push to prod
+        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t spurt-be -f Dockerfile .
+          docker tag spurt-be:latest ${{ secrets.DOCKER_USER }}/spurt-be:latest
+          docker push ${{ secrets.DOCKER_USER }}/spurt-be:latest
 
-      - name: docker build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-          cache-from: type=registry,ref=${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-          cache-to: type=inline
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GIT_TOKEN }}
   pull_from_registry:
     name: Connect server ssh and pull from container registry
     needs: push_to_registry
     runs-on: ubuntu-latest
     steps:
-      - name: connect ssh
+      - name: Deploy to prod
+        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.DEV_USERNAME }}
-          password: ${{ secrets.DEV_PASSWORD }}
-          port: ${{ secrets.DEV_PORT }}
+          host: ${{ secrets.HOST_NAME }}
+          username: ${{ secrets.AWS_USER_NAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: ${{ secrets.AWS_PORT }}
           script: |
-            docker login ${{ secrets.NCP_CONTAINER_REGISTRY }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
-            docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
-            docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/spurt-backend:latest
-            docker image prune -f
+            docker pull ${{ secrets.DOCKER_USER }}/spurt-be:latest
+            docker stop spurt-be
+            docker rm spurt-be
+            docker run -d --network spurt --name spurt-be -p 8081:8081 ${{ secrets.DOCKER_USER }}/spurt-be
+            if docker images -f "dangling=true" -q | grep . > /dev/null; then
+              docker rmi $(docker images -f "dangling=true" -q)
+            fi
 
   upload_docs:
     name: upload api docs

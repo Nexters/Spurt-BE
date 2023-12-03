@@ -21,7 +21,7 @@ endif::[]
 |BASE URL
 
 |DEV
-|https://sirius-spurt.duckdns.org
+|https://spurtapp.com
 |===
 
 == Header 정보
