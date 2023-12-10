@@ -6,6 +6,7 @@ import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.validator.QuestionValidator;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
 import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
@@ -188,6 +189,9 @@ public class QuestionProviderImpl implements QuestionProvider {
         if (userEntity == null) {
             throw new GlobalException(NOT_EXIST_USER);
         }
+
+        QuestionEntity prevQuestion = questionRepository.findTopByUserIdOrderByCreateTimestampDesc(userId);
+        QuestionValidator.validate(prevQuestion.getCreateTimestamp());
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
