@@ -190,8 +190,9 @@ public class QuestionProviderImpl implements QuestionProvider {
             throw new GlobalException(NOT_EXIST_USER);
         }
 
-        QuestionEntity prevQuestion = questionRepository.findTopByUserIdOrderByCreateTimestampDesc(userId);
-        QuestionValidator.validate(prevQuestion.getCreateTimestamp());
+        QuestionEntity prevQuestion =
+                questionRepository.findTopByUserIdOrderByCreateTimestampDesc(userId);
+        QuestionValidator.validateTimestamp(prevQuestion);
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
