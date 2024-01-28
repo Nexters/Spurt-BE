@@ -13,4 +13,6 @@ public interface QuestionRepository
     QuestionEntity findByQuestionIdAndUserId(final Long id, final String userId);
 
     QuestionEntity findTopByUserIdOrderByCreateTimestampDesc(String userId);
+
+    void deleteByUserId(String userId);
 }

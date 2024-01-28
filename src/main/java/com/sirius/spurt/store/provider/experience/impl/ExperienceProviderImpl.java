@@ -6,6 +6,7 @@ import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.experience.ExperienceProvider;
 import com.sirius.spurt.store.provider.experience.vo.CategoryVo;
 import com.sirius.spurt.store.provider.experience.vo.ExperienceVo;
@@ -151,6 +152,13 @@ public class ExperienceProviderImpl implements ExperienceProvider {
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
 
         return experienceEntity != null ? experienceEntity.getTitle() : null;
+    }
+
+    @Override
+    public void deleteExperienceByUser(final String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        UserValidator.validator(userEntity);
+        experienceRepository.deleteByUserEntity(userEntity);
     }
 
     @Mapper

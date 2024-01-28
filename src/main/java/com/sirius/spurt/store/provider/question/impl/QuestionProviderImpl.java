@@ -17,7 +17,6 @@ import com.sirius.spurt.store.repository.database.entity.UserEntity;
 import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +27,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -230,6 +230,11 @@ public class QuestionProviderImpl implements QuestionProvider {
 
         return QuestionProviderImplMapper.INSTANCE.toQuestionVo(
                 questionRepository.save(questionEntity));
+    }
+
+    @Override
+    public void deleteQuestionByUser(final String userId) {
+        questionRepository.deleteByUserId(userId);
     }
 
     @Mapper

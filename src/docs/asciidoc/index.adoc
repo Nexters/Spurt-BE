@@ -90,6 +90,7 @@ include::{snippets}/user-controller-test/유저_존재_확인/auto-section.adoc[
 include::{snippets}/user-controller-test/유저_최초_질문_답변_작성_확인/auto-section.adoc[]
 include::{snippets}/user-controller-test/유저_최초_핀고정_확인/auto-section.adoc[]
 include::{snippets}/user-controller-test/유저_정보_조회/auto-section.adoc[]
+include::{snippets}/user-controller-test/유저_삭제_확인/auto-section.adoc[]
 
 == 프로젝트 API
 include::{snippets}/experience-controller-test/본인_경험_저장/auto-section.adoc[]

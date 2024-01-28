@@ -42,4 +42,6 @@ public interface QuestionProvider {
             final Boolean myQuestionIndicator,
             final String userId,
             final PageRequest pageRequest);
+
+    void deleteQuestionByUser(final String userId);
 }

@@ -28,4 +28,6 @@ public interface ExperienceProvider {
     ExperienceVo getExperience(final Long experienceId, final String userId);
 
     String getQuestionExperienceTitle(final Long experienceId, final String userId);
+
+    void deleteExperienceByUser(final String userId);
 }

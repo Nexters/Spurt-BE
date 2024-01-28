@@ -3,6 +3,7 @@ package com.sirius.spurt.store.provider.user.impl;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.user.UserProvider;
 import com.sirius.spurt.store.provider.user.vo.UserVo;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
@@ -18,17 +19,17 @@ public class UserProviderImpl implements UserProvider {
     private final UserRepository userRepository;
 
     @Override
-    public UserVo getUserInfo(String userId) {
+    public UserVo getUserInfo(final String userId) {
         return UserProviderImplMapper.INSTANCE.toUserVo(userRepository.findByUserId(userId));
     }
 
     @Override
-    public boolean checkUserExists(String userId) {
+    public boolean checkUserExists(final String userId) {
         return userRepository.existsByUserId(userId);
     }
 
     @Override
-    public boolean checkHasPined(String userId) {
+    public boolean checkHasPined(final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         if (userEntity == null) {
@@ -39,7 +40,7 @@ public class UserProviderImpl implements UserProvider {
     }
 
     @Override
-    public boolean checkHasPosted(String userId) {
+    public boolean checkHasPosted(final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         if (userEntity == null) {
@@ -47,6 +48,13 @@ public class UserProviderImpl implements UserProvider {
         }
 
         return userEntity.getHasPosted();
+    }
+
+    @Override
+    public void deleteUser(final String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        UserValidator.validator(userEntity);
+        userRepository.delete(userEntity);
     }
 
     @Mapper
