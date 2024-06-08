@@ -77,6 +77,12 @@ task jsonDoclet(type: Javadoc, dependsOn: compileTestJava) {
 
 spotless {
     java {
+        // generated 폴더는 제외
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            exclude '**/generated/**/*.*'
+        }
+
         // 사용하지 않는 import 제거
         removeUnusedImports()
         // 구글 자바 포맷 적용
@@ -91,7 +97,8 @@ spotless {
 }
 
 // 의존성을 설정해줌 test 끝나고 spotlessjava 수행되도록
-tasks.named("spotlessJava").configure { dependsOn("compileTestJava") }
+// tasks.named("spotlessJava").configure { dependsOn("compileTestJava") }
+tasks.named("spotlessJava").configure {dependsOn("asciidoctor")}
 
 // 테스트 실행 후, snipperDir에 snippet(.adoc 파일들) 생성
 test {
