@@ -10,7 +10,7 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-넥스터즈 시리우스 팀 api 명세서
+넥스터즈 게꽁지 팀 api 명세서
 
 [[Spurt-API]]
 
