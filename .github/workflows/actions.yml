@@ -71,7 +71,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USER }}/spurt-be:latest
             docker stop spurt-be
             docker rm spurt-be
-            docker run -d --network spurt --name spurt-be -p 8081:8081 ${{ secrets.DOCKER_USER }}/spurt-be
+            docker run -d --network spurt --name spurt-be -p 8080:8080 ${{ secrets.DOCKER_USER }}/spurt-be
             if docker images -f "dangling=true" -q | grep . > /dev/null; then
               docker rmi $(docker images -f "dangling=true" -q)
             fi
