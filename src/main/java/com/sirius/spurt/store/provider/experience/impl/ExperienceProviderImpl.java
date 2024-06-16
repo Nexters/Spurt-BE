@@ -6,6 +6,7 @@ import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.common.validator.ExperienceValidator;
 import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.experience.ExperienceProvider;
 import com.sirius.spurt.store.provider.experience.vo.CategoryVo;
@@ -56,6 +57,10 @@ public class ExperienceProviderImpl implements ExperienceProvider {
         if (userEntity == null) {
             throw new GlobalException(NOT_EXIST_USER);
         }
+
+        ExperienceEntity prevExperience =
+                experienceRepository.findTopByUserEntityOrderByCreateTimestampDesc(userEntity);
+        ExperienceValidator.validateTimestamp(prevExperience);
 
         ExperienceEntity experienceEntity =
                 ExperienceEntity.builder()

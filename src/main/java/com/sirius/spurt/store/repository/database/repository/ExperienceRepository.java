@@ -11,5 +11,7 @@ public interface ExperienceRepository extends JpaRepository<ExperienceEntity, Lo
 
     List<ExperienceEntity> findByUserEntityUserId(final String userId);
 
+    ExperienceEntity findTopByUserEntityOrderByCreateTimestampDesc(UserEntity userEntity);
+
     void deleteByUserEntity(UserEntity userEntity);
 }

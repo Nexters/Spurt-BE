@@ -10,7 +10,8 @@ public enum ResultCode {
     TIME_FORMAT_ERROR(4000, "시간 형식이 맞지 않습니다."),
     NOT_ALL_CATEGORY(5000, "ALL category는 저장할 수 없습니다."),
     NO_CONTENT(6000, "조회 결과가 없습니다."),
-    QUESTION_THREE_SECONDS(7000, "질문은 3초에 1번만 작성이 가능합니다.");
+    QUESTION_THREE_SECONDS(7000, "질문은 3초에 1번만 작성이 가능합니다."),
+    EXPERIENCE_THREE_SECONDS(7001, "경험은 3초에 1번만 작성이 가능합니다.");
 
     private Integer code;
     private String message;
