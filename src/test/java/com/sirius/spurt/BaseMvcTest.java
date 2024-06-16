@@ -46,7 +46,7 @@ public class BaseMvcTest {
 
         Mockito.when(authProvider.getUserId(anyString())).thenReturn(authVo);
         var mockMvcRequestBuilders =
-                MockMvcRequestBuilders.get("http://example.com")
+                MockMvcRequestBuilders.get("https://api.spurtapp.com")
                         .header("Authorization", "Bearer <<전달받은토큰값>>");
         this.mockMvc =
                 MockMvcBuilders.webAppContextSetup(context)
@@ -63,9 +63,9 @@ public class BaseMvcTest {
                         .apply(
                                 MockMvcRestDocumentation.documentationConfiguration(restDocumentation)
                                         .uris()
-                                        .withScheme("http")
-                                        .withHost("localhost")
-                                        .withPort(8080)
+                                        .withScheme("https")
+                                        .withHost("api.spurtapp.com")
+                                        .withPort(443)
                                         .and()
                                         .snippets()
                                         .withDefaults(
