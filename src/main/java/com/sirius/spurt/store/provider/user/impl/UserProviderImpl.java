@@ -1,8 +1,5 @@
 package com.sirius.spurt.store.provider.user.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
-
-import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.user.UserProvider;
 import com.sirius.spurt.store.provider.user.vo.UserVo;
@@ -31,22 +28,14 @@ public class UserProviderImpl implements UserProvider {
     @Override
     public boolean checkHasPined(final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
-
+        UserValidator.validator(userEntity);
         return userEntity.getHasPined();
     }
 
     @Override
     public boolean checkHasPosted(final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
-
+        UserValidator.validator(userEntity);
         return userEntity.getHasPosted();
     }
 

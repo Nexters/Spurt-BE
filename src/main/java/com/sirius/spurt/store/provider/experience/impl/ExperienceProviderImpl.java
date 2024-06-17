@@ -1,6 +1,5 @@
 package com.sirius.spurt.store.provider.experience.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
 import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
@@ -53,10 +52,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
             final String link,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        UserValidator.validator(userEntity);
 
         ExperienceEntity prevExperience =
                 experienceRepository.findTopByUserEntityOrderByCreateTimestampDesc(userEntity);

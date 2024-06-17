@@ -1,12 +1,12 @@
 package com.sirius.spurt.store.provider.question.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
 
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.validator.QuestionValidator;
+import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
 import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
@@ -41,10 +41,7 @@ public class QuestionProviderImpl implements QuestionProvider {
     public void putPinQuestion(
             final String questionId, final String userId, final Boolean pinIndicator) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        UserValidator.validator(userEntity);
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
@@ -136,10 +133,7 @@ public class QuestionProviderImpl implements QuestionProvider {
             final List<Category> categoryList,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        UserValidator.validator(userEntity);
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
@@ -185,10 +179,7 @@ public class QuestionProviderImpl implements QuestionProvider {
             final Long experienceId,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        UserValidator.validator(userEntity);
 
         QuestionEntity prevQuestion =
                 questionRepository.findTopByUserIdOrderByCreateTimestampDesc(userId);
