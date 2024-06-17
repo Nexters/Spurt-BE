@@ -1,7 +1,5 @@
 package com.sirius.spurt.store.provider.experience.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
-import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
 
 import com.sirius.spurt.common.exception.GlobalException;
@@ -84,10 +82,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
             final String userId) {
         ExperienceEntity previous =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_EXPERIENCE_OWNER);
-        }
+        ExperienceValidator.validate(previous);
 
         ExperienceEntity experienceEntity =
                 ExperienceEntity.builder()
@@ -109,11 +104,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public void deleteExperience(final Long experienceId, final String userId) {
         ExperienceEntity previous =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_EXPERIENCE_OWNER);
-        }
-
+        ExperienceValidator.validate(previous);
         experienceRepository.deleteById(experienceId);
     }
 
@@ -121,10 +112,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public ExperienceVoList getAllExperience(final String userId) {
         List<ExperienceEntity> experienceEntityList =
                 experienceRepository.findByUserEntityUserId(userId);
-
-        if (CollectionUtils.isEmpty(experienceEntityList)) {
-            throw new GlobalException(NO_CONTENT);
-        }
+        ExperienceValidator.validateNoContents(experienceEntityList);
 
         List<ExperienceVo> experienceVoList =
                 ExperienceProviderImplMapper.INSTANCE.toExperienceVoList(experienceEntityList);
@@ -139,11 +127,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public ExperienceVo getExperience(final Long experienceId, final String userId) {
         ExperienceEntity experienceEntity =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-        if (experienceEntity == null) {
-            throw new GlobalException(NO_CONTENT);
-        }
-
+        ExperienceValidator.validateNoContent(experienceEntity);
         return ExperienceProviderImplMapper.INSTANCE.toExperienceVo(experienceEntity);
     }
 
