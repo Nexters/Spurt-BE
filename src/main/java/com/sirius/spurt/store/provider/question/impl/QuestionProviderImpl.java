@@ -1,8 +1,5 @@
 package com.sirius.spurt.store.provider.question.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
-
-import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.validator.QuestionValidator;
@@ -45,10 +42,7 @@ public class QuestionProviderImpl implements QuestionProvider {
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_QUESTION_OWNER);
-        }
+        QuestionValidator.validate(previous);
 
         if (!userEntity.getHasPined()) {
             userRepository.save(
@@ -90,11 +84,9 @@ public class QuestionProviderImpl implements QuestionProvider {
 
     @Override
     public void deleteQuestion(final String userId, final Long questionId) {
-        QuestionEntity entity = questionRepository.findByQuestionIdAndUserId(questionId, userId);
-        if (entity == null) {
-            throw new GlobalException(NOT_QUESTION_OWNER);
-        }
-        questionRepository.delete(entity);
+        QuestionEntity questionEntity = questionRepository.findByQuestionIdAndUserId(questionId, userId);
+        QuestionValidator.validate(questionEntity);
+        questionRepository.delete(questionEntity);
     }
 
     @Override
@@ -137,10 +129,7 @@ public class QuestionProviderImpl implements QuestionProvider {
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_QUESTION_OWNER);
-        }
+        QuestionValidator.validate(previous);
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()

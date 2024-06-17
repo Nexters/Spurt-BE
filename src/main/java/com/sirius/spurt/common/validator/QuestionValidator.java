@@ -1,5 +1,6 @@
 package com.sirius.spurt.common.validator;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
 import static com.sirius.spurt.common.meta.ResultCode.QUESTION_THREE_SECONDS;
 
 import com.sirius.spurt.common.exception.GlobalException;
@@ -8,6 +9,12 @@ import java.sql.Timestamp;
 
 public class QuestionValidator {
     private static long BOARD_DUPLICATE_TIME = 3000L;
+
+    public static void validate(QuestionEntity questionEntity) {
+        if (!isExistQuestion(questionEntity)) {
+            throw new GlobalException(NOT_QUESTION_OWNER);
+        }
+    }
 
     public static void validateTimestamp(QuestionEntity questionEntity) {
         if (!isExistQuestion(questionEntity)) {
