@@ -135,8 +135,11 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public String getQuestionExperienceTitle(final Long experienceId, final String userId) {
         ExperienceEntity experienceEntity =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
+        if (experienceEntity == null) {
+            return null;
+        }
 
-        return experienceEntity != null ? experienceEntity.getTitle() : null;
+        return experienceEntity.getTitle();
     }
 
     @Override
@@ -166,7 +169,9 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
         default QuestionVoList toQuestionVoList(List<QuestionEntity> questionEntityList) {
             List<QuestionVo> unorderedQuestionList = new ArrayList<>();
+            int totalCount = 0;
             if (!CollectionUtils.isEmpty(questionEntityList)) {
+                totalCount = questionEntityList.size();
                 unorderedQuestionList =
                         new java.util.ArrayList<>(questionEntityList.stream().map(this::toQuestionVo).toList());
 
@@ -184,7 +189,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
             return QuestionVoList.builder()
                     .questionVoList(unorderedQuestionList)
-                    .totalCount(questionEntityList == null ? 0 : questionEntityList.size())
+                    .totalCount(totalCount)
                     .build();
         }
 

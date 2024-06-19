@@ -35,14 +35,11 @@ public class GetQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-        Result result =
-                GetQuestionBusinessMapper.INSTANCE.toResult(
-                        questionProvider.getQuestion(input.getQuestionId()));
-
+        QuestionVo questionVo = questionProvider.getQuestion(input.getQuestionId());
         String experienceTitle =
-                experienceProvider.getQuestionExperienceTitle(result.getExperienceId(), input.getUserId());
-        result.setExperienceTitle(experienceTitle);
-        return result;
+                experienceProvider.getQuestionExperienceTitle(
+                        questionVo.getExperienceId(), input.getUserId());
+        return GetQuestionBusinessMapper.INSTANCE.toResult(questionVo, experienceTitle);
     }
 
     @JsonIgnoreProperties
@@ -98,6 +95,6 @@ public class GetQuestionBusiness implements Business<Dto, Result> {
             return keyWordList.stream().map(KeyWordVo -> KeyWordVo.getKeyWord()).toList();
         }
 
-        Result toResult(QuestionVo vo);
+        Result toResult(QuestionVo vo, String experienceTitle);
     }
 }

@@ -11,7 +11,6 @@ import com.sirius.spurt.store.repository.database.entity.CategoryEntity;
 import com.sirius.spurt.store.repository.database.entity.KeyWordEntity;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
-import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import java.sql.Timestamp;
@@ -30,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QuestionProviderImpl implements QuestionProvider {
     private final QuestionRepository questionRepository;
-    private final ExperienceRepository experienceRepository;
     private final UserRepository userRepository;
 
     @Override
