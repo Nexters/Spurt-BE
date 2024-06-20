@@ -101,4 +101,17 @@ class QuestionRepositoryTest implements QuestionTest, ExperienceTest {
         assertThat(questionEntity.getPinUpdatedTime()).isEqualTo(savedQuestion.getPinUpdatedTime());
         assertThat(questionEntity.getExperienceId()).isEqualTo(savedQuestion.getExperienceId());
     }
+
+    @Test
+    void 질문_삭제_user_테스트() {
+        // given
+        questionRepository.deleteByUserId(savedUser.getUserId());
+
+        // when
+        QuestionEntity questionEntity =
+                questionRepository.findTopByUserIdOrderByCreateTimestampDesc(savedUser.getUserId());
+
+        // then
+        assertThat(questionEntity).isNull();
+    }
 }
