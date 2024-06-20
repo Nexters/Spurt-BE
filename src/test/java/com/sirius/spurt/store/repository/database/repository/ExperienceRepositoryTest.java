@@ -79,4 +79,19 @@ class ExperienceRepositoryTest implements ExperienceTest {
         assertThat(experienceEntity.getLink()).isEqualTo(savedExperience.getLink());
         assertThat(experienceEntity.getUserEntity()).isEqualTo(savedExperience.getUserEntity());
     }
+
+    @Test
+    void 경험_삭제_user_테스트() {
+        // given
+        userRepository.save(TEST_USER);
+        experienceRepository.save(TEST_EXPERIENCE);
+        experienceRepository.deleteByUserEntity(TEST_USER);
+
+        // when
+        ExperienceEntity experienceEntity =
+                experienceRepository.findTopByUserEntityOrderByCreateTimestampDesc(TEST_USER);
+
+        // then
+        assertThat(experienceEntity).isNull();
+    }
 }
