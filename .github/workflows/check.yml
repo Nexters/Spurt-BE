@@ -22,7 +22,6 @@ jobs:
       - name: make application.yml
         if: github.event.pull_request.base.ref == 'main'
         run: |
-          mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
           echo "${{ secrets.YML_PROD }}" > ./application.yml
