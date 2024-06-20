@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
@@ -113,5 +115,32 @@ class QuestionRepositoryTest implements QuestionTest, ExperienceTest {
 
         // then
         assertThat(questionEntity).isNull();
+    }
+
+    @Test
+    void 질문_페이지_조회_테스트() {
+        // given
+        questionRepository.save(
+                QuestionEntity.builder()
+                        .questionId(2L)
+                        .userId(savedUser.getUserId())
+                        .subject(TEST_QUESTION_SUBJECT)
+                        .mainText(TEST_QUESTION_MAIN_TEXT)
+                        .jobGroup(TEST_QUESTION_JOB_GROUP)
+                        .pinIndicator(TEST_PIN_INDICATOR)
+                        .pinUpdatedTime(TEST_PIN_UPDATED_TIME)
+                        .experienceId(savedExperience.getExperienceId())
+                        .build());
+        PageRequest pageRequest = PageRequest.of(0, 1);
+
+        // when
+        Page<QuestionEntity> pages =
+                questionRepository.searchQuestion(
+                        null, null, null, null, Boolean.TRUE, savedUser.getUserId(), pageRequest);
+
+        // then
+        assertThat(pages.getTotalPages()).isEqualTo(2);
+        assertThat(pages.getTotalElements()).isEqualTo(2);
+        assertThat(pages.getContent().get(0)).isEqualTo(savedQuestion);
     }
 }
