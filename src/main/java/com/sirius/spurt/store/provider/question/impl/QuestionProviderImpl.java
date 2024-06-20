@@ -82,7 +82,8 @@ public class QuestionProviderImpl implements QuestionProvider {
 
     @Override
     public void deleteQuestion(final String userId, final Long questionId) {
-        QuestionEntity questionEntity = questionRepository.findByQuestionIdAndUserId(questionId, userId);
+        QuestionEntity questionEntity =
+                questionRepository.findByQuestionIdAndUserId(questionId, userId);
         QuestionValidator.validate(questionEntity);
         questionRepository.delete(questionEntity);
     }

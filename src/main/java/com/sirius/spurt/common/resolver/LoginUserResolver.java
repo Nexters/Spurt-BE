@@ -1,14 +1,12 @@
 package com.sirius.spurt.common.resolver;
 
 import com.sirius.spurt.common.exception.GlobalException;
-import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.common.meta.ResultCode;
 import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
 import com.sirius.spurt.store.provider.auth.vo.AuthVo;
 import com.sirius.spurt.store.provider.jobgroup.JobGroupProvider;
 import com.sirius.spurt.store.provider.user.UserProvider;
-import com.sirius.spurt.store.provider.user.vo.UserVo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -54,11 +52,11 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
             String accessToken = accessHeader.replace(TOKEN_TYPE, "");
             userInfo = authProvider.getUserId(accessToken);
             // 로그인 이후 직군 미선택 유저 추가 체크
-//            UserVo userVo = userProvider.getUserInfo(userInfo.getUserId());
-//            if (userVo == null) {
-//                jobGroupProvider.saveJobGroup(
-//                        userInfo.getUserId(), userInfo.getEmail(), JobGroup.DEVELOPER);
-//            }
+            //            UserVo userVo = userProvider.getUserInfo(userInfo.getUserId());
+            //            if (userVo == null) {
+            //                jobGroupProvider.saveJobGroup(
+            //                        userInfo.getUserId(), userInfo.getEmail(), JobGroup.DEVELOPER);
+            //            }
         }
         return new LoginUser(userInfo.getUserId(), userInfo.getEmail());
     }
