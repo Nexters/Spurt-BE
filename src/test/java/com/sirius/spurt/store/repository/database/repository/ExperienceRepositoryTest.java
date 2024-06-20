@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.sirius.spurt.common.config.QuerydslConfigTest;
 import com.sirius.spurt.store.repository.database.entity.ExperienceEntity;
 import com.sirius.spurt.test.ExperienceTest;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -38,5 +39,25 @@ class ExperienceRepositoryTest implements ExperienceTest {
         assertThat(experienceEntity.getEndDate()).isEqualTo(savedExperience.getEndDate());
         assertThat(experienceEntity.getLink()).isEqualTo(savedExperience.getLink());
         assertThat(experienceEntity.getUserEntity()).isEqualTo(savedExperience.getUserEntity());
+    }
+
+    @Test
+    void 경험_조회_userId_테스트() {
+        // given
+        userRepository.save(TEST_USER);
+        ExperienceEntity savedExperience = experienceRepository.save(TEST_EXPERIENCE);
+
+        // when
+        List<ExperienceEntity> experienceEntities =
+                experienceRepository.findByUserEntityUserId(TEST_USER_ID);
+
+        // then
+        assertThat(experienceEntities.get(0).getTitle()).isEqualTo(savedExperience.getTitle());
+        assertThat(experienceEntities.get(0).getContent()).isEqualTo(savedExperience.getContent());
+        assertThat(experienceEntities.get(0).getStartDate()).isEqualTo(savedExperience.getStartDate());
+        assertThat(experienceEntities.get(0).getEndDate()).isEqualTo(savedExperience.getEndDate());
+        assertThat(experienceEntities.get(0).getLink()).isEqualTo(savedExperience.getLink());
+        assertThat(experienceEntities.get(0).getUserEntity())
+                .isEqualTo(savedExperience.getUserEntity());
     }
 }
