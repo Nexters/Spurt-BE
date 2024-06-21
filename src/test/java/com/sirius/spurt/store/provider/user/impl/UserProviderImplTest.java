@@ -84,4 +84,38 @@ class UserProviderImplTest implements UserTest {
             assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
         }
     }
+
+    @Nested
+    class 유저_게시글_작성_여부 {
+        @Test
+        void 게시글_작성_여부_확인_성공_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+
+            // when
+            boolean hasPosted = userProvider.checkHasPosted(TEST_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+            assertThat(hasPosted).isEqualTo(true);
+        }
+
+        @Test
+        void 게시글_작성_여부_확인_실패_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                userProvider.checkHasPosted(TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
+        }
+    }
 }
