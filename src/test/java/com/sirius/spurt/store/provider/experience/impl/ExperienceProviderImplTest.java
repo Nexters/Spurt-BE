@@ -269,4 +269,45 @@ class ExperienceProviderImplTest implements ExperienceTest {
             assertThat(exception.getResultCode()).isEqualTo(NO_CONTENT);
         }
     }
+
+    @Nested
+    class 경험_조회 {
+        @Test
+        void 경험_조회_성공_테스트() {
+            // given
+            when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                    .thenReturn(TEST_EXPERIENCE);
+
+            // when
+            ExperienceVo experienceVo =
+                    experienceProvider.getExperience(TEST_EXPERIENCE_ID, TEST_USER_ID);
+
+            // then
+            verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            assertThat(experienceVo.getTitle()).isEqualTo(TEST_EXPERIENCE_TITLE);
+            assertThat(experienceVo.getContent()).isEqualTo(TEST_EXPERIENCE_CONTENT);
+            assertThat(experienceVo.getStartDate()).isEqualTo(TEST_EXPERIENCE_START_DATE_STRING);
+            assertThat(experienceVo.getEndDate()).isEqualTo(TEST_EXPERIENCE_END_DATE_STRING);
+            assertThat(experienceVo.getLink()).isEqualTo(TEST_EXPERIENCE_LINK);
+        }
+
+        @Test
+        void 경험_조회_실패_테스트() {
+            // given
+            when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                    .thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                experienceProvider.getExperience(TEST_EXPERIENCE_ID, TEST_USER_ID);
+                            });
+
+            // then
+            verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            assertThat(exception.getResultCode()).isEqualTo(NO_CONTENT);
+        }
+    }
 }
