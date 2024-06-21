@@ -6,6 +6,7 @@ import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -84,6 +85,8 @@ class ExperienceProviderImplTest implements ExperienceTest {
 
             // then
             verify(userRepository).findByUserId(any());
+            verify(experienceRepository, times(0)).findTopByUserEntityOrderByCreateTimestampDesc(any());
+            verify(experienceRepository, times(0)).save(any());
             assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
         }
 
@@ -119,6 +122,7 @@ class ExperienceProviderImplTest implements ExperienceTest {
             // then
             verify(userRepository).findByUserId(any());
             verify(experienceRepository).findTopByUserEntityOrderByCreateTimestampDesc(any());
+            verify(experienceRepository, times(0)).save(any());
             assertThat(exception.getResultCode()).isEqualTo(EXPERIENCE_THREE_SECONDS);
         }
     }
@@ -169,6 +173,44 @@ class ExperienceProviderImplTest implements ExperienceTest {
 
             // then
             verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            verify(experienceRepository, times(0)).save(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXPERIENCE_OWNER);
+        }
+    }
+
+    @Nested
+    class 경험_삭제 {
+        @Test
+        void 경험_삭제_성공_테스트() {
+            // given
+            when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                    .thenReturn(TEST_EXPERIENCE);
+
+            // when
+            experienceProvider.deleteExperience(TEST_EXPERIENCE_ID, TEST_USER_ID);
+
+            // then
+            verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            verify(experienceRepository).deleteById(any());
+        }
+
+        @Test
+        void 경험_삭제_실패_테스트() {
+            // given
+            when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                    .thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                experienceProvider.deleteExperience(TEST_EXPERIENCE_ID, TEST_USER_ID);
+                            });
+
+            // then
+            verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            verify(experienceRepository, times(0)).deleteById(any());
             assertThat(exception.getResultCode()).isEqualTo(NOT_EXPERIENCE_OWNER);
         }
     }
