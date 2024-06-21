@@ -325,4 +325,39 @@ class ExperienceProviderImplTest implements ExperienceTest {
         verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
         assertThat(experienceTitle).isEqualTo(TEST_EXPERIENCE_TITLE);
     }
+
+    @Nested
+    class 경험_삭제_user {
+        @Test
+        void 경험_삭제_user_성공_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+
+            // when
+            experienceProvider.deleteExperienceByUser(TEST_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(experienceRepository).deleteByUserEntity(any());
+        }
+
+        @Test
+        void 경험_삭제_user_실패_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                experienceProvider.deleteExperienceByUser(TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(experienceRepository, times(0)).deleteByUserEntity(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
+        }
+    }
 }
