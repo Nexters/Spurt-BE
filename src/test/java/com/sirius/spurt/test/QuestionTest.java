@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 
 public interface QuestionTest {
     Long TEST_QUESTION_ID = 1L;
+    Long TEST_ANOTHER_QUESTION_ID = 2L;
     String TEST_USER_ID = "userId";
     String TEST_QUESTION_SUBJECT = "subject";
     String TEST_QUESTION_MAIN_TEXT = "mainText";

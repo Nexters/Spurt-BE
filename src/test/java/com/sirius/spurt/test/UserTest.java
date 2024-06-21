@@ -5,6 +5,7 @@ import com.sirius.spurt.store.repository.database.entity.UserEntity;
 
 public interface UserTest {
     String TEST_USER_ID = "userId";
+    String TEST_ANOTHER_USER_ID = "anotherUserId";
     JobGroup TEST_JOB_GROUP = JobGroup.DEVELOPER;
     String TEST_EMAIL = "email@gmail.com";
     Boolean TEST_HAS_PINED = Boolean.TRUE;
