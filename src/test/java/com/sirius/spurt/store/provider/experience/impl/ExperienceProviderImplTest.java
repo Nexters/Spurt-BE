@@ -3,6 +3,7 @@ package com.sirius.spurt.store.provider.experience.impl;
 import static com.sirius.spurt.common.meta.ResultCode.EXPERIENCE_THREE_SECONDS;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
+import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.store.provider.experience.vo.ExperienceVo;
+import com.sirius.spurt.store.provider.experience.vo.ExperienceVoList;
 import com.sirius.spurt.store.repository.database.entity.BaseEntity;
 import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
@@ -19,6 +21,7 @@ import com.sirius.spurt.test.ExperienceTest;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -212,6 +215,58 @@ class ExperienceProviderImplTest implements ExperienceTest {
             verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
             verify(experienceRepository, times(0)).deleteById(any());
             assertThat(exception.getResultCode()).isEqualTo(NOT_EXPERIENCE_OWNER);
+        }
+    }
+
+    @Nested
+    class 경험_전체_조회 {
+        @Test
+        void 경험_전체_조회_성공_테스트() {
+            // given
+            when(experienceRepository.findByUserEntityUserId(any()))
+                    .thenReturn(List.of(TEST_EXPERIENCE, TEST_ANOTHER_EXPERIENCE));
+
+            // when
+            ExperienceVoList experienceVoList = experienceProvider.getAllExperience(TEST_USER_ID);
+
+            // then
+            verify(experienceRepository).findByUserEntityUserId(any());
+            assertThat(experienceVoList.getExperienceVoList().size()).isEqualTo(2);
+            assertThat(experienceVoList.getExperienceVoList().get(0).getTitle())
+                    .isEqualTo(TEST_EXPERIENCE_TITLE);
+            assertThat(experienceVoList.getExperienceVoList().get(0).getContent())
+                    .isEqualTo(TEST_EXPERIENCE_CONTENT);
+            assertThat(experienceVoList.getExperienceVoList().get(0).getStartDate())
+                    .isEqualTo(TEST_EXPERIENCE_START_DATE_STRING);
+            assertThat(experienceVoList.getExperienceVoList().get(0).getEndDate())
+                    .isEqualTo(TEST_EXPERIENCE_END_DATE_STRING);
+            assertThat(experienceVoList.getExperienceVoList().get(0).getLink())
+                    .isEqualTo(TEST_EXPERIENCE_LINK);
+            assertThat(experienceVoList.getExperienceVoList().get(1).getTitle())
+                    .isEqualTo(TEST_ANOTHER_EXPERIENCE_TITLE);
+            assertThat(experienceVoList.getExperienceVoList().get(1).getContent())
+                    .isEqualTo(TEST_ANOTHER_EXPERIENCE_CONTENT);
+            assertThat(experienceVoList.getExperienceVoList().get(1).getLink())
+                    .isEqualTo(TEST_ANOTHER_EXPERIENCE_LINK);
+            assertThat(experienceVoList.getTotalCount()).isEqualTo(2);
+        }
+
+        @Test
+        void 경험_전체_조회_실패_테스트() {
+            // given
+            when(experienceRepository.findByUserEntityUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                experienceProvider.getAllExperience(TEST_USER_ID);
+                            });
+
+            // then
+            verify(experienceRepository).findByUserEntityUserId(any());
+            assertThat(exception.getResultCode()).isEqualTo(NO_CONTENT);
         }
     }
 }
