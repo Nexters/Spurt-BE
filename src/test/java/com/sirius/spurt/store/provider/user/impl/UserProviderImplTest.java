@@ -1,13 +1,17 @@
 package com.sirius.spurt.store.provider.user.impl;
 
+import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.store.provider.user.vo.UserVo;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import com.sirius.spurt.test.UserTest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,5 +49,39 @@ class UserProviderImplTest implements UserTest {
         // then
         verify(userRepository).existsByUserId(any());
         assertThat(isExistsUser).isEqualTo(true);
+    }
+
+    @Nested
+    class 유저_핀_등록_여부 {
+        @Test
+        void 핀_등록_여부_확인_성공_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+
+            // when
+            boolean hasPined = userProvider.checkHasPined(TEST_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+            assertThat(hasPined).isEqualTo(true);
+        }
+
+        @Test
+        void 핀_등록_여부_확인_실패_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                userProvider.checkHasPined(TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
+        }
     }
 }
