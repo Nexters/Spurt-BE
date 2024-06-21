@@ -4,6 +4,7 @@ import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.ResultCode;
 import com.sirius.spurt.store.repository.resttemplate.auth.AuthRepository;
 import com.sirius.spurt.store.repository.resttemplate.auth.playload.UserInfoPayload;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -16,7 +17,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AuthRepositoryImpl implements AuthRepository {
+    private final RestTemplate restTemplate;
+
     @Value("${user-info-endpoint}")
     private String userInfoEndpoint;
 
@@ -24,10 +28,8 @@ public class AuthRepositoryImpl implements AuthRepository {
     public UserInfoPayload getUserInfo(String accessToken) {
         try {
             MultiValueMap<String, String> httpBody = new LinkedMultiValueMap<>();
-
             HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(httpBody);
 
-            RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<UserInfoPayload> res =
                     restTemplate.exchange(
                             userInfoEndpoint + "?access_token=" + accessToken,
