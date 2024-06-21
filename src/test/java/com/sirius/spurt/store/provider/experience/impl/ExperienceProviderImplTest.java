@@ -310,4 +310,19 @@ class ExperienceProviderImplTest implements ExperienceTest {
             assertThat(exception.getResultCode()).isEqualTo(NO_CONTENT);
         }
     }
+
+    @Test
+    void 경험_제목_조회_테스트() {
+        // given
+        when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                .thenReturn(TEST_EXPERIENCE);
+
+        // when
+        String experienceTitle =
+                experienceProvider.getQuestionExperienceTitle(TEST_EXPERIENCE_ID, TEST_USER_ID);
+
+        // then
+        verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+        assertThat(experienceTitle).isEqualTo(TEST_EXPERIENCE_TITLE);
+    }
 }
