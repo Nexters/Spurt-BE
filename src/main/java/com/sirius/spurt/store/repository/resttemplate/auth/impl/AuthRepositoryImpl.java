@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
-public class AuthImpl implements AuthRepository {
+public class AuthRepositoryImpl implements AuthRepository {
     @Value("${user-info-endpoint}")
     private String userInfoEndpoint;
 
