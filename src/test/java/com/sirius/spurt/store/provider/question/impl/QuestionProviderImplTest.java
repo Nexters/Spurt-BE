@@ -132,4 +132,39 @@ class QuestionProviderImplTest implements QuestionTest, UserTest {
         assertThat(questionVoList.getQuestions().get(1).getMainText())
                 .isEqualTo(TEST_ANOTHER_QUESTION_MAIN_TEXT);
     }
+
+    @Nested
+    class 질문_삭제 {
+        @Test
+        void 질문_삭제_성공_테스트() {
+            // given
+            when(questionRepository.findByQuestionIdAndUserId(any(), any())).thenReturn(TEST_QUESTION);
+
+            // when
+            questionProvider.deleteQuestion(UserTest.TEST_USER_ID, TEST_QUESTION_ID);
+
+            // then
+            verify(questionRepository).findByQuestionIdAndUserId(any(), any());
+            verify(questionRepository).delete(any());
+        }
+
+        @Test
+        void 질문_삭제_실패_테스트() {
+            // given
+            when(questionRepository.findByQuestionIdAndUserId(any(), any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                questionProvider.deleteQuestion(UserTest.TEST_USER_ID, TEST_QUESTION_ID);
+                            });
+
+            // then
+            verify(questionRepository).findByQuestionIdAndUserId(any(), any());
+            verify(questionRepository, times(0)).deleteByUserId(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_QUESTION_OWNER);
+        }
+    }
 }
