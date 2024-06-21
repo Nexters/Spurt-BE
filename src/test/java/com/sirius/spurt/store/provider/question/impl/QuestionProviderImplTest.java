@@ -10,10 +10,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import com.sirius.spurt.test.QuestionTest;
 import com.sirius.spurt.test.UserTest;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -108,5 +110,26 @@ class QuestionProviderImplTest implements QuestionTest, UserTest {
             verify(questionRepository, times(0)).save(any());
             assertThat(exception.getResultCode()).isEqualTo(NOT_QUESTION_OWNER);
         }
+    }
+
+    @Test
+    void 랜덤_질문_조회_테스트() {
+        // given
+        when(questionRepository.randomQuestion(any(), any(), any(), any()))
+                .thenReturn(List.of(TEST_QUESTION, TEST_ANOTHER_QUESTION));
+
+        // when
+        QuestionVoList questionVoList = questionProvider.randomQuestion(null, null, 2, null);
+
+        // then
+        verify(questionRepository).randomQuestion(any(), any(), any(), any());
+        assertThat(questionVoList.getQuestions().size()).isEqualTo(2);
+        assertThat(questionVoList.getQuestions().get(0).getSubject()).isEqualTo(TEST_QUESTION_SUBJECT);
+        assertThat(questionVoList.getQuestions().get(0).getMainText())
+                .isEqualTo(TEST_QUESTION_MAIN_TEXT);
+        assertThat(questionVoList.getQuestions().get(1).getSubject())
+                .isEqualTo(TEST_ANOTHER_QUESTION_SUBJECT);
+        assertThat(questionVoList.getQuestions().get(1).getMainText())
+                .isEqualTo(TEST_ANOTHER_QUESTION_MAIN_TEXT);
     }
 }
