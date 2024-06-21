@@ -76,7 +76,7 @@ public class QuestionProviderImpl implements QuestionProvider {
         return QuestionVoList.builder()
                 .questions(
                         QuestionProviderImplMapper.INSTANCE.toQuestionVos(
-                                questionRepository.RandomQuestion(jobGroup, userId, count, category)))
+                                questionRepository.randomQuestion(jobGroup, userId, count, category)))
                 .build();
     }
 

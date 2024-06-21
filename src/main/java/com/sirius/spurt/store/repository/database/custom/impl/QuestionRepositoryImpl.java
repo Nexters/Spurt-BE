@@ -23,7 +23,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<QuestionEntity> RandomQuestion(
+    public List<QuestionEntity> randomQuestion(
             final JobGroup jobGroup, final String userId, final Integer count, final Category category) {
         return jpaQueryFactory
                 .selectFrom(QQuestionEntity.questionEntity)
