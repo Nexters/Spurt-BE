@@ -33,4 +33,17 @@ class UserProviderImplTest implements UserTest {
         assertThat(userVo.getUserId()).isEqualTo(TEST_USER_ID);
         assertThat(userVo.getJobGroup()).isEqualTo(TEST_JOB_GROUP);
     }
+
+    @Test
+    void 유저_존재_확인_테스트() {
+        // given
+        when(userRepository.existsByUserId(any())).thenReturn(true);
+
+        // when
+        boolean isExistsUser = userProvider.checkUserExists(TEST_USER_ID);
+
+        // then
+        verify(userRepository).existsByUserId(any());
+        assertThat(isExistsUser).isEqualTo(true);
+    }
 }
