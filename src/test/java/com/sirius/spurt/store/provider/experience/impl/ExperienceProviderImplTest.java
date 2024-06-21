@@ -2,6 +2,7 @@ package com.sirius.spurt.store.provider.experience.impl;
 
 import static com.sirius.spurt.common.meta.ResultCode.EXPERIENCE_THREE_SECONDS;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
+import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -119,6 +120,56 @@ class ExperienceProviderImplTest implements ExperienceTest {
             verify(userRepository).findByUserId(any());
             verify(experienceRepository).findTopByUserEntityOrderByCreateTimestampDesc(any());
             assertThat(exception.getResultCode()).isEqualTo(EXPERIENCE_THREE_SECONDS);
+        }
+    }
+
+    @Nested
+    class 경험_수정 {
+        @Test
+        void 경험_수정_성공_테스트() {
+            // given
+            when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                    .thenReturn(TEST_EXPERIENCE);
+
+            // when
+            experienceProvider.updateExperience(
+                    TEST_EXPERIENCE_ID,
+                    TEST_EXPERIENCE_TITLE,
+                    TEST_EXPERIENCE_CONTENT,
+                    TEST_EXPERIENCE_START_DATE_STRING,
+                    TEST_EXPERIENCE_END_DATE_STRING,
+                    TEST_EXPERIENCE_LINK,
+                    TEST_USER_ID);
+
+            // then
+            verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            verify(experienceRepository).save(any());
+        }
+
+        @Test
+        void 경험_수정_실패_테스트() {
+            // given
+            when(experienceRepository.findByExperienceIdAndUserEntityUserId(any(), any()))
+                    .thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                experienceProvider.updateExperience(
+                                        TEST_EXPERIENCE_ID,
+                                        TEST_EXPERIENCE_TITLE,
+                                        TEST_EXPERIENCE_CONTENT,
+                                        TEST_EXPERIENCE_START_DATE_STRING,
+                                        TEST_EXPERIENCE_END_DATE_STRING,
+                                        TEST_EXPERIENCE_LINK,
+                                        TEST_USER_ID);
+                            });
+
+            // then
+            verify(experienceRepository).findByExperienceIdAndUserEntityUserId(any(), any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXPERIENCE_OWNER);
         }
     }
 }
