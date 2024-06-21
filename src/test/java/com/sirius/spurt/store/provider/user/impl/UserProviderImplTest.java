@@ -118,4 +118,37 @@ class UserProviderImplTest implements UserTest {
             assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
         }
     }
+
+    @Nested
+    class 유저_삭제 {
+        @Test
+        void 유저_삭제_성공_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+
+            // when
+            userProvider.deleteUser(TEST_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+        }
+
+        @Test
+        void 유저_삭제_실패_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                userProvider.deleteUser(TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
+        }
+    }
 }
