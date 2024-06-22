@@ -419,4 +419,15 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
             assertThat(exception.getResultCode()).isEqualTo(QUESTION_THREE_SECONDS);
         }
     }
+
+    @Test
+    void 질문_삭제_user_테스트() {
+        // given
+
+        // when
+        questionProvider.deleteQuestionByUser(TEST_USER_ID);
+
+        // then
+        verify(questionRepository).deleteByUserId(any());
+    }
 }
