@@ -2,6 +2,7 @@ package com.sirius.spurt.store.provider.question.impl;
 
 import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
+import static com.sirius.spurt.common.meta.ResultCode.QUESTION_THREE_SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,13 +13,16 @@ import static org.mockito.Mockito.when;
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
+import com.sirius.spurt.store.repository.database.entity.BaseEntity;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import com.sirius.spurt.test.CategoryTest;
 import com.sirius.spurt.test.KeyWordTest;
 import com.sirius.spurt.test.QuestionTest;
-import com.sirius.spurt.test.UserTest;
+import java.lang.reflect.Field;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,7 +35,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
-class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, KeyWordTest {
+class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTest {
     @InjectMocks private QuestionProviderImpl questionProvider;
 
     @Mock private QuestionRepository questionRepository;
@@ -47,7 +51,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
 
             // when
             questionProvider.putPinQuestion(
-                    String.valueOf(QuestionTest.TEST_QUESTION_ID), UserTest.TEST_USER_ID, Boolean.FALSE);
+                    String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
 
             // then
             verify(userRepository).findByUserId(any());
@@ -64,7 +68,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
 
             // when
             questionProvider.putPinQuestion(
-                    String.valueOf(QuestionTest.TEST_QUESTION_ID), UserTest.TEST_USER_ID, Boolean.FALSE);
+                    String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_ANOTHER_USER_ID, Boolean.FALSE);
 
             // then
             verify(userRepository).findByUserId(any());
@@ -84,9 +88,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                             GlobalException.class,
                             () -> {
                                 questionProvider.putPinQuestion(
-                                        String.valueOf(QuestionTest.TEST_QUESTION_ID),
-                                        UserTest.TEST_USER_ID,
-                                        Boolean.FALSE);
+                                        String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
                             });
 
             // then
@@ -109,9 +111,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                             GlobalException.class,
                             () -> {
                                 questionProvider.putPinQuestion(
-                                        String.valueOf(QuestionTest.TEST_QUESTION_ID),
-                                        UserTest.TEST_USER_ID,
-                                        Boolean.FALSE);
+                                        String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
                             });
 
             // then
@@ -152,7 +152,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
             when(questionRepository.findByQuestionIdAndUserId(any(), any())).thenReturn(TEST_QUESTION);
 
             // when
-            questionProvider.deleteQuestion(UserTest.TEST_USER_ID, QuestionTest.TEST_QUESTION_ID);
+            questionProvider.deleteQuestion(TEST_USER_ID, QuestionTest.TEST_QUESTION_ID);
 
             // then
             verify(questionRepository).findByQuestionIdAndUserId(any(), any());
@@ -169,8 +169,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                     assertThrows(
                             GlobalException.class,
                             () -> {
-                                questionProvider.deleteQuestion(
-                                        UserTest.TEST_USER_ID, QuestionTest.TEST_QUESTION_ID);
+                                questionProvider.deleteQuestion(TEST_USER_ID, QuestionTest.TEST_QUESTION_ID);
                             });
 
             // then
@@ -196,7 +195,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                         TEST_CATEGORY,
                         TEST_PIN_INDICATOR,
                         Boolean.TRUE,
-                        UserTest.TEST_USER_ID,
+                        TEST_USER_ID,
                         pageRequest);
 
         // then
@@ -240,7 +239,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                     TEST_QUESTION_MAIN_TEXT,
                     List.of(TEST_KEY_WORD),
                     List.of(TEST_CATEGORY),
-                    UserTest.TEST_USER_ID);
+                    TEST_USER_ID);
 
             // then
             verify(userRepository).findByUserId(any());
@@ -264,7 +263,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                                         TEST_QUESTION_MAIN_TEXT,
                                         List.of(TEST_KEY_WORD),
                                         List.of(TEST_CATEGORY),
-                                        UserTest.TEST_USER_ID);
+                                        TEST_USER_ID);
                             });
 
             // then
@@ -291,7 +290,7 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
                                         TEST_QUESTION_MAIN_TEXT,
                                         List.of(TEST_KEY_WORD),
                                         List.of(TEST_CATEGORY),
-                                        UserTest.TEST_USER_ID);
+                                        TEST_USER_ID);
                             });
 
             // then
@@ -299,6 +298,125 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, 
             verify(questionRepository).findByQuestionIdAndUserId(any(), any());
             verify(questionRepository, times(0)).save(any());
             assertThat(exception.getResultCode()).isEqualTo(NOT_QUESTION_OWNER);
+        }
+    }
+
+    @Nested
+    class 질문_저장 {
+        @Test
+        void 질문_저장_성공_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+            when(questionRepository.findTopByUserIdOrderByCreateTimestampDesc(any())).thenReturn(null);
+            when(questionRepository.save(any())).thenReturn(TEST_QUESTION);
+
+            // when
+            QuestionVo questionVo =
+                    questionProvider.saveQuestion(
+                            TEST_QUESTION_SUBJECT,
+                            TEST_QUESTION_MAIN_TEXT,
+                            List.of(TEST_KEY_WORD),
+                            List.of(TEST_CATEGORY),
+                            TEST_EXPERIENCE_ID,
+                            TEST_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository).findTopByUserIdOrderByCreateTimestampDesc(any());
+            verify(userRepository, times(0)).save(any());
+            verify(questionRepository).save(any());
+            assertThat(questionVo.getSubject()).isEqualTo(TEST_QUESTION_SUBJECT);
+            assertThat(questionVo.getMainText()).isEqualTo(TEST_QUESTION_MAIN_TEXT);
+        }
+
+        @Test
+        void 질문_저장_성공_테스트_첫질문() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_ANOTHER_USER);
+            when(questionRepository.findTopByUserIdOrderByCreateTimestampDesc(any())).thenReturn(null);
+            when(questionRepository.save(any())).thenReturn(TEST_ANOTHER_QUESTION);
+
+            // when
+            QuestionVo questionVo =
+                    questionProvider.saveQuestion(
+                            TEST_ANOTHER_QUESTION_SUBJECT,
+                            TEST_ANOTHER_QUESTION_MAIN_TEXT,
+                            List.of(TEST_KEY_WORD),
+                            List.of(TEST_CATEGORY),
+                            TEST_ANOTHER_EXPERIENCE_ID,
+                            TEST_ANOTHER_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository).findTopByUserIdOrderByCreateTimestampDesc(any());
+            verify(userRepository).save(any());
+            verify(questionRepository).save(any());
+            assertThat(questionVo.getSubject()).isEqualTo(TEST_ANOTHER_QUESTION_SUBJECT);
+            assertThat(questionVo.getMainText()).isEqualTo(TEST_ANOTHER_QUESTION_MAIN_TEXT);
+        }
+
+        @Test
+        void 질문_저장_실패_테스트_유저없음() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                questionProvider.saveQuestion(
+                                        TEST_QUESTION_SUBJECT,
+                                        TEST_QUESTION_MAIN_TEXT,
+                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_CATEGORY),
+                                        TEST_EXPERIENCE_ID,
+                                        TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository, times(0)).findTopByUserIdOrderByCreateTimestampDesc(any());
+            verify(userRepository, times(0)).save(any());
+            verify(questionRepository, times(0)).save(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
+        }
+
+        @Test
+        void 질문_저장_실패_테스트_3초등록() {
+            // given
+            try {
+                Field field = BaseEntity.class.getDeclaredField("createTimestamp");
+                field.setAccessible(true);
+                field.set(TEST_QUESTION, Timestamp.valueOf(LocalDateTime.now()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+            when(questionRepository.findTopByUserIdOrderByCreateTimestampDesc(any()))
+                    .thenReturn(TEST_QUESTION);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                questionProvider.saveQuestion(
+                                        TEST_QUESTION_SUBJECT,
+                                        TEST_QUESTION_MAIN_TEXT,
+                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_CATEGORY),
+                                        TEST_EXPERIENCE_ID,
+                                        TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository).findTopByUserIdOrderByCreateTimestampDesc(any());
+            verify(userRepository, times(0)).save(any());
+            verify(questionRepository, times(0)).save(any());
+            assertThat(exception.getResultCode()).isEqualTo(QUESTION_THREE_SECONDS);
         }
     }
 }
