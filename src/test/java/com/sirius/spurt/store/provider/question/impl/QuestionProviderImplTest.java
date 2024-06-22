@@ -16,6 +16,7 @@ import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import com.sirius.spurt.test.CategoryTest;
+import com.sirius.spurt.test.KeyWordTest;
 import com.sirius.spurt.test.QuestionTest;
 import com.sirius.spurt.test.UserTest;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
-class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest {
+class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest, KeyWordTest {
     @InjectMocks private QuestionProviderImpl questionProvider;
 
     @Mock private QuestionRepository questionRepository;
@@ -222,5 +223,82 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest {
         verify(questionRepository).findByQuestionId(any());
         assertThat(questionVo.getSubject()).isEqualTo(TEST_QUESTION_SUBJECT);
         assertThat(questionVo.getMainText()).isEqualTo(TEST_QUESTION_MAIN_TEXT);
+    }
+
+    @Nested
+    class 질문_수정 {
+        @Test
+        void 질문_수정_성공_테스트() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+            when(questionRepository.findByQuestionIdAndUserId(any(), any())).thenReturn(TEST_QUESTION);
+
+            // when
+            questionProvider.putQuestion(
+                    String.valueOf(QuestionTest.TEST_QUESTION_ID),
+                    TEST_QUESTION_SUBJECT,
+                    TEST_QUESTION_MAIN_TEXT,
+                    List.of(TEST_KEY_WORD),
+                    List.of(TEST_CATEGORY),
+                    UserTest.TEST_USER_ID);
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository).findByQuestionIdAndUserId(any(), any());
+            verify(questionRepository).save(any());
+        }
+
+        @Test
+        void 질문_수정_실패_테스트_유저없음() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                questionProvider.putQuestion(
+                                        String.valueOf(QuestionTest.TEST_QUESTION_ID),
+                                        TEST_QUESTION_SUBJECT,
+                                        TEST_QUESTION_MAIN_TEXT,
+                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_CATEGORY),
+                                        UserTest.TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository, times(0)).findByQuestionIdAndUserId(any(), any());
+            verify(questionRepository, times(0)).save(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_EXIST_USER);
+        }
+
+        @Test
+        void 질문_수정_실패_테스트_질문없음() {
+            // given
+            when(userRepository.findByUserId(any())).thenReturn(TEST_USER);
+            when(questionRepository.findByQuestionIdAndUserId(any(), any())).thenReturn(null);
+
+            // when
+            GlobalException exception =
+                    assertThrows(
+                            GlobalException.class,
+                            () -> {
+                                questionProvider.putQuestion(
+                                        String.valueOf(QuestionTest.TEST_QUESTION_ID),
+                                        TEST_QUESTION_SUBJECT,
+                                        TEST_QUESTION_MAIN_TEXT,
+                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_CATEGORY),
+                                        UserTest.TEST_USER_ID);
+                            });
+
+            // then
+            verify(userRepository).findByUserId(any());
+            verify(questionRepository).findByQuestionIdAndUserId(any(), any());
+            verify(questionRepository, times(0)).save(any());
+            assertThat(exception.getResultCode()).isEqualTo(NOT_QUESTION_OWNER);
+        }
     }
 }
