@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
@@ -207,5 +208,19 @@ class QuestionProviderImplTest implements QuestionTest, UserTest, CategoryTest {
                 .isEqualTo(pages.getContent().get(0).getSubject());
         assertThat(questionVoList.getQuestions().get(0).getMainText())
                 .isEqualTo(pages.getContent().get(0).getMainText());
+    }
+
+    @Test
+    void 질문_단건_조회_테스트() {
+        // given
+        when(questionRepository.findByQuestionId(any())).thenReturn(TEST_QUESTION);
+
+        // when
+        QuestionVo questionVo = questionProvider.getQuestion(QuestionTest.TEST_QUESTION_ID);
+
+        // then
+        verify(questionRepository).findByQuestionId(any());
+        assertThat(questionVo.getSubject()).isEqualTo(TEST_QUESTION_SUBJECT);
+        assertThat(questionVo.getMainText()).isEqualTo(TEST_QUESTION_MAIN_TEXT);
     }
 }
