@@ -9,6 +9,7 @@ public interface CategoryTest {
     Long TEST_QUESTION_ID = 1L;
     Long TEST_ANOTHER_QUESTION_ID = 2L;
     Category TEST_CATEGORY = Category.MAJOR;
+    Category TEST_ANOTHER_CATEGORY = Category.ALL;
 
     CategoryEntity TEST_CATEGORY_ENTITY =
             CategoryEntity.builder()
