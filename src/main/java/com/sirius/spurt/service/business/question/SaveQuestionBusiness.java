@@ -1,11 +1,9 @@
 package com.sirius.spurt.service.business.question;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_ALL_CATEGORY;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.template.Business;
+import com.sirius.spurt.common.validator.QuestionValidator;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Dto;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness.Result;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
@@ -36,10 +34,7 @@ public class SaveQuestionBusiness implements Business<Dto, Result> {
 
     @Override
     public Result execute(Dto input) {
-
-        if (input.getCategoryList().contains(Category.ALL)) {
-            throw new GlobalException(NOT_ALL_CATEGORY);
-        }
+        QuestionValidator.validate(input);
 
         return SaveQuestionBusinessMapper.INSTANCE.toResult(
                 questionProvider.saveQuestion(
