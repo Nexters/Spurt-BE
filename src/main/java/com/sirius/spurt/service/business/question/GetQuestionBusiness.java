@@ -36,9 +36,12 @@ public class GetQuestionBusiness implements Business<Dto, Result> {
     @Override
     public Result execute(Dto input) {
         QuestionVo questionVo = questionProvider.getQuestion(input.getQuestionId());
-        String experienceTitle =
-                experienceProvider.getQuestionExperienceTitle(
-                        questionVo.getExperienceId(), input.getUserId());
+        String experienceTitle = null;
+        if (questionVo.getExperienceId() != null) {
+            experienceTitle =
+                    experienceProvider.getQuestionExperienceTitle(
+                            questionVo.getExperienceId(), input.getUserId());
+        }
         return GetQuestionBusinessMapper.INSTANCE.toResult(questionVo, experienceTitle);
     }
 
