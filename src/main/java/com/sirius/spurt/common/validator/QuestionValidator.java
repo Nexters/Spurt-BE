@@ -1,15 +1,18 @@
 package com.sirius.spurt.common.validator;
 
+import static com.sirius.spurt.common.meta.ResultCode.MISSING_CATEGORY;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_ALL_CATEGORY;
 import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
 import static com.sirius.spurt.common.meta.ResultCode.QUESTION_THREE_SECONDS;
 
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
+import com.sirius.spurt.service.business.question.PutQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import java.sql.Timestamp;
 import java.util.List;
+import org.springframework.util.CollectionUtils;
 
 public class QuestionValidator {
     private static long BOARD_DUPLICATE_TIME = 3000L;
@@ -31,6 +34,20 @@ public class QuestionValidator {
     }
 
     public static void validate(SaveQuestionBusiness.Dto dto) {
+        if (isEmptyCategory(dto.getCategoryList())) {
+            throw new GlobalException(MISSING_CATEGORY);
+        }
+
+        if (isContainsAllCategory(dto.getCategoryList())) {
+            throw new GlobalException(NOT_ALL_CATEGORY);
+        }
+    }
+
+    public static void validate(PutQuestionBusiness.Dto dto) {
+        if (isEmptyCategory(dto.getCategoryList())) {
+            throw new GlobalException(MISSING_CATEGORY);
+        }
+
         if (isContainsAllCategory(dto.getCategoryList())) {
             throw new GlobalException(NOT_ALL_CATEGORY);
         }
@@ -47,5 +64,9 @@ public class QuestionValidator {
 
     private static boolean isContainsAllCategory(List<Category> categoryList) {
         return categoryList.contains(Category.ALL);
+    }
+
+    private static boolean isEmptyCategory(List<Category> categoryList) {
+        return CollectionUtils.isEmpty(categoryList);
     }
 }
