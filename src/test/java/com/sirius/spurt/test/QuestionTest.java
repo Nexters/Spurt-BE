@@ -4,19 +4,17 @@ import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import java.sql.Timestamp;
 
-public interface QuestionTest extends UserTest {
+public interface QuestionTest extends UserTest, ExperienceTest {
     Long TEST_QUESTION_ID = 1L;
     String TEST_QUESTION_SUBJECT = "subject";
     String TEST_QUESTION_MAIN_TEXT = "mainText";
     JobGroup TEST_QUESTION_JOB_GROUP = JobGroup.DEVELOPER;
     Boolean TEST_PIN_INDICATOR = Boolean.TRUE;
     Timestamp TEST_PIN_UPDATED_TIME = Timestamp.valueOf("2024-06-21 00:00:00");
-    Long TEST_EXPERIENCE_ID = 1L;
 
     Long TEST_ANOTHER_QUESTION_ID = 2L;
     String TEST_ANOTHER_QUESTION_SUBJECT = "anotherSubject";
     String TEST_ANOTHER_QUESTION_MAIN_TEXT = "anotherMainText";
-    Long TEST_ANOTHER_EXPERIENCE_ID = 2L;
 
     QuestionEntity TEST_QUESTION =
             QuestionEntity.builder()

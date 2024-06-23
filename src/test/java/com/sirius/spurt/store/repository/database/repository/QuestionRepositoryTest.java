@@ -39,7 +39,7 @@ class QuestionRepositoryTest implements QuestionTest, UserTest, CategoryTest {
         savedQuestion =
                 questionRepository.save(
                         QuestionEntity.builder()
-                                .questionId(QuestionTest.TEST_QUESTION_ID)
+                                .questionId(TEST_QUESTION_ID)
                                 .userId(savedUser.getUserId())
                                 .subject(TEST_QUESTION_SUBJECT)
                                 .mainText(TEST_QUESTION_MAIN_TEXT)
@@ -124,7 +124,7 @@ class QuestionRepositoryTest implements QuestionTest, UserTest, CategoryTest {
         // given
         questionRepository.save(
                 QuestionEntity.builder()
-                        .questionId(QuestionTest.TEST_QUESTION_ID)
+                        .questionId(TEST_QUESTION_ID)
                         .userId(savedUser.getUserId())
                         .subject(TEST_QUESTION_SUBJECT)
                         .mainText(TEST_QUESTION_MAIN_TEXT)
@@ -152,7 +152,7 @@ class QuestionRepositoryTest implements QuestionTest, UserTest, CategoryTest {
         CategoryEntity savedCategory2 = CategoryEntity.builder().category(TEST_CATEGORY).build();
         questionRepository.save(
                 QuestionEntity.builder()
-                        .questionId(QuestionTest.TEST_ANOTHER_QUESTION_ID)
+                        .questionId(TEST_ANOTHER_QUESTION_ID)
                         .userId(savedUser.getUserId())
                         .subject(TEST_QUESTION_SUBJECT)
                         .mainText(TEST_QUESTION_MAIN_TEXT)

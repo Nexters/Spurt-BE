@@ -1,9 +1,15 @@
 package com.sirius.spurt.store.provider.question.vo;
 
 import com.sirius.spurt.common.meta.Category;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryVo {
     private Long categoryId;
 

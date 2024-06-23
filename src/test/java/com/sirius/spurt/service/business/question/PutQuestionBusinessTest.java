@@ -34,10 +34,10 @@ class PutQuestionBusinessTest implements QuestionTest, KeyWordTest, CategoryTest
             // given
             Dto dto =
                     Dto.builder()
-                            .questionId(String.valueOf(QuestionTest.TEST_QUESTION_ID))
+                            .questionId(String.valueOf(TEST_QUESTION_ID))
                             .subject(TEST_QUESTION_SUBJECT)
                             .mainText(TEST_QUESTION_MAIN_TEXT)
-                            .keyWordList(List.of(TEST_KEY_WORD, TEST_ANOTHER_KEY_WORD))
+                            .keyWordList(List.of(TEST_KEY_WORD_VALUE, TEST_ANOTHER_KEY_WORD_VALUE))
                             .categoryList(List.of(TEST_CATEGORY))
                             .userId(TEST_USER_ID)
                             .build();
@@ -54,10 +54,10 @@ class PutQuestionBusinessTest implements QuestionTest, KeyWordTest, CategoryTest
             // given
             Dto dto =
                     Dto.builder()
-                            .questionId(String.valueOf(QuestionTest.TEST_QUESTION_ID))
+                            .questionId(String.valueOf(TEST_QUESTION_ID))
                             .subject(TEST_QUESTION_SUBJECT)
                             .mainText(TEST_QUESTION_MAIN_TEXT)
-                            .keyWordList(List.of(TEST_KEY_WORD, TEST_ANOTHER_KEY_WORD))
+                            .keyWordList(List.of(TEST_KEY_WORD_VALUE, TEST_ANOTHER_KEY_WORD_VALUE))
                             .categoryList(List.of(TEST_ANOTHER_CATEGORY))
                             .userId(TEST_USER_ID)
                             .build();

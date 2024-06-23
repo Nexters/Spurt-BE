@@ -51,7 +51,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
 
             // when
             questionProvider.putPinQuestion(
-                    String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
+                    String.valueOf(TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
 
             // then
             verify(userRepository).findByUserId(any());
@@ -68,7 +68,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
 
             // when
             questionProvider.putPinQuestion(
-                    String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_ANOTHER_USER_ID, Boolean.FALSE);
+                    String.valueOf(TEST_QUESTION_ID), TEST_ANOTHER_USER_ID, Boolean.FALSE);
 
             // then
             verify(userRepository).findByUserId(any());
@@ -88,7 +88,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                             GlobalException.class,
                             () -> {
                                 questionProvider.putPinQuestion(
-                                        String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
+                                        String.valueOf(TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
                             });
 
             // then
@@ -111,7 +111,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                             GlobalException.class,
                             () -> {
                                 questionProvider.putPinQuestion(
-                                        String.valueOf(QuestionTest.TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
+                                        String.valueOf(TEST_QUESTION_ID), TEST_USER_ID, Boolean.FALSE);
                             });
 
             // then
@@ -152,7 +152,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
             when(questionRepository.findByQuestionIdAndUserId(any(), any())).thenReturn(TEST_QUESTION);
 
             // when
-            questionProvider.deleteQuestion(TEST_USER_ID, QuestionTest.TEST_QUESTION_ID);
+            questionProvider.deleteQuestion(TEST_USER_ID, TEST_QUESTION_ID);
 
             // then
             verify(questionRepository).findByQuestionIdAndUserId(any(), any());
@@ -169,7 +169,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                     assertThrows(
                             GlobalException.class,
                             () -> {
-                                questionProvider.deleteQuestion(TEST_USER_ID, QuestionTest.TEST_QUESTION_ID);
+                                questionProvider.deleteQuestion(TEST_USER_ID, TEST_QUESTION_ID);
                             });
 
             // then
@@ -216,7 +216,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
         when(questionRepository.findByQuestionId(any())).thenReturn(TEST_QUESTION);
 
         // when
-        QuestionVo questionVo = questionProvider.getQuestion(QuestionTest.TEST_QUESTION_ID);
+        QuestionVo questionVo = questionProvider.getQuestion(TEST_QUESTION_ID);
 
         // then
         verify(questionRepository).findByQuestionId(any());
@@ -234,10 +234,10 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
 
             // when
             questionProvider.putQuestion(
-                    String.valueOf(QuestionTest.TEST_QUESTION_ID),
+                    String.valueOf(TEST_QUESTION_ID),
                     TEST_QUESTION_SUBJECT,
                     TEST_QUESTION_MAIN_TEXT,
-                    List.of(TEST_KEY_WORD),
+                    List.of(TEST_KEY_WORD_VALUE),
                     List.of(TEST_CATEGORY),
                     TEST_USER_ID);
 
@@ -258,10 +258,10 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                             GlobalException.class,
                             () -> {
                                 questionProvider.putQuestion(
-                                        String.valueOf(QuestionTest.TEST_QUESTION_ID),
+                                        String.valueOf(TEST_QUESTION_ID),
                                         TEST_QUESTION_SUBJECT,
                                         TEST_QUESTION_MAIN_TEXT,
-                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_KEY_WORD_VALUE),
                                         List.of(TEST_CATEGORY),
                                         TEST_USER_ID);
                             });
@@ -285,10 +285,10 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                             GlobalException.class,
                             () -> {
                                 questionProvider.putQuestion(
-                                        String.valueOf(QuestionTest.TEST_QUESTION_ID),
+                                        String.valueOf(TEST_QUESTION_ID),
                                         TEST_QUESTION_SUBJECT,
                                         TEST_QUESTION_MAIN_TEXT,
-                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_KEY_WORD_VALUE),
                                         List.of(TEST_CATEGORY),
                                         TEST_USER_ID);
                             });
@@ -315,7 +315,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                     questionProvider.saveQuestion(
                             TEST_QUESTION_SUBJECT,
                             TEST_QUESTION_MAIN_TEXT,
-                            List.of(TEST_KEY_WORD),
+                            List.of(TEST_KEY_WORD_VALUE),
                             List.of(TEST_CATEGORY),
                             TEST_EXPERIENCE_ID,
                             TEST_USER_ID);
@@ -341,7 +341,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                     questionProvider.saveQuestion(
                             TEST_ANOTHER_QUESTION_SUBJECT,
                             TEST_ANOTHER_QUESTION_MAIN_TEXT,
-                            List.of(TEST_KEY_WORD),
+                            List.of(TEST_KEY_WORD_VALUE),
                             List.of(TEST_CATEGORY),
                             TEST_ANOTHER_EXPERIENCE_ID,
                             TEST_ANOTHER_USER_ID);
@@ -368,7 +368,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                                 questionProvider.saveQuestion(
                                         TEST_QUESTION_SUBJECT,
                                         TEST_QUESTION_MAIN_TEXT,
-                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_KEY_WORD_VALUE),
                                         List.of(TEST_CATEGORY),
                                         TEST_EXPERIENCE_ID,
                                         TEST_USER_ID);
@@ -405,7 +405,7 @@ class QuestionProviderImplTest implements QuestionTest, CategoryTest, KeyWordTes
                                 questionProvider.saveQuestion(
                                         TEST_QUESTION_SUBJECT,
                                         TEST_QUESTION_MAIN_TEXT,
-                                        List.of(TEST_KEY_WORD),
+                                        List.of(TEST_KEY_WORD_VALUE),
                                         List.of(TEST_CATEGORY),
                                         TEST_EXPERIENCE_ID,
                                         TEST_USER_ID);

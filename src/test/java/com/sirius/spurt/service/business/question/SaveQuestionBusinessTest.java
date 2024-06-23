@@ -39,12 +39,11 @@ class SaveQuestionBusinessTest implements QuestionTest, CategoryTest, KeyWordTes
                     Dto.builder()
                             .subject(TEST_QUESTION_SUBJECT)
                             .mainText(TEST_QUESTION_MAIN_TEXT)
-                            .keyWordList(List.of(TEST_KEY_WORD, TEST_ANOTHER_KEY_WORD))
+                            .keyWordList(List.of(TEST_KEY_WORD_VALUE, TEST_ANOTHER_KEY_WORD_VALUE))
                             .categoryList(List.of(TEST_CATEGORY))
                             .userId(TEST_USER_ID)
                             .build();
-            QuestionVo questionVo =
-                    QuestionVo.builder().questionId(QuestionTest.TEST_QUESTION_ID).build();
+            QuestionVo questionVo = QuestionVo.builder().questionId(TEST_QUESTION_ID).build();
             when(questionProvider.saveQuestion(any(), any(), any(), any(), any(), any()))
                     .thenReturn(questionVo);
 
@@ -53,7 +52,7 @@ class SaveQuestionBusinessTest implements QuestionTest, CategoryTest, KeyWordTes
 
             // then
             verify(questionProvider).saveQuestion(any(), any(), any(), any(), any(), any());
-            assertThat(result.getQuestionId()).isEqualTo(QuestionTest.TEST_QUESTION_ID);
+            assertThat(result.getQuestionId()).isEqualTo(TEST_QUESTION_ID);
         }
 
         @Test
@@ -63,7 +62,7 @@ class SaveQuestionBusinessTest implements QuestionTest, CategoryTest, KeyWordTes
                     Dto.builder()
                             .subject(TEST_QUESTION_SUBJECT)
                             .mainText(TEST_QUESTION_MAIN_TEXT)
-                            .keyWordList(List.of(TEST_KEY_WORD, TEST_ANOTHER_KEY_WORD))
+                            .keyWordList(List.of(TEST_KEY_WORD_VALUE, TEST_ANOTHER_KEY_WORD_VALUE))
                             .categoryList(List.of(TEST_ANOTHER_CATEGORY))
                             .userId(TEST_USER_ID)
                             .build();
