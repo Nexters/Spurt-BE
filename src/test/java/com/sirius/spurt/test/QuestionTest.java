@@ -16,6 +16,8 @@ public interface QuestionTest extends UserTest, ExperienceTest {
     String TEST_ANOTHER_QUESTION_SUBJECT = "anotherSubject";
     String TEST_ANOTHER_QUESTION_MAIN_TEXT = "anotherMainText";
 
+    String TEST_CREATE_TIME = "2023-08-13 01:39:21";
+
     QuestionEntity TEST_QUESTION =
             QuestionEntity.builder()
                     .questionId(TEST_QUESTION_ID)
