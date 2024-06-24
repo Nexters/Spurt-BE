@@ -133,7 +133,9 @@ public class QuestionControllerTest extends BaseMvcTest
                         .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("testKeyword"))
                         .build();
-        when(saveQuestionBusiness.execute(any())).thenReturn(new SaveQuestionBusiness.Result());
+        SaveQuestionBusiness.Result result =
+                SaveQuestionBusiness.Result.builder().questionId(TEST_QUESTION_ID).build();
+        when(saveQuestionBusiness.execute(any())).thenReturn(result);
         this.mockMvc
                 .perform(
                         post("/v1/question")
