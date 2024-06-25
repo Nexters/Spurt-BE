@@ -34,15 +34,15 @@ public class GetAllCategoryBusiness implements Business<Dto, Result> {
     @JsonIgnoreProperties
     @Builder
     public static class Result implements Business.Result, Serializable {
-        List<ResultCategory> categoryList;
+        private List<ResultCategory> categoryList;
 
         @Data
         @JsonIgnoreProperties
         @Builder
         @AllArgsConstructor
-        static class ResultCategory {
-            String value;
-            String description;
+        public static class ResultCategory {
+            private String value;
+            private String description;
         }
     }
 

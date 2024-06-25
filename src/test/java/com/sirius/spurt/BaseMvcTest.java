@@ -58,7 +58,7 @@ public class BaseMvcTest {
                                         Preprocessors.preprocessRequest(),
                                         Preprocessors.preprocessResponse(
                                                 ResponseModifyingPreprocessors.replaceBinaryContent(),
-                                                ResponseModifyingPreprocessors.limitJsonArrayLength(objectMapper),
+                                                // ResponseModifyingPreprocessors.limitJsonArrayLength(objectMapper),
                                                 Preprocessors.prettyPrint())))
                         .apply(
                                 MockMvcRestDocumentation.documentationConfiguration(restDocumentation)
