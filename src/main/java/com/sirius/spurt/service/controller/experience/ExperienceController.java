@@ -70,7 +70,8 @@ public class ExperienceController {
      */
     @GetMapping
     public RestResponse<GetAllExperienceBusiness.Result> getAllExperience(LoginUser loginUser) {
-        GetAllExperienceBusiness.Dto dto = new GetAllExperienceBusiness.Dto(loginUser.getUserId());
+        GetAllExperienceBusiness.Dto dto =
+                GetAllExperienceBusiness.Dto.builder().userId(loginUser.getUserId()).build();
         return RestResponse.success(getAllExperienceBusiness.execute(dto));
     }
 
@@ -83,7 +84,10 @@ public class ExperienceController {
     public RestResponse<GetExperienceBusiness.Result> getExperience(
             LoginUser loginUser, @PathVariable("experienceId") Long experienceId) {
         GetExperienceBusiness.Dto dto =
-                new GetExperienceBusiness.Dto(loginUser.getUserId(), experienceId);
+                GetExperienceBusiness.Dto.builder()
+                        .userId(loginUser.getUserId())
+                        .experienceId(experienceId)
+                        .build();
         return RestResponse.success(getExperienceBusiness.execute(dto));
     }
 }
