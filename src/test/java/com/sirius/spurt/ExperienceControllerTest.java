@@ -10,25 +10,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sirius.spurt.common.meta.Category;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.experience.DeleteExperienceBusiness;
 import com.sirius.spurt.service.business.experience.GetAllExperienceBusiness;
 import com.sirius.spurt.service.business.experience.GetExperienceBusiness;
 import com.sirius.spurt.service.business.experience.SaveExperienceBusiness;
 import com.sirius.spurt.service.business.experience.UpdateExperienceBusiness;
 import com.sirius.spurt.service.controller.experience.ExperienceController;
+import com.sirius.spurt.test.ExperienceTest;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(controllers = {ExperienceController.class})
-public class ExperienceControllerTest extends BaseMvcTest {
+public class ExperienceControllerTest extends BaseMvcTest implements ExperienceTest {
     @MockBean private SaveExperienceBusiness saveExperienceBusiness;
     @MockBean private UpdateExperienceBusiness updateExperienceBusiness;
     @MockBean private DeleteExperienceBusiness deleteExperienceBusiness;
     @MockBean private GetAllExperienceBusiness getAllExperienceBusiness;
     @MockBean private GetExperienceBusiness getExperienceBusiness;
+
+    private LoginUser loginUser;
+
+    @BeforeEach
+    void setUp() {
+        loginUser = LoginUser.builder().userId(TEST_USER_ID).email(TEST_EMAIL).build();
+    }
 
     @Test
     void 본인_경험_저장() throws Exception {
@@ -39,14 +49,20 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .startDate("2023-07")
                         .endDate("2023-08")
                         .link("link")
-                        .userId("admin")
                         .build();
-        when(saveExperienceBusiness.execute(any())).thenReturn(new SaveExperienceBusiness.Result());
+        SaveExperienceBusiness.Result result =
+                SaveExperienceBusiness.Result.builder().experienceId(TEST_EXPERIENCE_ID).build();
+        when(saveExperienceBusiness.execute(any())).thenReturn(result);
         this.mockMvc
                 .perform(
                         post("/v1/experience")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .with(
+                                        request -> {
+                                            request.setAttribute("loginUser", loginUser);
+                                            return request;
+                                        }))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -61,14 +77,18 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .startDate("2023-07")
                         .endDate("2023-08")
                         .link("link")
-                        .userId("admin")
                         .build();
         when(updateExperienceBusiness.execute(any())).thenReturn(new UpdateExperienceBusiness.Result());
         this.mockMvc
                 .perform(
                         put("/v1/experience")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .with(
+                                        request -> {
+                                            request.setAttribute("loginUser", loginUser);
+                                            return request;
+                                        }))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -76,21 +96,24 @@ public class ExperienceControllerTest extends BaseMvcTest {
     @Test
     void 본인_경험_삭제() throws Exception {
         DeleteExperienceBusiness.Dto dto =
-                DeleteExperienceBusiness.Dto.builder().experienceId(1L).userId("admin").build();
+                DeleteExperienceBusiness.Dto.builder().experienceId(1L).build();
         when(deleteExperienceBusiness.execute(any())).thenReturn(new DeleteExperienceBusiness.Result());
         this.mockMvc
                 .perform(
                         delete("/v1/experience")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .with(
+                                        request -> {
+                                            request.setAttribute("loginUser", loginUser);
+                                            return request;
+                                        }))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
     void 본인_경험_전체_조회() throws Exception {
-        GetAllExperienceBusiness.Dto dto =
-                GetAllExperienceBusiness.Dto.builder().userId("admin").build();
         GetAllExperienceBusiness.Result.Experience.QuestionList.Question question =
                 GetAllExperienceBusiness.Result.Experience.QuestionList.Question.builder()
                         .questionId(1L)
@@ -117,13 +140,20 @@ public class ExperienceControllerTest extends BaseMvcTest {
         GetAllExperienceBusiness.Result result =
                 GetAllExperienceBusiness.Result.builder().experienceList(List.of(experience)).build();
         when(getAllExperienceBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/experience")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(
+                        get("/v1/experience")
+                                .with(
+                                        request -> {
+                                            request.setAttribute("loginUser", loginUser);
+                                            return request;
+                                        }))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
     void 본인_경험_단건_조회() throws Exception {
-        GetExperienceBusiness.Dto dto =
-                GetExperienceBusiness.Dto.builder().experienceId(1L).userId("admin").build();
         GetExperienceBusiness.Result.QuestionList.Question question =
                 GetExperienceBusiness.Result.QuestionList.Question.builder()
                         .questionId(1L)
@@ -148,6 +178,15 @@ public class ExperienceControllerTest extends BaseMvcTest {
                         .questionList(questionList)
                         .build();
         when(getExperienceBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/experience/1")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(
+                        get("/v1/experience/1")
+                                .with(
+                                        request -> {
+                                            request.setAttribute("loginUser", loginUser);
+                                            return request;
+                                        }))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }
