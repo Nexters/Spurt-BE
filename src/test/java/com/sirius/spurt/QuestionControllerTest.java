@@ -93,10 +93,13 @@ public class QuestionControllerTest extends BaseMvcTest
                 GetQuestionBusiness.Dto.builder().questionId(Long.parseLong("1")).build();
         GetQuestionBusiness.Result result =
                 GetQuestionBusiness.Result.builder()
+                        .questionId(TEST_QUESTION_ID)
                         .subject("제목")
                         .jobGroup(JobGroup.DEVELOPER)
                         .mainText("본문")
                         .createTime("2023-08-13 01:39:21")
+                        .userId(TEST_USER_ID)
+                        .pinIndicator(Boolean.FALSE)
                         .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("키워드"))
                         .build();
