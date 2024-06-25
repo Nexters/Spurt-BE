@@ -119,8 +119,9 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         .questionId(1L)
                         .subject("질문제목1")
                         .mainText("질문내용1")
-                        .pinIndicator(false)
+                        .pinIndicator(Boolean.FALSE)
                         .categoryList(List.of(Category.PRACTICAL))
+                        .keyWordList(List.of("keyWord1", "keyWord2"))
                         .build();
         GetAllExperienceBusiness.Result.Experience.QuestionList questionList =
                 GetAllExperienceBusiness.Result.Experience.QuestionList.builder()
@@ -138,7 +139,10 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         .questionList(questionList)
                         .build();
         GetAllExperienceBusiness.Result result =
-                GetAllExperienceBusiness.Result.builder().experienceList(List.of(experience)).build();
+                GetAllExperienceBusiness.Result.builder()
+                        .experienceList(List.of(experience))
+                        .totalCount(1)
+                        .build();
         when(getAllExperienceBusiness.execute(any())).thenReturn(result);
         this.mockMvc
                 .perform(
