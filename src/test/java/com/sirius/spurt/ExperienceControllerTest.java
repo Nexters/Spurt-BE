@@ -159,8 +159,9 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         .questionId(1L)
                         .subject("질문제목1")
                         .mainText("질문내용1")
-                        .pinIndicator(false)
+                        .pinIndicator(Boolean.FALSE)
                         .categoryList(List.of(Category.PRACTICAL))
+                        .keyWordList(List.of("keyWord1", "keyWord2"))
                         .build();
         GetExperienceBusiness.Result.QuestionList questionList =
                 GetExperienceBusiness.Result.QuestionList.builder()
