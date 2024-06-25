@@ -100,6 +100,7 @@ include::{snippets}/category-controller-test/카테고리_전체_조회_테스�
 
 == 직군 API
 include::{snippets}/job-group-controller-test/유저_직군_저장/auto-section.adoc[]
+include::{snippets}/job-group-controller-test/유저_직군_수정/auto-section.adoc[]
 
 == 유저 API
 include::{snippets}/user-controller-test/유저_존재_확인/auto-section.adoc[]
