@@ -3,7 +3,7 @@ name: spurt CICD
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   push_to_registry:
@@ -20,7 +20,7 @@ jobs:
           distribution: 'corretto'
 
       - name: make application.yml
-        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        if: contains(github.ref, 'master')
         run: |
           cd ./src/main/resources
           touch ./application.yml
@@ -46,7 +46,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Docker build & push to prod
-        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        if: contains(github.ref, 'master')
         run: |
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t spurt-be -f Dockerfile .
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to prod
-        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        if: contains(github.ref, 'master')
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_NAME }}
