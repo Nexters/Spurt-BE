@@ -19,6 +19,6 @@ public class CategoryController {
      */
     @GetMapping
     public RestResponse<GetAllCategoryBusiness.Result> getAllCategory() {
-        return RestResponse.success(getAllCategoryBusiness.execute(null));
+        return RestResponse.success(getAllCategoryBusiness.execute(new GetAllCategoryBusiness.Dto()));
     }
 }

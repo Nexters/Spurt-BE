@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "QUESTION")
+@Table(name = "tb_question")
 public class QuestionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +46,7 @@ public class QuestionEntity extends BaseEntity {
     @Column private Boolean pinIndicator;
     @Column private Timestamp pinUpdatedTime;
 
-    @Column(nullable = false)
-    private Long experienceId;
+    @Column private Long experienceId;
 
     // 키워드 테이블 조인
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

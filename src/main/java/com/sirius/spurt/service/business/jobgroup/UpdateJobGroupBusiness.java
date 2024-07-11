@@ -24,7 +24,7 @@ public class UpdateJobGroupBusiness implements Business<Dto, Result> {
     @Override
     public Result execute(Dto input) {
         jobGroupProvider.updateJobGroup(
-                input.loginUser.getUserId(), input.loginUser.getEmail(), input.getJobGroup());
+                input.getLoginUser().getUserId(), input.getLoginUser().getEmail(), input.getJobGroup());
 
         return new UpdateJobGroupBusiness.Result();
     }

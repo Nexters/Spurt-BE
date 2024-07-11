@@ -1,11 +1,10 @@
 package com.sirius.spurt.store.provider.experience.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXPERIENCE_OWNER;
-import static com.sirius.spurt.common.meta.ResultCode.NO_CONTENT;
 import static com.sirius.spurt.common.meta.ResultCode.TIME_FORMAT_ERROR;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.common.validator.ExperienceValidator;
+import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.experience.ExperienceProvider;
 import com.sirius.spurt.store.provider.experience.vo.CategoryVo;
 import com.sirius.spurt.store.provider.experience.vo.ExperienceVo;
@@ -51,10 +50,11 @@ public class ExperienceProviderImpl implements ExperienceProvider {
             final String link,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
+        UserValidator.validator(userEntity);
 
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        ExperienceEntity prevExperience =
+                experienceRepository.findTopByUserEntityOrderByCreateTimestampDesc(userEntity);
+        ExperienceValidator.validateTimestamp(prevExperience);
 
         ExperienceEntity experienceEntity =
                 ExperienceEntity.builder()
@@ -82,10 +82,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
             final String userId) {
         ExperienceEntity previous =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_EXPERIENCE_OWNER);
-        }
+        ExperienceValidator.validate(previous);
 
         ExperienceEntity experienceEntity =
                 ExperienceEntity.builder()
@@ -107,11 +104,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public void deleteExperience(final Long experienceId, final String userId) {
         ExperienceEntity previous =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_EXPERIENCE_OWNER);
-        }
-
+        ExperienceValidator.validate(previous);
         experienceRepository.deleteById(experienceId);
     }
 
@@ -119,10 +112,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public ExperienceVoList getAllExperience(final String userId) {
         List<ExperienceEntity> experienceEntityList =
                 experienceRepository.findByUserEntityUserId(userId);
-
-        if (CollectionUtils.isEmpty(experienceEntityList)) {
-            throw new GlobalException(NO_CONTENT);
-        }
+        ExperienceValidator.validateNoContents(experienceEntityList);
 
         List<ExperienceVo> experienceVoList =
                 ExperienceProviderImplMapper.INSTANCE.toExperienceVoList(experienceEntityList);
@@ -137,11 +127,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public ExperienceVo getExperience(final Long experienceId, final String userId) {
         ExperienceEntity experienceEntity =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
-
-        if (experienceEntity == null) {
-            throw new GlobalException(NO_CONTENT);
-        }
-
+        ExperienceValidator.validateNoContent(experienceEntity);
         return ExperienceProviderImplMapper.INSTANCE.toExperienceVo(experienceEntity);
     }
 
@@ -149,8 +135,18 @@ public class ExperienceProviderImpl implements ExperienceProvider {
     public String getQuestionExperienceTitle(final Long experienceId, final String userId) {
         ExperienceEntity experienceEntity =
                 experienceRepository.findByExperienceIdAndUserEntityUserId(experienceId, userId);
+        if (experienceEntity == null) {
+            return null;
+        }
 
-        return experienceEntity != null ? experienceEntity.getTitle() : null;
+        return experienceEntity.getTitle();
+    }
+
+    @Override
+    public void deleteExperienceByUser(final String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        UserValidator.validator(userEntity);
+        experienceRepository.deleteByUserEntity(userEntity);
     }
 
     @Mapper
@@ -173,7 +169,9 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
         default QuestionVoList toQuestionVoList(List<QuestionEntity> questionEntityList) {
             List<QuestionVo> unorderedQuestionList = new ArrayList<>();
+            int totalCount = 0;
             if (!CollectionUtils.isEmpty(questionEntityList)) {
+                totalCount = questionEntityList.size();
                 unorderedQuestionList =
                         new java.util.ArrayList<>(questionEntityList.stream().map(this::toQuestionVo).toList());
 
@@ -191,7 +189,7 @@ public class ExperienceProviderImpl implements ExperienceProvider {
 
             return QuestionVoList.builder()
                     .questionVoList(unorderedQuestionList)
-                    .totalCount(questionEntityList == null ? 0 : questionEntityList.size())
+                    .totalCount(totalCount)
                     .build();
         }
 

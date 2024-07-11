@@ -26,7 +26,6 @@ public class QuestionVo {
     private JobGroup jobGroup;
 
     private Boolean pinIndicator;
-    private String createTime;
 
     private Long experienceId;
 

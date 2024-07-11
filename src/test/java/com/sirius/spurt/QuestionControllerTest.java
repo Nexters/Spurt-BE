@@ -19,6 +19,9 @@ import com.sirius.spurt.service.business.question.RandomQuestionBusiness;
 import com.sirius.spurt.service.business.question.RetrieveQuestionBusiness;
 import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.question.QuestionController;
+import com.sirius.spurt.test.CategoryTest;
+import com.sirius.spurt.test.KeyWordTest;
+import com.sirius.spurt.test.QuestionTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,7 +29,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(controllers = {QuestionController.class})
-public class QuestionControllerTest extends BaseMvcTest {
+public class QuestionControllerTest extends BaseMvcTest
+        implements QuestionTest, KeyWordTest, CategoryTest {
     @MockBean private RetrieveQuestionBusiness retrieveQuestionBusiness;
     @MockBean private SaveQuestionBusiness saveQuestionBusiness;
     @MockBean private PutQuestionBusiness putQuestionBusiness;
@@ -89,10 +93,13 @@ public class QuestionControllerTest extends BaseMvcTest {
                 GetQuestionBusiness.Dto.builder().questionId(Long.parseLong("1")).build();
         GetQuestionBusiness.Result result =
                 GetQuestionBusiness.Result.builder()
+                        .questionId(TEST_QUESTION_ID)
                         .subject("제목")
                         .jobGroup(JobGroup.DEVELOPER)
                         .mainText("본문")
                         .createTime("2023-08-13 01:39:21")
+                        .userId(TEST_USER_ID)
+                        .pinIndicator(Boolean.FALSE)
                         .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("키워드"))
                         .build();
@@ -129,7 +136,9 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .categoryList(List.of(Category.CONFLICT))
                         .keyWordList(List.of("testKeyword"))
                         .build();
-        when(saveQuestionBusiness.execute(any())).thenReturn(new SaveQuestionBusiness.Result());
+        SaveQuestionBusiness.Result result =
+                SaveQuestionBusiness.Result.builder().questionId(TEST_QUESTION_ID).build();
+        when(saveQuestionBusiness.execute(any())).thenReturn(result);
         this.mockMvc
                 .perform(
                         post("/v1/question")
@@ -147,11 +156,14 @@ public class QuestionControllerTest extends BaseMvcTest {
                         .questions(
                                 List.of(
                                         RetrieveQuestionBusiness.Result.Question.builder()
-                                                .subject("제목")
-                                                .categoryList(List.of(Category.CONFLICT))
-                                                .jobGroup(JobGroup.DEVELOPER)
-                                                .mainText("본문")
-                                                .createTime("2023-08-13 01:39:21")
+                                                .questionId(TEST_QUESTION_ID)
+                                                .subject(TEST_QUESTION_SUBJECT)
+                                                .mainText(TEST_QUESTION_MAIN_TEXT)
+                                                .pinIndicator(Boolean.TRUE)
+                                                .keyWordList(List.of(TEST_KEY_WORD_VALUE))
+                                                .categoryList(List.of(TEST_CATEGORY))
+                                                .jobGroup(TEST_JOB_GROUP)
+                                                .createTime(TEST_CREATE_TIME)
                                                 .build()))
                         .meta(
                                 RetrieveQuestionBusiness.Result.MetaData.builder()
@@ -164,10 +176,8 @@ public class QuestionControllerTest extends BaseMvcTest {
         this.mockMvc
                 .perform(
                         get("/v1/question")
-                                .param("subject", "제목")
-                                .param("pinIndicator", "false")
-                                .param("jobGroup", JobGroup.DEVELOPER.name())
-                                .param("category", Category.CONFLICT.name()))
+                                .param("jobGroup", TEST_JOB_GROUP.name())
+                                .param("category", TEST_CATEGORY.name()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

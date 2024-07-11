@@ -1,11 +1,9 @@
 package com.sirius.spurt.store.provider.question.impl;
 
-import static com.sirius.spurt.common.meta.ResultCode.NOT_EXIST_USER;
-import static com.sirius.spurt.common.meta.ResultCode.NOT_QUESTION_OWNER;
-
-import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
+import com.sirius.spurt.common.validator.QuestionValidator;
+import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.provider.question.QuestionProvider;
 import com.sirius.spurt.store.provider.question.vo.QuestionVo;
 import com.sirius.spurt.store.provider.question.vo.QuestionVoList;
@@ -13,10 +11,8 @@ import com.sirius.spurt.store.repository.database.entity.CategoryEntity;
 import com.sirius.spurt.store.repository.database.entity.KeyWordEntity;
 import com.sirius.spurt.store.repository.database.entity.QuestionEntity;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
-import com.sirius.spurt.store.repository.database.repository.ExperienceRepository;
 import com.sirius.spurt.store.repository.database.repository.QuestionRepository;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,12 +23,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionProviderImpl implements QuestionProvider {
     private final QuestionRepository questionRepository;
-    private final ExperienceRepository experienceRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -40,17 +36,11 @@ public class QuestionProviderImpl implements QuestionProvider {
     public void putPinQuestion(
             final String questionId, final String userId, final Boolean pinIndicator) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        UserValidator.validator(userEntity);
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_QUESTION_OWNER);
-        }
+        QuestionValidator.validate(previous);
 
         if (!userEntity.getHasPined()) {
             userRepository.save(
@@ -86,17 +76,16 @@ public class QuestionProviderImpl implements QuestionProvider {
         return QuestionVoList.builder()
                 .questions(
                         QuestionProviderImplMapper.INSTANCE.toQuestionVos(
-                                questionRepository.RandomQuestion(jobGroup, userId, count, category)))
+                                questionRepository.randomQuestion(jobGroup, userId, count, category)))
                 .build();
     }
 
     @Override
     public void deleteQuestion(final String userId, final Long questionId) {
-        QuestionEntity entity = questionRepository.findByQuestionIdAndUserId(questionId, userId);
-        if (entity == null) {
-            throw new GlobalException(NOT_QUESTION_OWNER);
-        }
-        questionRepository.delete(entity);
+        QuestionEntity questionEntity =
+                questionRepository.findByQuestionIdAndUserId(questionId, userId);
+        QuestionValidator.validate(questionEntity);
+        questionRepository.delete(questionEntity);
     }
 
     @Override
@@ -135,17 +124,11 @@ public class QuestionProviderImpl implements QuestionProvider {
             final List<Category> categoryList,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        UserValidator.validator(userEntity);
 
         QuestionEntity previous =
                 questionRepository.findByQuestionIdAndUserId(Long.valueOf(questionId), userId);
-
-        if (previous == null) {
-            throw new GlobalException(NOT_QUESTION_OWNER);
-        }
+        QuestionValidator.validate(previous);
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
@@ -184,10 +167,11 @@ public class QuestionProviderImpl implements QuestionProvider {
             final Long experienceId,
             final String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
+        UserValidator.validator(userEntity);
 
-        if (userEntity == null) {
-            throw new GlobalException(NOT_EXIST_USER);
-        }
+        QuestionEntity prevQuestion =
+                questionRepository.findTopByUserIdOrderByCreateTimestampDesc(userId);
+        QuestionValidator.validateTimestamp(prevQuestion);
 
         List<CategoryEntity> categoryEntityList =
                 categoryList.stream()
@@ -225,6 +209,11 @@ public class QuestionProviderImpl implements QuestionProvider {
 
         return QuestionProviderImplMapper.INSTANCE.toQuestionVo(
                 questionRepository.save(questionEntity));
+    }
+
+    @Override
+    public void deleteQuestionByUser(final String userId) {
+        questionRepository.deleteByUserId(userId);
     }
 
     @Mapper

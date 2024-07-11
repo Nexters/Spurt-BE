@@ -10,7 +10,7 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-넥스터즈 시리우스 팀 api 명세서
+넥스터즈 게꽁지 팀 api 명세서
 
 [[Spurt-API]]
 
@@ -21,7 +21,7 @@ endif::[]
 |BASE URL
 
 |DEV
-|https://sirius-spurt.duckdns.org
+|https://api.spurtapp.com
 |===
 
 == Header 정보
@@ -47,7 +47,7 @@ endif::[]
 |정상 처리 되었습니다
 
 |1000
-|알 수 없는 애러가 발생했습니다.
+|알 수 없는 에러가 발생했습니다.
 
 |2000
 |인증에 실패했습니다.
@@ -63,6 +63,22 @@ endif::[]
 
 |4000
 |시간 형식이 맞지 않습니다.
+
+|5000
+|ALL category는 저장할 수 없습니다.
+
+|5001
+|category는 최소 1개 이상 입력하셔야 합니다.
+
+|6000
+|조회 결과가 없습니다.
+
+|7000
+|질문은 3초에 1번만 작성이 가능합니다.
+
+|7001
+|경험은 3초에 1번만 작성이 가능합니다.
+
 |===
 
 == 현재 오류 사항
@@ -84,12 +100,14 @@ include::{snippets}/category-controller-test/카테고리_전체_조회_테스�
 
 == 직군 API
 include::{snippets}/job-group-controller-test/유저_직군_저장/auto-section.adoc[]
+include::{snippets}/job-group-controller-test/유저_직군_수정/auto-section.adoc[]
 
 == 유저 API
 include::{snippets}/user-controller-test/유저_존재_확인/auto-section.adoc[]
 include::{snippets}/user-controller-test/유저_최초_질문_답변_작성_확인/auto-section.adoc[]
 include::{snippets}/user-controller-test/유저_최초_핀고정_확인/auto-section.adoc[]
 include::{snippets}/user-controller-test/유저_정보_조회/auto-section.adoc[]
+include::{snippets}/user-controller-test/유저_삭제_확인/auto-section.adoc[]
 
 == 프로젝트 API
 include::{snippets}/experience-controller-test/본인_경험_저장/auto-section.adoc[]

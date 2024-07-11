@@ -1,5 +1,6 @@
 package com.sirius.spurt;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,7 +27,7 @@ public class CategoryControllerTest extends BaseMvcTest {
                                 GetAllCategoryBusinessMapper.INSTANCE.toResultCategoryList(
                                         List.of(Category.values())))
                         .build();
-        when(getAllCategoryBusiness.execute(null)).thenReturn(result);
+        when(getAllCategoryBusiness.execute(any())).thenReturn(result);
         this.mockMvc.perform(get("/v1/category")).andExpect(status().isOk()).andDo(print());
     }
 }

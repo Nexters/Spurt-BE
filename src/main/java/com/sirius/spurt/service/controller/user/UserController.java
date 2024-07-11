@@ -4,10 +4,12 @@ import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.user.CheckUserExistsBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPinedBusiness;
 import com.sirius.spurt.service.business.user.CheckUserHasPostedBusiness;
+import com.sirius.spurt.service.business.user.DeleteUserBusiness;
 import com.sirius.spurt.service.business.user.UserInfoBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,7 @@ public class UserController {
     private final CheckUserHasPinedBusiness checkUserHasPinedBusiness;
     private final CheckUserHasPostedBusiness checkUserHasPostedBusiness;
     private final UserInfoBusiness userInfoBusiness;
+    private final DeleteUserBusiness deleteUserBusiness;
 
     /**
      * @return
@@ -64,5 +67,16 @@ public class UserController {
         return RestResponse.success(
                 userInfoBusiness.execute(
                         UserInfoBusiness.Dto.builder().userId(loginUser.getUserId()).build()));
+    }
+
+    /**
+     * @return
+     * @title 유저 삭제
+     */
+    @DeleteMapping
+    public RestResponse<DeleteUserBusiness.Result> deleteUser(LoginUser loginUser) {
+        return RestResponse.success(
+                deleteUserBusiness.execute(
+                        DeleteUserBusiness.Dto.builder().userId(loginUser.getUserId()).build()));
     }
 }
