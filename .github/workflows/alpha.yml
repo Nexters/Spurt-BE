@@ -44,7 +44,7 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t spurt-alpha-be -f Dockerfile .
-          docker tag spurt-be:latest ${{ secrets.DOCKER_USER }}/spurt-alpha-be:latest
+          docker tag spurt-alpha-be:latest ${{ secrets.DOCKER_USER }}/spurt-alpha-be:latest
           docker push ${{ secrets.DOCKER_USER }}/spurt-alpha-be:latest
 
   pull_from_registry:
