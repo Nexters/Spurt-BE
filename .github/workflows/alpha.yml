@@ -1,0 +1,70 @@
+name: spurt alpha CICD
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  push_to_registry:
+    name: Push to aws container registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: make application.yml
+        if: contains(github.ref, 'develop')
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.YML_PROD }}" > ./application.yml
+        shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build -x spotlessJavaCheck
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Docker build & push to prod
+        if: contains(github.ref, 'develop')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t spurt-alpha-be -f Dockerfile .
+          docker tag spurt-be:latest ${{ secrets.DOCKER_USER }}/spurt-alpha-be:latest
+          docker push ${{ secrets.DOCKER_USER }}/spurt-alpha-be:latest
+
+  pull_from_registry:
+    name: Connect server ssh and pull from container registry
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to prod
+        if: contains(github.ref, 'develop')
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_ALPHA_NAME }}
+          username: ${{ secrets.AWS_USER_NAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: ${{ secrets.AWS_PORT }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USER }}/spurt-alpha-be:latest
+            docker stop spurt-be
+            docker rm spurt-be
+            docker run -d --network spurt --name spurt-be -p 8080:8080 ${{ secrets.DOCKER_USER }}/spurt-alpha-be
+            if docker images -f "dangling=true" -q | grep . > /dev/null; then
+              docker rmi $(docker images -f "dangling=true" -q)
+            fi
