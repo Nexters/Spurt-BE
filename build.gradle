@@ -58,6 +58,7 @@ dependencies {
     compileOnly('com.h2database:h2:2.1.214')
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
