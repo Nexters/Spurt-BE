@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   push_to_registry:
@@ -20,7 +21,7 @@ jobs:
           distribution: 'corretto'
 
       - name: make application.yml
-        if: github.event.pull_request.base.ref == 'main'
+        if: github.event.pull_request.base.ref == 'main' || github.event.pull_request.base.ref == 'develop'
         run: |
           cd ./src/main/resources
           touch ./application.yml
