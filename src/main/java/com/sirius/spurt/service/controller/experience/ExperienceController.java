@@ -1,6 +1,6 @@
 package com.sirius.spurt.service.controller.experience;
 
-import com.sirius.spurt.common.resolver.user.LoginUser;
+import com.sirius.spurt.common.auth.PrincipalDetails;
 import com.sirius.spurt.service.business.experience.DeleteExperienceBusiness;
 import com.sirius.spurt.service.business.experience.GetAllExperienceBusiness;
 import com.sirius.spurt.service.business.experience.GetExperienceBusiness;
@@ -8,6 +8,7 @@ import com.sirius.spurt.service.business.experience.SaveExperienceBusiness;
 import com.sirius.spurt.service.business.experience.UpdateExperienceBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +35,9 @@ public class ExperienceController {
      */
     @PostMapping
     public RestResponse<SaveExperienceBusiness.Result> saveExperience(
-            LoginUser loginUser, @RequestBody SaveExperienceBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody SaveExperienceBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(saveExperienceBusiness.execute(dto));
     }
 
@@ -46,8 +48,9 @@ public class ExperienceController {
      */
     @PutMapping
     public RestResponse<UpdateExperienceBusiness.Result> updateExperience(
-            LoginUser loginUser, @RequestBody UpdateExperienceBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody UpdateExperienceBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(updateExperienceBusiness.execute(dto));
     }
 
@@ -58,8 +61,9 @@ public class ExperienceController {
      */
     @DeleteMapping
     public RestResponse<DeleteExperienceBusiness.Result> deleteExperience(
-            LoginUser loginUser, @RequestBody DeleteExperienceBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody DeleteExperienceBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(deleteExperienceBusiness.execute(dto));
     }
 
@@ -69,9 +73,12 @@ public class ExperienceController {
      * @title 나의 모든 경험 조회 api
      */
     @GetMapping
-    public RestResponse<GetAllExperienceBusiness.Result> getAllExperience(LoginUser loginUser) {
+    public RestResponse<GetAllExperienceBusiness.Result> getAllExperience(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         GetAllExperienceBusiness.Dto dto =
-                GetAllExperienceBusiness.Dto.builder().userId(loginUser.getUserId()).build();
+                GetAllExperienceBusiness.Dto.builder()
+                        .userId(principalDetails.getUserEntity().getUserId())
+                        .build();
         return RestResponse.success(getAllExperienceBusiness.execute(dto));
     }
 
@@ -82,10 +89,11 @@ public class ExperienceController {
      */
     @GetMapping("/{experienceId}")
     public RestResponse<GetExperienceBusiness.Result> getExperience(
-            LoginUser loginUser, @PathVariable("experienceId") Long experienceId) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable("experienceId") Long experienceId) {
         GetExperienceBusiness.Dto dto =
                 GetExperienceBusiness.Dto.builder()
-                        .userId(loginUser.getUserId())
+                        .userId(principalDetails.getUserEntity().getUserId())
                         .experienceId(experienceId)
                         .build();
         return RestResponse.success(getExperienceBusiness.execute(dto));
