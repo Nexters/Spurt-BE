@@ -68,4 +68,15 @@ class TokenRepositoryImplTest implements RefreshTokenTest {
         verify(redisTemplate).hasKey(anyString());
         assertThat(hasRefreshToken).isEqualTo(TRUE);
     }
+
+    @Test
+    void refreshToken_삭제_테스트() {
+        // given
+
+        // when
+        tokenRepository.deleteRedisToken(TEST_TOKEN_KEY);
+
+        // then
+        verify(redisTemplate).delete(anyString());
+    }
 }
