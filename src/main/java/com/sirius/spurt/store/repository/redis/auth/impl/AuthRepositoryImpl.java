@@ -1,6 +1,6 @@
-package com.sirius.spurt.store.repository.redis.token.impl;
+package com.sirius.spurt.store.repository.redis.auth.impl;
 
-import com.sirius.spurt.store.repository.redis.token.TokenRepository;
+import com.sirius.spurt.store.repository.redis.auth.AuthRepository;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TokenRepositoryImpl implements TokenRepository {
+public class AuthRepositoryImpl implements AuthRepository {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void setRefreshToken(final String key, final String value, final long expireTime) {
         if (hasRefreshToken(key)) {
-            deleteRedisToken(key);
+            deleteRefreshToken(key);
         }
 
         redisTemplate.opsForValue().set(key, value, Duration.ofMillis(expireTime));
@@ -31,7 +31,7 @@ public class TokenRepositoryImpl implements TokenRepository {
     }
 
     @Override
-    public void deleteRedisToken(final String key) {
+    public void deleteRefreshToken(final String key) {
         redisTemplate.delete(key);
     }
 }

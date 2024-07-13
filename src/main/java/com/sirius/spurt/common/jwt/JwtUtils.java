@@ -5,7 +5,7 @@ import static com.sirius.spurt.common.meta.ResultCode.AUTHENTICATION_FAILED;
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.jwt.token.AccessToken;
 import com.sirius.spurt.common.jwt.token.RefreshToken;
-import com.sirius.spurt.store.repository.redis.token.TokenRepository;
+import com.sirius.spurt.store.provider.auth.AuthProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-    private final TokenRepository tokenRepository;
+    private final AuthProvider authProvider;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -74,6 +74,8 @@ public class JwtUtils {
 
     public void setRefreshToken(HttpServletResponse response, String userId) {
         RefreshToken refreshToken = getRefreshToken(userId);
+        authProvider.setRefreshToken(
+                KEY_PREFIX + userId, refreshToken.getToken(), refreshToken.getExpireTime());
         setCookie(response, REFRESH_TOKEN_NAME, refreshToken.getToken(), refreshToken.getExpireTime());
     }
 
@@ -109,7 +111,7 @@ public class JwtUtils {
     }
 
     public void updateTokens(HttpServletResponse response, String userId) {
-        if (!tokenRepository.hasRefreshToken(KEY_PREFIX + userId)) {
+        if (!authProvider.hasRefreshToken(KEY_PREFIX + userId)) {
             throw new GlobalException(AUTHENTICATION_FAILED);
         }
 
