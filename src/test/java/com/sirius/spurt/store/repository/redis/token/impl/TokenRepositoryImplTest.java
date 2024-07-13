@@ -1,6 +1,7 @@
 package com.sirius.spurt.store.repository.redis.token.impl;
 
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -53,5 +54,18 @@ class TokenRepositoryImplTest implements RefreshTokenTest {
         verify(redisTemplate).opsForValue();
         verify(valueOperations).get(anyString());
         assertThat(value).isEqualTo(TEST_TOKEN_VALUE);
+    }
+
+    @Test
+    void refreshToken_존재여부_확인_테스트() {
+        // given
+        when(redisTemplate.hasKey(anyString())).thenReturn(TRUE);
+
+        // when
+        Boolean hasRefreshToken = tokenRepository.hasRefreshToken(TEST_TOKEN_KEY);
+
+        // then
+        verify(redisTemplate).hasKey(anyString());
+        assertThat(hasRefreshToken).isEqualTo(TRUE);
     }
 }
