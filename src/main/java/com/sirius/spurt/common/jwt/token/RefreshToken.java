@@ -1,4 +1,4 @@
-package com.sirius.spurt.common.resolver.user;
+package com.sirius.spurt.common.jwt.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginUser {
-    private String userId;
-    private String email;
+public class RefreshToken {
+    private String token;
+    private Long expireTime;
 }

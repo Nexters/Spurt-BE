@@ -1,8 +1,8 @@
 package com.sirius.spurt.service.controller.question;
 
+import com.sirius.spurt.common.auth.PrincipalDetails;
 import com.sirius.spurt.common.meta.Category;
 import com.sirius.spurt.common.meta.JobGroup;
-import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.common.resolver.user.NonLoginUser;
 import com.sirius.spurt.service.business.question.DeleteQuestionBusiness;
 import com.sirius.spurt.service.business.question.GetQuestionBusiness;
@@ -14,6 +14,7 @@ import com.sirius.spurt.service.business.question.SaveQuestionBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,15 +40,16 @@ public class QuestionController {
     private final PutPinQuestionBusiness putPinQuestionBusiness;
 
     /**
-     * @param loginUser
+     * @param principalDetails
      * @param dto
      * @return
      * @title pin 고정/비고정
      */
     @PutMapping("/question/pin")
     public RestResponse<PutPinQuestionBusiness.Result> questionPin(
-            LoginUser loginUser, @RequestBody PutPinQuestionBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody PutPinQuestionBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(putPinQuestionBusiness.execute(dto));
     }
 
@@ -81,8 +83,9 @@ public class QuestionController {
      */
     @DeleteMapping("/question")
     public RestResponse<DeleteQuestionBusiness.Result> questionDelete(
-            LoginUser loginUser, @RequestBody DeleteQuestionBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody DeleteQuestionBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(deleteQuestionBusiness.execute(dto));
     }
 
@@ -93,8 +96,9 @@ public class QuestionController {
      */
     @PutMapping("/question")
     public RestResponse<PutQuestionBusiness.Result> questionPut(
-            LoginUser loginUser, @RequestBody PutQuestionBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody PutQuestionBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(putQuestionBusiness.execute(dto));
     }
 
@@ -105,11 +109,12 @@ public class QuestionController {
      */
     @GetMapping("/question/{questionId}")
     public RestResponse<GetQuestionBusiness.Result> questionGet(
-            LoginUser loginUser, @PathVariable("questionId") String questionId) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable("questionId") String questionId) {
         GetQuestionBusiness.Dto dto =
                 GetQuestionBusiness.Dto.builder()
                         .questionId(Long.parseLong(questionId))
-                        .userId(loginUser.getUserId())
+                        .userId(principalDetails.getUserEntity().getUserId())
                         .build();
         return RestResponse.success(getQuestionBusiness.execute(dto));
     }
@@ -120,8 +125,9 @@ public class QuestionController {
      */
     @PostMapping("/question")
     public RestResponse<SaveQuestionBusiness.Result> questionSave(
-            LoginUser loginUser, @RequestBody SaveQuestionBusiness.Dto dto) {
-        dto.setUserId(loginUser.getUserId());
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody SaveQuestionBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
         return RestResponse.success(saveQuestionBusiness.execute(dto));
     }
 
@@ -138,7 +144,7 @@ public class QuestionController {
      */
     @GetMapping("/question")
     public RestResponse<RetrieveQuestionBusiness.Result> questionRetrieve(
-            LoginUser loginUser,
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam(name = "subject", required = false) String subject,
             @RequestParam(name = "jobGroup", required = false) JobGroup jobGroup,
             @RequestParam(name = "category", required = false) Category category,
@@ -148,7 +154,7 @@ public class QuestionController {
             @RequestParam(name = "size", defaultValue = "10") String size) {
         RetrieveQuestionBusiness.Dto dto =
                 RetrieveQuestionBusiness.Dto.builder()
-                        .userId(loginUser.getUserId())
+                        .userId(principalDetails.getUserEntity().getUserId())
                         .subject(subject)
                         .jobGroup(jobGroup)
                         .category(category)

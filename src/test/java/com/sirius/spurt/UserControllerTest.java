@@ -31,7 +31,10 @@ public class UserControllerTest extends BaseMvcTest {
         UserInfoBusiness.Result result =
                 UserInfoBusiness.Result.builder().userId("wieribwer").jobGroup(JobGroup.DEVELOPER).build();
         when(userInfoBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/user/info")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(get("/v1/user/info").principal(this.mockPrincipal))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -41,7 +44,10 @@ public class UserControllerTest extends BaseMvcTest {
         CheckUserExistsBusiness.Result result =
                 CheckUserExistsBusiness.Result.builder().isUserExists(false).build();
         when(checkUserExistsBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/user/exist")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(get("/v1/user/exist").principal(this.mockPrincipal))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -51,7 +57,10 @@ public class UserControllerTest extends BaseMvcTest {
         CheckUserHasPinedBusiness.Result result =
                 CheckUserHasPinedBusiness.Result.builder().hasPined(false).build();
         when(checkUserHasPinedBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/user/pin")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(get("/v1/user/pin").principal(this.mockPrincipal))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -61,7 +70,10 @@ public class UserControllerTest extends BaseMvcTest {
         CheckUserHasPostedBusiness.Result result =
                 CheckUserHasPostedBusiness.Result.builder().hasPosted(false).build();
         when(checkUserHasPostedBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/user/posting")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(get("/v1/user/posting").principal(this.mockPrincipal))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -69,6 +81,9 @@ public class UserControllerTest extends BaseMvcTest {
         DeleteUserBusiness.Dto dto = DeleteUserBusiness.Dto.builder().userId("userId").build();
         DeleteUserBusiness.Result result = new DeleteUserBusiness.Result();
         when(deleteUserBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(delete("/v1/user")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(delete("/v1/user").principal(this.mockPrincipal))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }

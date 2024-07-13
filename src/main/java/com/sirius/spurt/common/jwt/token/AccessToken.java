@@ -1,4 +1,4 @@
-package com.sirius.spurt.store.provider.auth.vo;
+package com.sirius.spurt.common.jwt.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthVo {
-    private String userId;
+public class AccessToken {
+    private String token;
+    private Long expireTime;
 }

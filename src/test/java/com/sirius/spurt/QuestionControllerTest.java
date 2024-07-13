@@ -48,7 +48,8 @@ public class QuestionControllerTest extends BaseMvcTest
                 .perform(
                         put("/v1/question/pin")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -82,7 +83,8 @@ public class QuestionControllerTest extends BaseMvcTest
                 .perform(
                         delete("/v1/question")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -104,7 +106,10 @@ public class QuestionControllerTest extends BaseMvcTest
                         .keyWordList(List.of("키워드"))
                         .build();
         when(getQuestionBusiness.execute(any())).thenReturn(result);
-        this.mockMvc.perform(get("/v1/question/1")).andExpect(status().isOk()).andDo(print());
+        this.mockMvc
+                .perform(get("/v1/question/1").principal(this.mockPrincipal))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -122,7 +127,8 @@ public class QuestionControllerTest extends BaseMvcTest
                 .perform(
                         put("/v1/question")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -143,7 +149,8 @@ public class QuestionControllerTest extends BaseMvcTest
                 .perform(
                         post("/v1/question")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
+                                .content(objectMapper.writeValueAsString(dto))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -177,7 +184,8 @@ public class QuestionControllerTest extends BaseMvcTest
                 .perform(
                         get("/v1/question")
                                 .param("jobGroup", TEST_JOB_GROUP.name())
-                                .param("category", TEST_CATEGORY.name()))
+                                .param("category", TEST_CATEGORY.name())
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

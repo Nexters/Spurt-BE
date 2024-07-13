@@ -3,7 +3,6 @@ package com.sirius.spurt.service.business.jobgroup;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
-import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness.Dto;
 import com.sirius.spurt.store.provider.jobgroup.JobGroupProvider;
 import com.sirius.spurt.test.UserTest;
@@ -22,11 +21,7 @@ class SaveJobGroupBusinessTest implements UserTest {
     @Test
     void 직군_저장_테스트() {
         // given
-        Dto dto =
-                Dto.builder()
-                        .loginUser(LoginUser.builder().userId(TEST_USER_ID).email(TEST_EMAIL).build())
-                        .jobGroup(TEST_JOB_GROUP)
-                        .build();
+        Dto dto = Dto.builder().userId(TEST_USER_ID).email(TEST_EMAIL).jobGroup(TEST_JOB_GROUP).build();
 
         // when
         saveJobGroupBusiness.execute(dto);

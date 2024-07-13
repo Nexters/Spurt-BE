@@ -1,4 +1,4 @@
-package com.sirius.spurt.store.repository.redis.token.impl;
+package com.sirius.spurt.store.repository.redis.auth.impl;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -19,8 +19,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 @ExtendWith(MockitoExtension.class)
-class TokenRepositoryImplTest implements RefreshTokenTest {
-    @InjectMocks private TokenRepositoryImpl tokenRepository;
+class AuthRepositoryImplTest implements RefreshTokenTest {
+    @InjectMocks private AuthRepositoryImpl tokenRepository;
 
     @Mock private RedisTemplate<String, String> redisTemplate;
     @Mock private ValueOperations<String, String> valueOperations;
@@ -74,7 +74,7 @@ class TokenRepositoryImplTest implements RefreshTokenTest {
         // given
 
         // when
-        tokenRepository.deleteRedisToken(TEST_TOKEN_KEY);
+        tokenRepository.deleteRefreshToken(TEST_TOKEN_KEY);
 
         // then
         verify(redisTemplate).delete(anyString());

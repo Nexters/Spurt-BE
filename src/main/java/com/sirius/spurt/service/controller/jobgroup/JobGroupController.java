@@ -1,11 +1,12 @@
 package com.sirius.spurt.service.controller.jobgroup;
 
-import com.sirius.spurt.common.resolver.user.LoginUser;
+import com.sirius.spurt.common.auth.PrincipalDetails;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness;
 import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +28,10 @@ public class JobGroupController {
      */
     @PostMapping
     public RestResponse<SaveJobGroupBusiness.Result> saveJobGroup(
-            LoginUser loginUser, @RequestBody SaveJobGroupBusiness.Dto dto) {
-        dto.setLoginUser(loginUser);
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody SaveJobGroupBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
+        dto.setEmail(principalDetails.getUserEntity().getEmail());
         return RestResponse.success(saveJobGroupBusiness.execute(dto));
     }
 
@@ -39,8 +42,10 @@ public class JobGroupController {
      */
     @PutMapping
     public RestResponse<UpdateJobGroupBusiness.Result> updateJobGroup(
-            LoginUser loginUser, @RequestBody UpdateJobGroupBusiness.Dto dto) {
-        dto.setLoginUser(loginUser);
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody UpdateJobGroupBusiness.Dto dto) {
+        dto.setUserId(principalDetails.getUserEntity().getUserId());
+        dto.setEmail(principalDetails.getUserEntity().getEmail());
         return RestResponse.success(updateJobGroupBusiness.execute(dto));
     }
 }

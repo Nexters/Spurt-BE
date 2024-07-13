@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sirius.spurt.common.meta.Category;
-import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.experience.DeleteExperienceBusiness;
 import com.sirius.spurt.service.business.experience.GetAllExperienceBusiness;
 import com.sirius.spurt.service.business.experience.GetExperienceBusiness;
@@ -19,7 +18,6 @@ import com.sirius.spurt.service.business.experience.UpdateExperienceBusiness;
 import com.sirius.spurt.service.controller.experience.ExperienceController;
 import com.sirius.spurt.test.ExperienceTest;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,13 +30,6 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
     @MockBean private DeleteExperienceBusiness deleteExperienceBusiness;
     @MockBean private GetAllExperienceBusiness getAllExperienceBusiness;
     @MockBean private GetExperienceBusiness getExperienceBusiness;
-
-    private LoginUser loginUser;
-
-    @BeforeEach
-    void setUp() {
-        loginUser = LoginUser.builder().userId(TEST_USER_ID).email(TEST_EMAIL).build();
-    }
 
     @Test
     void 본인_경험_저장() throws Exception {
@@ -58,11 +49,7 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         post("/v1/experience")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
-                                .with(
-                                        request -> {
-                                            request.setAttribute("loginUser", loginUser);
-                                            return request;
-                                        }))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -84,11 +71,7 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         put("/v1/experience")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
-                                .with(
-                                        request -> {
-                                            request.setAttribute("loginUser", loginUser);
-                                            return request;
-                                        }))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -103,11 +86,7 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         delete("/v1/experience")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
-                                .with(
-                                        request -> {
-                                            request.setAttribute("loginUser", loginUser);
-                                            return request;
-                                        }))
+                                .principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -145,13 +124,7 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         .build();
         when(getAllExperienceBusiness.execute(any())).thenReturn(result);
         this.mockMvc
-                .perform(
-                        get("/v1/experience")
-                                .with(
-                                        request -> {
-                                            request.setAttribute("loginUser", loginUser);
-                                            return request;
-                                        }))
+                .perform(get("/v1/experience").principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -184,13 +157,7 @@ public class ExperienceControllerTest extends BaseMvcTest implements ExperienceT
                         .build();
         when(getExperienceBusiness.execute(any())).thenReturn(result);
         this.mockMvc
-                .perform(
-                        get("/v1/experience/1")
-                                .with(
-                                        request -> {
-                                            request.setAttribute("loginUser", loginUser);
-                                            return request;
-                                        }))
+                .perform(get("/v1/experience/1").principal(this.mockPrincipal))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
