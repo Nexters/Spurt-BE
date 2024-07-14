@@ -7,6 +7,7 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 import com.sirius.spurt.common.auth.PrincipalDetails;
+import com.sirius.spurt.common.oauth.user.OAuthUser;
 import com.sirius.spurt.common.validator.TokenValidator;
 import com.sirius.spurt.common.validator.UserValidator;
 import com.sirius.spurt.store.repository.database.entity.UserEntity;
@@ -60,16 +61,16 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         TokenValidator.validateCookie(accessCookie);
 
         String accessToken = accessCookie.replace(TOKEN_TYPE, "");
-        String userId = jwtUtils.getUserId(accessToken);
-        if (userId == null) {
+        OAuthUser oAuthUser = jwtUtils.getOAuthUser(accessToken);
+        if (oAuthUser == null) {
             TokenValidator.validateCookie(refreshCookie);
             String refreshToken = refreshCookie.replace(TOKEN_TYPE, "");
-            userId = jwtUtils.getUserId(refreshToken);
-            TokenValidator.validateUserId(userId);
-            jwtUtils.updateTokens(response, userId);
+            oAuthUser = jwtUtils.getOAuthUser(refreshToken);
+            TokenValidator.validateOAuthUser(oAuthUser);
+            jwtUtils.updateTokens(response, oAuthUser.getUserId(), oAuthUser.getEmail());
         }
 
-        setAuthentication(userId);
+        setAuthentication(oAuthUser.getUserId());
         filterChain.doFilter(request, response);
     }
 

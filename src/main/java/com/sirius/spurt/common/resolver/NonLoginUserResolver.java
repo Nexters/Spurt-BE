@@ -2,8 +2,10 @@ package com.sirius.spurt.common.resolver;
 
 import static com.sirius.spurt.common.jwt.JwtUtils.ACCESS_TOKEN_NAME;
 import static com.sirius.spurt.common.jwt.JwtUtils.REFRESH_TOKEN_NAME;
+import static com.sirius.spurt.common.jwt.JwtUtils.TOKEN_TYPE;
 
 import com.sirius.spurt.common.jwt.JwtUtils;
+import com.sirius.spurt.common.oauth.user.OAuthUser;
 import com.sirius.spurt.common.resolver.user.NonLoginUser;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +25,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
     private final JwtUtils jwtUtils;
-    private final String TOKEN_TYPE = "Bearer ";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -46,27 +47,14 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
 
         String accessCookie = getCookie(request, ACCESS_TOKEN_NAME);
         String refreshCookie = getCookie(request, REFRESH_TOKEN_NAME);
+        log.info("accessCookie: " + accessCookie);
+        log.info("refreshCookie: " + refreshCookie);
         if (isInValidCookie(accessCookie)) {
             return new NonLoginUser(null);
         }
 
-        String accessToken = accessCookie.replace(TOKEN_TYPE, "");
-        String userId = jwtUtils.getUserId(accessToken);
-        if (userId == null) {
-            if (isInValidCookie(refreshCookie)) {
-                return new NonLoginUser(null);
-            }
-
-            String refreshToken = refreshCookie.replace(TOKEN_TYPE, "");
-            userId = jwtUtils.getUserId(refreshToken);
-            if (userId == null) {
-                return new NonLoginUser(null);
-            }
-
-            jwtUtils.updateTokens(response, userId);
-        }
-
-        return new NonLoginUser(userId);
+        OAuthUser oAuthUser = getOAuthUser(response, accessCookie, refreshCookie);
+        return new NonLoginUser(oAuthUser.getUserId());
     }
 
     private boolean isTestHeader(HttpServletRequest request) {
@@ -88,6 +76,26 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
         }
 
         return cookie.getValue();
+    }
+
+    private OAuthUser getOAuthUser(
+            HttpServletResponse response, String accessCookie, String refreshCookie) {
+        String accessToken = accessCookie.replace(TOKEN_TYPE, "");
+        OAuthUser oAuthUser = jwtUtils.getOAuthUser(accessToken);
+        if (oAuthUser == null) {
+            if (isInValidCookie(refreshCookie)) {
+                return OAuthUser.builder().build();
+            }
+
+            String refreshToken = refreshCookie.replace(TOKEN_TYPE, "");
+            oAuthUser = jwtUtils.getOAuthUser(refreshToken);
+            if (oAuthUser == null) {
+                return OAuthUser.builder().build();
+            }
+            jwtUtils.updateTokens(response, oAuthUser.getUserId(), oAuthUser.getEmail());
+        }
+
+        return oAuthUser;
     }
 
     private boolean isInValidCookie(String cookie) {
