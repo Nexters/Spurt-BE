@@ -36,14 +36,15 @@ public class OAuth2Service extends DefaultOAuth2UserService {
                 Social.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo oAuth2UserInfo =
                 OAuth2UserInfoFactory.getOAuth2UserInfo(social, oAuth2User.getAttributes());
-        UserEntity userEntity = getUserByUserId(oAuth2UserInfo.getUserId());
+        UserEntity userEntity = getUserByUserId(oAuth2UserInfo.getUserId(), oAuth2UserInfo.getEmail());
         return PrincipalDetails.builder().userEntity(userEntity).build();
     }
 
-    private UserEntity getUserByUserId(String userId) {
-        /*
-         * if userEntity is null, return new UserEntity?
-         */
-        return userRepository.findByUserId(userId);
+    private UserEntity getUserByUserId(String userId, String email) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity == null) {
+            return UserEntity.builder().userId(userId).email(email).build();
+        }
+        return userEntity;
     }
 }
