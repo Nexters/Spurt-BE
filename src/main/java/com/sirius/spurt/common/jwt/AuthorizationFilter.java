@@ -48,7 +48,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (isTestHeader(request)) {
-            setAuthentication("111705357761926793028");
+            setAuthentication("admin");
             filterChain.doFilter(request, response);
             return;
         }
