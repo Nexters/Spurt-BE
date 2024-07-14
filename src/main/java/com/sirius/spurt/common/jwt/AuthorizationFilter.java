@@ -4,6 +4,7 @@ import static com.sirius.spurt.common.jwt.JwtUtils.ACCESS_TOKEN_NAME;
 import static com.sirius.spurt.common.jwt.JwtUtils.REFRESH_TOKEN_NAME;
 import static com.sirius.spurt.common.jwt.JwtUtils.TOKEN_TYPE;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 import com.sirius.spurt.common.auth.PrincipalDetails;
 import com.sirius.spurt.common.validator.TokenValidator;
@@ -36,7 +37,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
 
     private static final List<RequestMatcher> whiteList =
-            List.of(new AntPathRequestMatcher("/v1/question/random", GET.name()));
+            List.of(
+                    new AntPathRequestMatcher("/oauth2/**", GET.name()),
+                    new AntPathRequestMatcher("/v1/question/random", GET.name()),
+                    new AntPathRequestMatcher("/v1/jobgroup", POST.name()));
 
     @Override
     protected void doFilterInternal(
