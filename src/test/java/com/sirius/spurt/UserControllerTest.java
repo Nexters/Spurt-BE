@@ -39,8 +39,6 @@ public class UserControllerTest extends BaseMvcTest {
 
     @Test
     void 유저_존재_확인() throws Exception {
-        CheckUserExistsBusiness.Dto dto =
-                CheckUserExistsBusiness.Dto.builder().userId("test-admin").build();
         CheckUserExistsBusiness.Result result =
                 CheckUserExistsBusiness.Result.builder().isUserExists(false).build();
         when(checkUserExistsBusiness.execute(any())).thenReturn(result);
@@ -52,8 +50,6 @@ public class UserControllerTest extends BaseMvcTest {
 
     @Test
     void 유저_최초_핀고정_확인() throws Exception {
-        CheckUserHasPinedBusiness.Dto dto =
-                CheckUserHasPinedBusiness.Dto.builder().userId("admin").build();
         CheckUserHasPinedBusiness.Result result =
                 CheckUserHasPinedBusiness.Result.builder().hasPined(false).build();
         when(checkUserHasPinedBusiness.execute(any())).thenReturn(result);
@@ -65,8 +61,6 @@ public class UserControllerTest extends BaseMvcTest {
 
     @Test
     void 유저_최초_질문_답변_작성_확인() throws Exception {
-        CheckUserHasPostedBusiness.Dto dto =
-                CheckUserHasPostedBusiness.Dto.builder().userId("admin").build();
         CheckUserHasPostedBusiness.Result result =
                 CheckUserHasPostedBusiness.Result.builder().hasPosted(false).build();
         when(checkUserHasPostedBusiness.execute(any())).thenReturn(result);
@@ -78,7 +72,6 @@ public class UserControllerTest extends BaseMvcTest {
 
     @Test
     void 유저_삭제_확인() throws Exception {
-        DeleteUserBusiness.Dto dto = DeleteUserBusiness.Dto.builder().userId("userId").build();
         DeleteUserBusiness.Result result = new DeleteUserBusiness.Result();
         when(deleteUserBusiness.execute(any())).thenReturn(result);
         this.mockMvc
