@@ -1,5 +1,6 @@
 package com.sirius.spurt.store.provider.auth.impl;
 
+import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -44,5 +45,18 @@ class AuthProviderImplTest implements TokenTest, UserTest {
         // then
         verify(authRepository).getRefreshToken(anyString());
         assertThat(authVo.getUserId()).isEqualTo(TEST_USER_ID);
+    }
+
+    @Test
+    void refreshToken_존재여부_확인_테스트() {
+        // given
+        when(authRepository.hasRefreshToken(anyString())).thenReturn(TRUE);
+
+        // when
+        Boolean hasRefreshToken = authProvider.hasRefreshToken(TEST_TOKEN_KEY);
+
+        // then
+        verify(authRepository).hasRefreshToken(anyString());
+        assertThat(hasRefreshToken).isEqualTo(TRUE);
     }
 }
