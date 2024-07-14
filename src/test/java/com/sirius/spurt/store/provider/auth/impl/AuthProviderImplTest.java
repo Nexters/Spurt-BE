@@ -59,4 +59,15 @@ class AuthProviderImplTest implements TokenTest, UserTest {
         verify(authRepository).hasRefreshToken(anyString());
         assertThat(hasRefreshToken).isEqualTo(TRUE);
     }
+
+    @Test
+    void refreshToken_삭제_테스트() {
+        // given
+
+        // when
+        authProvider.deleteRefreshToken(TEST_TOKEN_KEY);
+
+        // then
+        verify(authRepository).deleteRefreshToken(anyString());
+    }
 }
