@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sirius.spurt.common.filter.ExceptionHandlerFilter;
 import com.sirius.spurt.common.jwt.AuthorizationFilter;
 import com.sirius.spurt.common.jwt.JwtUtils;
+import com.sirius.spurt.common.oauth.handler.OAuth2AuthenticationFailHandler;
+import com.sirius.spurt.common.oauth.handler.OAuth2AuthenticationSuccessHandler;
+import com.sirius.spurt.common.oauth.service.OAuth2Service;
 import com.sirius.spurt.store.repository.database.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +28,7 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final JwtUtils jwtUtils;
     private final ObjectMapper objectMapper;
+    private final OAuth2Service oAuth2Service;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,6 +41,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (requests) ->
                                 requests
+                                        .requestMatchers("/oauth2/**")
+                                        .permitAll()
                                         .requestMatchers("/v1/question/random")
                                         .permitAll()
                                         .requestMatchers("/v1/jobgroup", HttpMethod.POST.name())
@@ -46,7 +52,14 @@ public class SecurityConfig {
                                         .anyRequest()
                                         .authenticated())
                 .addFilterBefore(authorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionHandlerFilter(), LogoutFilter.class);
+                .addFilterBefore(exceptionHandlerFilter(), LogoutFilter.class)
+                .oauth2Login(
+                        oauth2LoginConfigurer ->
+                                oauth2LoginConfigurer
+                                        .successHandler(oAuth2AuthenticationSuccessHandler())
+                                        .failureHandler(oAuth2AuthenticationFailHandler())
+                                        .userInfoEndpoint(
+                                                userInfoEndpoint -> userInfoEndpoint.userService(oAuth2Service)));
 
         return http.build();
     }
@@ -59,5 +72,15 @@ public class SecurityConfig {
     @Bean
     public ExceptionHandlerFilter exceptionHandlerFilter() {
         return new ExceptionHandlerFilter(objectMapper);
+    }
+
+    @Bean
+    public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
+        return new OAuth2AuthenticationSuccessHandler(jwtUtils);
+    }
+
+    @Bean
+    public OAuth2AuthenticationFailHandler oAuth2AuthenticationFailHandler() {
+        return new OAuth2AuthenticationFailHandler(objectMapper);
     }
 }
