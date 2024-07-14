@@ -1,6 +1,7 @@
 package com.sirius.spurt.service.controller.jobgroup;
 
 import com.sirius.spurt.common.auth.PrincipalDetails;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness;
 import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness;
 import com.sirius.spurt.service.controller.RestResponse;
@@ -28,10 +29,9 @@ public class JobGroupController {
      */
     @PostMapping
     public RestResponse<SaveJobGroupBusiness.Result> saveJobGroup(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody SaveJobGroupBusiness.Dto dto) {
-        dto.setUserId(principalDetails.getUserEntity().getUserId());
-        dto.setEmail(principalDetails.getUserEntity().getEmail());
+            LoginUser loginUser, @RequestBody SaveJobGroupBusiness.Dto dto) {
+        dto.setUserId(loginUser.getUserId());
+        dto.setEmail(loginUser.getEmail());
         return RestResponse.success(saveJobGroupBusiness.execute(dto));
     }
 

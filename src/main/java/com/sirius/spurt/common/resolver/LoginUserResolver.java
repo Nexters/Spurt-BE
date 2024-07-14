@@ -3,10 +3,12 @@ package com.sirius.spurt.common.resolver;
 import static com.sirius.spurt.common.jwt.JwtUtils.ACCESS_TOKEN_NAME;
 import static com.sirius.spurt.common.jwt.JwtUtils.REFRESH_TOKEN_NAME;
 import static com.sirius.spurt.common.jwt.JwtUtils.TOKEN_TYPE;
+import static com.sirius.spurt.common.meta.ResultCode.AUTHENTICATION_FAILED;
 
+import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.jwt.JwtUtils;
 import com.sirius.spurt.common.oauth.user.OAuthUser;
-import com.sirius.spurt.common.resolver.user.NonLoginUser;
+import com.sirius.spurt.common.resolver.user.LoginUser;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,12 +25,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
+public class LoginUserResolver implements HandlerMethodArgumentResolver {
     private final JwtUtils jwtUtils;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(NonLoginUser.class);
+        return parameter.getParameterType().equals(LoginUser.class);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
         HttpServletResponse response = (HttpServletResponse) webRequest.getNativeResponse();
 
         if (isTestHeader(request)) {
-            return new NonLoginUser("admin");
+            return new LoginUser("admin", "email");
         }
 
         String accessCookie = getCookie(request, ACCESS_TOKEN_NAME);
@@ -50,11 +52,11 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
         log.info("accessCookie: " + accessCookie);
         log.info("refreshCookie: " + refreshCookie);
         if (isInValidCookie(accessCookie)) {
-            return new NonLoginUser(null);
+            throw new GlobalException(AUTHENTICATION_FAILED);
         }
 
         OAuthUser oAuthUser = getOAuthUser(response, accessCookie, refreshCookie);
-        return new NonLoginUser(oAuthUser.getUserId());
+        return new LoginUser(oAuthUser.getUserId(), oAuthUser.getEmail());
     }
 
     private boolean isTestHeader(HttpServletRequest request) {
@@ -84,13 +86,13 @@ public class NonLoginUserResolver implements HandlerMethodArgumentResolver {
         OAuthUser oAuthUser = jwtUtils.getOAuthUser(accessToken);
         if (oAuthUser == null) {
             if (isInValidCookie(refreshCookie)) {
-                return OAuthUser.builder().build();
+                throw new GlobalException(AUTHENTICATION_FAILED);
             }
 
             String refreshToken = refreshCookie.replace(TOKEN_TYPE, "");
             oAuthUser = jwtUtils.getOAuthUser(refreshToken);
             if (oAuthUser == null) {
-                return OAuthUser.builder().build();
+                throw new GlobalException(AUTHENTICATION_FAILED);
             }
             jwtUtils.updateTokens(response, oAuthUser.getUserId(), oAuthUser.getEmail());
         }

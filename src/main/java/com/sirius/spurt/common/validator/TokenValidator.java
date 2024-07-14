@@ -3,6 +3,7 @@ package com.sirius.spurt.common.validator;
 import static com.sirius.spurt.common.meta.ResultCode.AUTHENTICATION_FAILED;
 
 import com.sirius.spurt.common.exception.GlobalException;
+import com.sirius.spurt.common.oauth.user.OAuthUser;
 
 public class TokenValidator {
     public static void validateCookie(String cookie) {
@@ -11,8 +12,8 @@ public class TokenValidator {
         }
     }
 
-    public static void validateUserId(String userId) {
-        if (!isExistUserId(userId)) {
+    public static void validateOAuthUser(OAuthUser oAuthUser) {
+        if (!isExistOAuthUser(oAuthUser)) {
             throw new GlobalException(AUTHENTICATION_FAILED);
         }
     }
@@ -21,7 +22,7 @@ public class TokenValidator {
         return cookie != null;
     }
 
-    private static boolean isExistUserId(String userId) {
-        return userId != null;
+    private static boolean isExistOAuthUser(OAuthUser oAuthUser) {
+        return oAuthUser != null;
     }
 }

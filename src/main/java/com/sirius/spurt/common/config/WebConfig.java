@@ -1,6 +1,7 @@
 package com.sirius.spurt.common.config;
 
 import com.sirius.spurt.common.jwt.JwtUtils;
+import com.sirius.spurt.common.resolver.LoginUserResolver;
 import com.sirius.spurt.common.resolver.NonLoginUserResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new LoginUserResolver(jwtUtils));
         resolvers.add(new NonLoginUserResolver(jwtUtils));
     }
 }

@@ -5,7 +5,9 @@ import static com.sirius.spurt.common.meta.ResultCode.AUTHENTICATION_FAILED;
 import com.sirius.spurt.common.exception.GlobalException;
 import com.sirius.spurt.common.jwt.token.AccessToken;
 import com.sirius.spurt.common.jwt.token.RefreshToken;
+import com.sirius.spurt.common.oauth.user.OAuthUser;
 import com.sirius.spurt.store.provider.auth.AuthProvider;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -43,11 +45,12 @@ public class JwtUtils {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private AccessToken getAccessToken(String userId) {
+    private AccessToken getAccessToken(String userId, String email) {
         String accessToken =
                 Jwts.builder()
                         .setSubject("accessToken")
                         .claim("userId", userId)
+                        .claim("email", email)
                         .setExpiration(new Date(getCurrentTimestamp() + ACCESS_TOKEN_EXPIRE_TIME))
                         .signWith(key, SignatureAlgorithm.HS256)
                         .compact();
@@ -55,11 +58,12 @@ public class JwtUtils {
         return AccessToken.builder().token(accessToken).expireTime(ACCESS_TOKEN_EXPIRE_TIME).build();
     }
 
-    private RefreshToken getRefreshToken(String userId) {
+    private RefreshToken getRefreshToken(String userId, String email) {
         String refreshToken =
                 Jwts.builder()
                         .setSubject("refreshToken")
                         .claim("userId", userId)
+                        .claim("email", email)
                         .setExpiration(new Date(getCurrentTimestamp() + REFRESH_TOKEN_EXPIRE_TIME))
                         .signWith(key, SignatureAlgorithm.HS256)
                         .compact();
@@ -67,16 +71,24 @@ public class JwtUtils {
         return RefreshToken.builder().token(refreshToken).expireTime(REFRESH_TOKEN_EXPIRE_TIME).build();
     }
 
-    public void setAccessToken(HttpServletResponse response, String userId) {
-        AccessToken accessToken = getAccessToken(userId);
-        setCookie(response, ACCESS_TOKEN_NAME, accessToken.getToken(), accessToken.getExpireTime());
+    public void setAccessToken(HttpServletResponse response, String userId, String email) {
+        AccessToken accessToken = getAccessToken(userId, email);
+        setCookie(
+                response,
+                ACCESS_TOKEN_NAME,
+                TOKEN_TYPE + accessToken.getToken(),
+                accessToken.getExpireTime());
     }
 
-    public void setRefreshToken(HttpServletResponse response, String userId) {
-        RefreshToken refreshToken = getRefreshToken(userId);
+    public void setRefreshToken(HttpServletResponse response, String userId, String email) {
+        RefreshToken refreshToken = getRefreshToken(userId, email);
         authProvider.setRefreshToken(
                 KEY_PREFIX + userId, refreshToken.getToken(), refreshToken.getExpireTime());
-        setCookie(response, REFRESH_TOKEN_NAME, refreshToken.getToken(), refreshToken.getExpireTime());
+        setCookie(
+                response,
+                REFRESH_TOKEN_NAME,
+                TOKEN_TYPE + refreshToken.getToken(),
+                refreshToken.getExpireTime());
     }
 
     private void setCookie(HttpServletResponse response, String key, String token, Long expireTime) {
@@ -95,27 +107,26 @@ public class JwtUtils {
         return System.currentTimeMillis();
     }
 
-    public String getUserId(String token) {
+    public OAuthUser getOAuthUser(String token) {
         try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .get("userId")
-                    .toString();
+            Claims claims =
+                    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            return OAuthUser.builder()
+                    .userId(claims.get("userId").toString())
+                    .email(claims.get("email").toString())
+                    .build();
         } catch (Exception e) {
             log.error(e.getMessage());
             return null;
         }
     }
 
-    public void updateTokens(HttpServletResponse response, String userId) {
+    public void updateTokens(HttpServletResponse response, String userId, String email) {
         if (!authProvider.hasRefreshToken(KEY_PREFIX + userId)) {
             throw new GlobalException(AUTHENTICATION_FAILED);
         }
 
-        setAccessToken(response, userId);
-        setRefreshToken(response, userId);
+        setAccessToken(response, userId, email);
+        setRefreshToken(response, userId, email);
     }
 }
