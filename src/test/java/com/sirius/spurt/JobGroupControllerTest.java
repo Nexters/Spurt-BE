@@ -1,5 +1,7 @@
 package com.sirius.spurt;
 
+import static com.sirius.spurt.common.jwt.JwtUtils.ACCESS_TOKEN_NAME;
+import static com.sirius.spurt.common.jwt.JwtUtils.TOKEN_TYPE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,13 +13,15 @@ import com.sirius.spurt.common.meta.JobGroup;
 import com.sirius.spurt.service.business.jobgroup.SaveJobGroupBusiness;
 import com.sirius.spurt.service.business.jobgroup.UpdateJobGroupBusiness;
 import com.sirius.spurt.service.controller.jobgroup.JobGroupController;
+import com.sirius.spurt.test.TokenTest;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(controllers = {JobGroupController.class})
-public class JobGroupControllerTest extends BaseMvcTest {
+public class JobGroupControllerTest extends BaseMvcTest implements TokenTest {
     @MockBean private SaveJobGroupBusiness saveJobGroupBusiness;
     @MockBean private UpdateJobGroupBusiness updateJobGroupBusiness;
 
@@ -29,10 +33,10 @@ public class JobGroupControllerTest extends BaseMvcTest {
         this.mockMvc
                 .perform(
                         post("/v1/jobgroup")
+                                .cookie(new Cookie(ACCESS_TOKEN_NAME, TOKEN_TYPE + TEST_TOKEN_VALUE))
                                 .requestAttr("userId", "admin")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto))
-                                .principal(this.mockPrincipal))
+                                .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sirius.spurt.test.RefreshTokenTest;
+import com.sirius.spurt.test.TokenTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 @ExtendWith(MockitoExtension.class)
-class AuthRepositoryImplTest implements RefreshTokenTest {
+class AuthRepositoryImplTest implements TokenTest {
     @InjectMocks private AuthRepositoryImpl tokenRepository;
 
     @Mock private RedisTemplate<String, String> redisTemplate;

@@ -1,5 +1,7 @@
 package com.sirius.spurt;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 import capital.scalable.restdocs.AutoDocumentation;
@@ -9,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sirius.spurt.common.auth.PrincipalDetails;
 import com.sirius.spurt.common.jwt.JwtUtils;
 import com.sirius.spurt.common.jwt.MockSpringSecurityFilter;
+import com.sirius.spurt.common.oauth.user.OAuthUser;
 import com.sirius.spurt.custom.CustomRequestFieldSnippet;
 import com.sirius.spurt.custom.CustomResponseFieldSnippet;
 import com.sirius.spurt.test.UserTest;
@@ -43,6 +46,8 @@ public class BaseMvcTest implements UserTest {
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) throws Exception {
+        OAuthUser oAuthUser = OAuthUser.builder().userId(TEST_USER_ID).email(TEST_EMAIL).build();
+        when(jwtUtils.getOAuthUser(anyString())).thenReturn(oAuthUser);
         setUpMockUser();
         var mockMvcRequestBuilders =
                 MockMvcRequestBuilders.get("https://api.spurtapp.com")
