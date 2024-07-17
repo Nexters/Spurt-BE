@@ -93,13 +93,7 @@ public class JwtUtils {
 
     private void setCookie(HttpServletResponse response, String key, String token, Long expireTime) {
         ResponseCookie responseCookie =
-                ResponseCookie.from(key, token)
-                        .path("/")
-                        .sameSite("None")
-                        .httpOnly(false)
-                        .secure(true)
-                        .maxAge(Math.toIntExact(expireTime))
-                        .build();
+                ResponseCookie.from(key, token).path("/").maxAge(Math.toIntExact(expireTime)).build();
         response.addHeader("Set-Cookie", responseCookie.toString());
     }
 
