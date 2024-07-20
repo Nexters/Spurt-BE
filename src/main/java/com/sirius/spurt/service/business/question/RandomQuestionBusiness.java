@@ -45,7 +45,11 @@ public class RandomQuestionBusiness implements Business<Dto, Result> {
         }
 
         final UserVo userVo = userProvider.getUserInfo(input.getUserId());
-        JobGroup jobGroup = userVo.getJobGroup();
+        JobGroup jobGroup = null;
+        if (userVo != null) {
+            jobGroup = userVo.getJobGroup();
+        }
+
         return RandomQuestionBusinessMapper.INSTANCE.toResult(
                 questionProvider.randomQuestion(
                         jobGroup, input.getUserId(), input.getCount(), input.getCategory()));
